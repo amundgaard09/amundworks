@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/MAU/.vscode/amundworks.py",
-      "program": "c:/Users/MAU/.vscode/amundworks.py/build/Debug/outDebug",
+      "cwd": "c:/Users/hondo/.vscode/amundworks",
+      "program": "c:/Users/hondo/.vscode/amundworks/ctest.c",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
