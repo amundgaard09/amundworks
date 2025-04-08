@@ -2,14 +2,27 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Kjør C-program",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "preLaunchTask": "C/C++ Runner: Debug Session",
+      "externalConsole": true
+    },
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/hondo/.vscode/amundworks",
-      "program": "c:/Users/hondo/.vscode/amundworks/ctest.c",
+      "cwd": "c:/Users/MAU/.vscode/amundworks/main.c",
+      "program": "c:/Users/MAU/.vscode/amundworks/main.c/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
