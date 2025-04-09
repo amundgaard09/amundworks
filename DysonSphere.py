@@ -59,7 +59,7 @@ def login():
         print("No users registered yet. Please sign up first.\n")
 def startup():
     while True:
-        print("Welcome to the Dyson Sphere Program!")
+        print("DysonSphere Login!")
         print("1. Sign Up")
         print("2. Log In")
         print("3. Exit")
