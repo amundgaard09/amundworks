@@ -1,24 +1,24 @@
+
+
 import hashlib
 import os
 
 def hash_passord(passord):
+    '''hashing password function'''
     return hashlib.md5(passord.encode()).hexdigest()
 def signup():
+    '''user/admin signup function'''
     email = input("Enter email address: ").strip()
     pwd = input("Enter password: ").strip()
     conf_pwd = input("Confirm password: ").strip()
-
     if conf_pwd != pwd:
         print("Passwords do not match! Try again.\n")
         return
-
     role = input("Enter role (user/admin): ").strip().lower()
     if role not in ["user", "admin"]:
         print("Invalid role! Defaulting to user.\n")
         role = "user"
-
     hashed_pwd = hash_passord(pwd)
-
     if os.path.exists("credentials.txt"):
         with open("credentials.txt", "r") as f:
             for linje in f:
@@ -28,15 +28,14 @@ def signup():
                 if email == lagret_email:
                     print("Email already registered. Please log in.\n")
                     return
-
     with open("credentials.txt", "a") as f:
         f.write(f"{email},{hashed_pwd},{role}\n")
     print(f"Registered successfully as {role}!\n")
 def login():
+    '''user/admin login function'''
     email = input("Enter email: ").strip()
     pwd = input("Enter password: ").strip()
     hashed_input = hash_passord(pwd)
-
     try:
         with open("credentials.txt", "r") as f:
             for linje in f:
@@ -58,13 +57,13 @@ def login():
     except FileNotFoundError:
         print("No users registered yet. Please sign up first.\n")
 def startup():
+    '''program startup function'''
     while True:
-        print("DysonSphere Login!")
+        print("DysonSphere Login")
         print("1. Sign Up")
         print("2. Log In")
         print("3. Exit")
         choice = input("Enter your choice: ")
-
         if choice == "1":
             signup()
         elif choice == "2":
@@ -74,17 +73,12 @@ def startup():
             break
         else:
             print("Invalid choice! Try again.\n")
-
-def main_user():
-    print("welcome, user")
-    #placeholder for main function'
-def main_admin():
-    print("welcome, admin")
-    #placeholder for main function
 def login_successful():
+    '''user login successful'''
     print("User Login Successful: Starting Up")
     main_user()
 def login_unsuccessful():
+    '''user login unsuccessful'''
     print("Login Unsuccessful: Please try again")
     continue_choice = input("Do you want to try again? (y/n): ").strip().lower()
     if continue_choice == 'y':
@@ -93,9 +87,11 @@ def login_unsuccessful():
         print("Exiting...")
         exit()
 def login_admin_successful():
+    '''admin login successful'''
     print("Admin Login Successful: Starting Up")
     main_admin()
 def login_admin_unsuccessful():
+    '''admin login unsuccessful'''
     print("Admin Login Unsuccessful: Please try again")
     continue_choice = input("Do you want to try again? (y/n): ").strip().lower()
     if continue_choice == 'y':
@@ -103,14 +99,12 @@ def login_admin_unsuccessful():
     else:
         print("Exiting...")
         exit()
-
     while True:
         print("Welcome to the Dyson Sphere Program!")
         print("1. Sign Up")
         print("2. Log In")
         print("3. Exit")
         choice = input("Enter your choice: ")
-
         if choice == "1":
             signup()
         elif choice == "2":
@@ -120,6 +114,14 @@ def login_admin_unsuccessful():
             break
         else:
             print("Invalid choice! Try again.\n")
+def main_user():
+    '''main program for user'''
+    print("welcome, user")
+    #placeholder for main function
+def main_admin():
+    '''main program for admin'''
+    print("welcome, admin")
+    #placeholder for main function
 
 startup()
 
