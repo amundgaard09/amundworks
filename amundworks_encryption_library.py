@@ -80,3 +80,46 @@ def vigenere_encrypt():
         else:
             plaintext += ciphertext[i]
     print("Plaintext:", plaintext)
+def railfence_encrypt():
+    plaintext = str(input("plaintext: "))
+    key = int(input("key: "))
+    pos = 0
+    direction = 1
+    rows = [[] for _ in range(key)]
+
+    for char in plaintext:
+        rows[pos].append(char)
+    
+        pos += direction
+        if pos == 0 or pos == key - 1:
+            direction *= -1
+    
+    ciphertext = ''.join([''.join(row) for row in rows])
+    print("ciphertext:", ciphertext)
+def railfence_decrypt():
+    ciphertext = input("ciphertext: ")
+    key = int(input("key: "))
+    length = len(ciphertext)
+    pattern = []
+    pos = 0
+    direction = 1
+    for _ in range(length):
+        pattern.append(pos)
+        pos += direction
+        if pos == 0 or pos == key - 1:
+            direction *= -1
+
+    counts = [pattern.count(r) for r in range(key)]
+    rows = []
+    index = 0
+    for c in counts:
+        rows.append(list(ciphertext[index:index + c]))
+        index += c
+
+    plaintext = ''
+    row_pointers = [0] * key
+    for r in pattern:
+        plaintext += rows[r][row_pointers[r]]
+        row_pointers[r] += 1
+
+    print("plaintext:", plaintext)

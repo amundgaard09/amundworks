@@ -1,9 +1,12 @@
 
-# dysonsphere v1.0.0.1 copyright 2025 amundworks all rights reserved
+# dysonsphere v1.0.0.1 copyright 2025 AmundWorks all rights reserved
+# Amundworks Encryption Library | copyright (c) 2025 AmundWorks
+# Amundworks General Function Library | copyright (c) 2025 AmundWorks
 
 import hashlib
 import os
 import amundworks_encryption_library as awel
+import amundworks_general_function_library as awgfl
 import questionary
 
 def hash_passord(passord):
@@ -119,7 +122,7 @@ def ds_awel():
             "binary()",
             "vigenerè()",
             "ceasar()",
-            "railfence() (coming soon)",
+            "railfence()",
             "return()",
         ]
     ).ask()
@@ -178,9 +181,58 @@ def ds_awel():
             print("Returning to main menu...")
             ds_awel()   
     elif decode_action == "railfence()":
-        #placeholder for railfence function
-        main_admin()
+        ceasar_action = questionary.select(
+            "Choose between encryption or decryption:",
+            choices=[ 
+                "encrypt()",
+                "decrypt()",
+                "return()",
+            ]
+        ).ask()
+        if ceasar_action == "encrypt()":
+            awel.railfence_encrypt()
+            ds_awel()
+        elif ceasar_action == "decrypt()":
+            awel.railfence_decrypt()
+            ds_awel()   
+        elif ceasar_action == "return()":
+            print("Returning to main menu...")
+            ds_awel() 
     elif decode_action == "return()":
+        print("Returning to main menu...")
+        main_admin()
+def ds_awgfl():
+    '''amundworks general function library function'''
+    awgfl_action = questionary.select(
+        "Choose a function:",
+        choices=[ 
+            "fibonacci()",
+            "dices()",
+            "return()",
+        ]
+    ).ask()
+    if awgfl_action == "fibonacci()":
+        fibonacci_action = questionary.select(
+            "Choose between list or int:",
+            choices=[ 
+                "list()",
+                "int()",
+                "return()",
+            ]
+        ).ask()
+        if fibonacci_action == "list()":
+            awgfl.fibonacci_list()
+            ds_awgfl()
+        elif fibonacci_action == "int()":
+            awgfl.fibonacci_int()
+            ds_awgfl()
+        elif fibonacci_action == "return()":
+            print("Returning to main menu...")
+            ds_awgfl()
+    elif awgfl_action == "dices()":
+        awgfl.dices()
+        ds_awgfl()
+    elif awgfl_action == "return()":
         print("Returning to main menu...")
         main_admin()
 
@@ -193,10 +245,11 @@ def main_admin():
     print("\n")
     action = questionary.select(
         "Choose an action:",
-        choices=[ #gjør hvert cipher om til en funksjon og lag en spørre funksjon for å velge mellom krypteringsmetodene
+        choices=[ 
             "listusers()",
             "delete_user()",
-            "AWEL()",
+            "AW Encryption Library()",
+            "AW General Function Library()",
             "shutdown()",
         ]
     ).ask()
@@ -207,8 +260,10 @@ def main_admin():
     elif action == "delete_user()":
         delete_user()
         main_admin()
-    elif action == "AWEL()":
+    elif action == "AW Encryption Library()":
         ds_awel()
+    elif action == "AW General Function Library()":
+        ds_awgfl()
     elif action == "shutdown()":
         print("Shutting down...")
         exit()
