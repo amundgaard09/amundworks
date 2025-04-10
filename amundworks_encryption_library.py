@@ -1,4 +1,3 @@
-
 # AmundWorks Encryption Library | copyright (c) 2025 AmundWorks
 
 def binary_encrypt():
