@@ -1,12 +1,14 @@
 
 # dysonsphere v1.0.0.1 copyright 2025 AmundWorks all rights reserved
-# Amundworks Encryption Library | copyright (c) 2025 AmundWorks
+# Amundworks Encryption Library       | copyright (c) 2025 AmundWorks
 # Amundworks General Function Library | copyright (c) 2025 AmundWorks
+# Amundworks Mathematics Library      | copyright (c) 2025 AmundWorks
 
 import hashlib
 import os
 import amundworks_encryption_library as awel
 import amundworks_general_function_library as awgfl
+import amundworks_mathematics_library as awml
 import questionary
 
 def hash_passord(passord):
@@ -80,9 +82,9 @@ def startup():
         ]
     ).ask()    
     if choice == "login":
-        signup()
-    elif choice == "signup":
         login()
+    elif choice == "signup":
+        signup()
     elif choice == "debug":
         main_admin()
     elif choice == "exit":
@@ -114,8 +116,9 @@ def login_admin_unsuccessful():
     else:
         print("Exiting...")
         exit()
+
 def ds_awel():
-    '''amundworks encryption library function'''
+    '''amundworks encryption library'''
     decode_action = questionary.select(
         "Choose a cipher/decoding method:",
         choices=[ 
@@ -168,6 +171,7 @@ def ds_awel():
             choices=[ 
                 "encrypt()",
                 "decrypt()",
+                "bruteforce_decrypt()",
                 "return()",
             ]
         ).ask()
@@ -176,7 +180,10 @@ def ds_awel():
             ds_awel()
         elif ceasar_action == "decrypt()":
             awel.csr_decrypt()
-            ds_awel()   
+            ds_awel()  
+        elif ceasar_action == "bruteforce_decrypt()":
+            awel.csr_bruteforce()
+            ds_awel() 
         elif ceasar_action == "return()":
             print("Returning to main menu...")
             ds_awel()   
@@ -201,17 +208,31 @@ def ds_awel():
     elif decode_action == "return()":
         print("Returning to main menu...")
         main_admin()
-def ds_awgfl():
-    '''amundworks general function library function'''
-    awgfl_action = questionary.select(
+def ds_awml():
+    '''amundworks mathematics library'''
+    awml_action = questionary.select(
         "Choose a function:",
         choices=[ 
+            "serielån()",
+            "sparing()",
+            "tollberegner()",
             "fibonacci()",
-            "dices()",
+            "abc formel()",
+            "triangle analysis()",
+            "calculate()",
             "return()",
         ]
     ).ask()
-    if awgfl_action == "fibonacci()":
+    if awml_action == "serielån()":
+        awml.serielån()
+        ds_awml()
+    if awml_action == "sparing()":
+        awml.sparingscalc()
+        ds_awml()
+    if awml_action == "tollberegner()":
+        awml.formelark()
+        ds_awml()
+    if awml_action == "fibonacci()":
         fibonacci_action = questionary.select(
             "Choose between list or int:",
             choices=[ 
@@ -221,15 +242,36 @@ def ds_awgfl():
             ]
         ).ask()
         if fibonacci_action == "list()":
-            awgfl.fibonacci_list()
-            ds_awgfl()
+            awml.fibonacci_list()
+            ds_awml()
         elif fibonacci_action == "int()":
-            awgfl.fibonacci_int()
-            ds_awgfl()
+            awml.fibonacci_int()
+            ds_awml()
         elif fibonacci_action == "return()":
             print("Returning to main menu...")
-            ds_awgfl()
-    elif awgfl_action == "dices()":
+            ds_awml()
+    if awml_action == "abc formel()":
+        awml.solve_quadratic()
+        ds_awml()
+    if awml_action == "triangle analysis()":
+        awml.ctaa()
+        ds_awml()
+    if awml_action == "calculate()":
+        awml.calculate()
+        ds_awml()
+    elif awml_action == "return()":
+        print("Returning to main menu...")
+        main_admin()
+def ds_awgfl():
+    '''amundworks general function library'''
+    awgfl_action = questionary.select(
+        "Choose a function:",
+        choices=[ 
+            "dices()",
+            "return()",
+        ]
+    ).ask()
+    if awgfl_action == "dices()":
         awgfl.dices()
         ds_awgfl()
     elif awgfl_action == "return()":
@@ -244,12 +286,13 @@ def main_admin():
     '''main program for admin'''
     print("\n")
     action = questionary.select(
-        "Choose an action:",
+        "What would you like to do today?",
         choices=[ 
             "listusers()",
             "delete_user()",
             "AW Encryption Library()",
             "AW General Function Library()",
+            "AW Mathematics Library()",
             "shutdown()",
         ]
     ).ask()
@@ -264,9 +307,12 @@ def main_admin():
         ds_awel()
     elif action == "AW General Function Library()":
         ds_awgfl()
+    elif action == "AW Mathematics Library()":
+        ds_awml()
     elif action == "shutdown()":
         print("Shutting down...")
         exit()
+
 def listusers():
     '''list all users'''
     try:
@@ -297,3 +343,5 @@ def delete_user():
         print("No users registered yet.")
  
 startup()
+
+    

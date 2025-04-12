@@ -1,11 +1,14 @@
-# AmundWorks Encryption Library | copyright (c) 2025 AmundWorks
+'''amundworks encryption library'''
+# copyright (c) 2025 AmundWorks
 
 def binary_encrypt():
+    '''binary encoding module'''
     inputstr = input("plaintext:")
     tran = ''.join(format(ord(i), '08b') for i in inputstr)
     outputstr = ' '.join(tran[i:i+8] for i in range(0, len(tran), 8))
     print("binary: ",outputstr)  
 def binary_decrypt():
+    '''binary decoding module'''
     inputstr = input("binary: ")
     tran = ''.join(chr(int(b, 2)) for b in inputstr.split())
     print("plaintext: ", tran)
@@ -24,6 +27,7 @@ def csr_encrypt():
             newtext += character 
     print("ciphertext: ",newtext) 
 def csr_decrypt():
+    '''ceasar decryption module'''
     text = str(input("ciphertext: "))
     newtext = ""
     x = int(input("shift? (1-26): "))
@@ -50,7 +54,7 @@ def csr_bruteforce():
             else:
                 newtext += character  
         print(f"Shift {shift}: {newtext}")
-def vigenere_decrypt():
+def vigenere_decrypt(): #FUNKER IKKE - BARE ENKRYPTERING
     '''vigenere cipher decryption module'''
     ciphertext = str(input("Enter ciphertext: "))
     key = str(input("Enter key: "))
@@ -65,7 +69,7 @@ def vigenere_decrypt():
         else:
             plaintext += ciphertext[i]
     print("Plaintext:", plaintext)
-def vigenere_encrypt():
+def vigenere_encrypt(): 
     '''vigenere cipher encryption module'''
     ciphertext = str(input("Enter ciphertext: "))
     key = str(input("Enter key: "))
