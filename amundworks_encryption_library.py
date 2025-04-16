@@ -54,20 +54,27 @@ def csr_bruteforce():
             else:
                 newtext += character  
         print(f"Shift {shift}: {newtext}")
-def vigenere_decrypt(): #FUNKER IKKE - BARE ENKRYPTERING
-    '''vigenere cipher decryption module'''
-    ciphertext = str(input("Enter ciphertext: "))
-    key = str(input("Enter key: "))
+def vigenere_decrypt():
+    '''Vigenere cipher decryption module'''
+    ciphertext = input("Enter ciphertext: ")
+    key = input("Enter key: ")
     plaintext = ""
 
-    for i in range(len(ciphertext)):
-        if ciphertext[i].isalpha():
-            if ciphertext[i].isupper():
-                plaintext += chr((ord(ciphertext[i]) - ord(key[i % len(key)].upper()) + 26) % 26 + ord("A"))
+    key = key.lower()
+    key_index = 0
+
+    for char in ciphertext:
+        if char.isalpha():
+            shift = ord(key[key_index % len(key)]) - ord('a')
+            if char.isupper():
+                decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
             else:
-                plaintext += chr((ord(ciphertext[i]) - ord(key[i % len(key)].lower()) + 26) % 26 + ord("a"))
+                decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))
+            plaintext += decrypted_char
+            key_index += 1
         else:
-            plaintext += ciphertext[i]
+            plaintext += char
+
     print("Plaintext:", plaintext)
 def vigenere_encrypt(): 
     '''vigenere cipher encryption module'''
