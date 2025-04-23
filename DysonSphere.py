@@ -61,11 +61,8 @@ def login():
                     print("Logged in Successfully!\n")
                     if rolle == "admin":
                         login_admin_successful()
-                        isLoggedIn = True
-                        isAdmin = True
                     else:
                         login_successful()
-                        isLoggedIn = True
                     return
         print("Login failed! Wrong email or password.\n")
         login_unsuccessful()

@@ -2,18 +2,39 @@
 
 import random
 
-thrownum = int(input("How many throws?: "))
-dicenum = int(input("How many dice per throw?: "))
+rows = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+]
 
-min_sum = dicenum * 1
-max_sum = dicenum * 6
+while True:
+    try:
+        thrownum = int(input("\nHow many throws?: "))
+    except ValueError:
+        print("Please enter a valid number.")
+        continue
+    for i in range(thrownum):
+        dicethrow1 = random.randint(1,6)
+        dicethrow2 = random.randint(1,6)
+        dicesum = dicethrow1 + dicethrow2
+        rows[dicesum-2].append(dicesum)
 
-rows = [[] for _ in range(min_sum, max_sum + 1)]
-
-for _ in range(thrownum):
-    dicesum = sum(random.randint(1, 6) for _ in range(dicenum))
-    rows[dicesum - min_sum].append(dicesum)
-
-for idx, row in enumerate(rows, start=min_sum):
-    print(f"{idx}:","'" * sum(row))
-  
+    for row in rows:
+        print(row)
+    print("\n--------------------\n")
+    
+    counter = 2
+    for row in rows:
+        list = len(row)
+        listprcnt = (list / thrownum) * 100   
+        print(f"row{counter}:{listprcnt}%")
+        counter += 1
