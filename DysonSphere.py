@@ -95,7 +95,7 @@ def login_unsuccessful():
     '''user login unsuccessful'''
     print("Login Unsuccessful: Please try again")
     continue_choice = input("Do you want to try again? (y/n): ").strip().lower()
-    if continue_choice == 'y':
+    if continue_choice == 'y' or continue_choice == 'yes':
         login()
     else:
         print("Exiting...")
@@ -104,15 +104,6 @@ def login_admin_successful():
     '''admin login successful'''
     print("Admin Login Successful: Starting Up")
     main_admin()
-def login_admin_unsuccessful():
-    '''admin login unsuccessful'''
-    print("Admin Login Unsuccessful: Please try again")
-    continue_choice = input("Do you want to try again? (y/n): ").strip().lower()
-    if continue_choice == 'y':
-        login()
-    else:
-        print("Exiting...")
-        exit()
 
 def ds_awel():
     '''amundworks encryption library'''
