@@ -58,7 +58,7 @@ def hexaspiral():
         t.forward(100)
         t.right(176)
         
-
+sierpinski()
 
 
 
