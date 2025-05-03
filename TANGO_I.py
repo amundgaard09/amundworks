@@ -1,13 +1,25 @@
 # TACTICAL AEROSPACE NETWORKED GLOBAL OPERATOR
 
+import locale
+try:
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+except locale.Error:
+    pass 
 
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
-from tkinter import messagebox
+from tkinter import messagebox, font
 from tkintermapview import TkinterMapView
 import hashlib
 import os
-import locale
+
+
+class NoMissionError(Exception):
+    pass
+class FileAlreadyExistsError(Exception):
+    pass
+class DupedMissionIDError(Exception):
+    pass
 
 def hash_passord(passord):
     return hashlib.sha256(passord.encode()).hexdigest()
@@ -36,6 +48,67 @@ def signup(email, pwd):
         f.write(f"{email},{hashed_pwd}\n")
     return True
 
+def getmissioninfo(missionid: str) -> list:
+    if os.path.exists(f"tango_missions.txt"):
+        with open(f"tango_missions.txt", "r") as mis:
+            for line in mis:
+                if line.startswith(f"{missionid}|"):
+                    missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat = line.strip().split("|")
+                    misdur = (misstart, misend)
+                    mislon, mislat = misloc.strip().split(",")
+                    misloc = (mislon, mislat)
+                    return mistitle, misloc, misdur, desc, goal, missionstat
+        raise NoMissionError
+    else:
+        messagebox.showerror("Error", "No mission folder found")
+        raise FileNotFoundError     
+def makemission(missionid: str, title: str, location: tuple, start: str, end: str, desc: str, goal: str) -> bool:
+    missionstat = "Inactive"
+    if os.path.exists("tango_missions.txt"):
+        with open("tango_missions.txt", "r") as mis:
+            for line in mis:
+                if line.startswith(f"{missionid}|"):
+                    raise DupedMissionIDError
+        
+        with open("tango_missions.txt", "a") as mis:
+            mis.write(f"\n{missionid}|{title}|{location}|{start}|{end}|{desc}|{goal}|{missionstat}\n")
+            return True
+    else:
+        messagebox.showerror("Error", "No mission file found - Make a new file")
+        raise FileNotFoundError
+def makemissionfolder() -> bool:
+    if os.path.exists("tango_missions.txt"):
+        raise FileAlreadyExistsError("Mission file already exists.")
+    else:
+        with open("tango_missions.txt", "w") as f:
+            f.write("")
+            return True
+def deacmission(missionid: str) -> bool:
+    pass
+def actimission(missionid: str) -> bool:
+    pass
+def endmission(missionid: str) -> bool:
+    pass
+def editmission(missionid: str) -> bool:
+    pass
+
+def add_placeholder(entry: tb.Entry, placeholder: str):
+    entry.insert(0, placeholder)
+    entry.config(foreground="gray")
+
+    def on_focus_in(event):
+        if entry.get() == placeholder:
+            entry.delete(0, "end")
+            entry.config(foreground="black")
+
+    def on_focus_out(event):
+        if not entry.get():
+            entry.insert(0, placeholder)
+            entry.config(foreground="gray")
+
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
+
 class TANGOApp(tb.Window):
     def __init__(self):
         super().__init__(themename="darkly")
@@ -47,7 +120,7 @@ class TANGOApp(tb.Window):
         container = tb.Frame(self)
         container.pack(fill="both", expand=True)
 
-        for F in (loginpage, dashboard, MISCON, MAP, STATUS, COMM, USER):
+        for F in (loginpage, dashboard, MISCON, MISCREATOR, MAP, STATUS, COMM, USER):
             frame = F(container, self)
             self.frames[F] = frame
             frame.place(relwidth=1, relheight=1)
@@ -57,7 +130,6 @@ class TANGOApp(tb.Window):
     def show_frame(self, page_class):
         frame = self.frames[page_class]
         frame.tkraise()
-
 class tangobp(tb.Frame):
     def __init__(self, parent, controller, label_text):
         super().__init__(parent)
@@ -114,49 +186,171 @@ class loginpage(tb.Frame):
                 messagebox.showerror("Error", "Email already registered.")
         else:
             messagebox.showerror("Error", "Please enter both email and password.")
-
 class dashboard(tb.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
 
-        tb.Label(self, text="TANGO I Dashboard", font=("Arial", 24)).pack(pady=20)
+        tb.Label(self, text="TANGO I Dashboard", bootstyle="secondary-inverse", anchor="center").pack(pady=30, fill="x", padx=20)
+
         frame = tb.Frame(self)
         frame.pack(expand=True, fill="both", padx=20, pady=20)
 
-        buttons = [
-            ("Mission Control", MISCON, 0, 0, 1),
-            ("Map", MAP, 0, 1, 2),
-            ("Status", STATUS, 0, 2, 1),
-            ("Communications", COMM, 1, 0, 1),
-            ("User Management", USER, 1, 2, 1)
-        ]
-
-        frame.rowconfigure((0, 1, 2), weight=1)
+        frame.rowconfigure((0, 1), weight=2)
+        frame.rowconfigure((2, 3), weight=1)
         frame.columnconfigure((0, 2), weight=1)
-        frame.columnconfigure(1, weight=2)
+        frame.columnconfigure(1, weight=2)                                              
 
-        for text, page, r, c, span in buttons:
-            tb.Button(frame, text=text, command=lambda p=page: controller.show_frame(p), bootstyle=INFO).grid(
-                row=r, column=c, rowspan=span, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="Mission Control",command=lambda: controller.show_frame(MISCON),    bootstyle=(SECONDARY, OUTLINE)).grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="Map",            command=lambda: controller.show_frame(MAP),       bootstyle=(SECONDARY, OUTLINE)).grid(row=0, column=1, sticky="nsew", padx=10, pady=10, rowspan=2)
+        tb.Button(frame,text="Status",         command=lambda: controller.show_frame(STATUS),    bootstyle=(SECONDARY, OUTLINE)).grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="Communications", command=lambda: controller.show_frame(COMM),      bootstyle=(SECONDARY, OUTLINE)).grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="User Management",command=lambda: controller.show_frame(USER),      bootstyle=(SECONDARY, OUTLINE)).grid(row=1, column=2, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="Mission Creator",command=lambda: controller.show_frame(MISCREATOR),bootstyle=(SECONDARY, OUTLINE)).grid(row=2, column=0, sticky="nsew", padx=10, pady=10)
 
-        footer = tb.Frame(self)
-        footer.pack(fill="x", padx=20, pady=10)
-        for i in range(3):
-            footer.columnconfigure(i, weight=1)
-        tb.Button(footer, text="Exit", command=controller.quit, bootstyle=DANGER).grid(row=0, column=0, padx=10)
-        tb.Button(footer, text="Logout", command=lambda: controller.show_frame(loginpage), bootstyle=SECONDARY).grid(row=0, column=1, padx=10)
-        tb.Button(footer, text="Settings", command=lambda: messagebox.showinfo("Settings", "Settings not implemented."), bootstyle=WARNING).grid(row=0, column=2, padx=10)
+        command = tb.Frame(self)
+        command.pack(fill="x", padx=20, pady=10)
+        for i in range(10):
+            command.columnconfigure(i, weight=1)
+
+        tb.Button(command, text="Exit",    command=controller.quit,                                                      bootstyle=(DANGER,   OUTLINE)).grid(row=0, column=0, sticky="ew", padx=10)
+        tb.Button(command, text="Logout",  command=lambda: controller.show_frame(loginpage),                             bootstyle=(WARNING,  OUTLINE)).grid(row=0, column=1, sticky="ew", padx=10)
+        tb.Button(command, text="Settings",command=lambda: messagebox.showinfo("Settings", "Settings not implemented."), bootstyle=(SECONDARY,OUTLINE)).grid(row=0, column=2, sticky="ew", padx=10)
 
 class MISCON(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Mission Control")
+
+        self.mistitle = tb.StringVar(value="")
+        self.misloc = tb.StringVar(value="")
+        self.misdur = tb.StringVar(value="")
+        self.desc = tb.StringVar(value="")
+        self.goal = tb.StringVar(value="")
+        self.misstat = tb.StringVar(value="")
+
         panel = tb.Frame(self)
         panel.pack(expand=True, fill="both", padx=20, pady=20)
+        panel.columnconfigure((0, 1, 2, 3), weight=1)
+        panel.rowconfigure((0, 1, 2,), weight=1)
+        
+        misinfdisplay = tb.Frame(panel, bootstyle = SECONDARY)
+        misinfdisplay.grid(row=0, column=0, rowspan=3, padx=10, pady=10, sticky="news")
+        misinfdisplay.rowconfigure(list(range(30)), weight=1)
+        misinfdisplay.columnconfigure((0, 1, 2), weight=1)
 
-        tb.Label(panel, text="State: No active missions").pack(pady=10)
-        tb.Label(panel, text="Mission Data: No mission data available").pack(pady=10)
+        mismap = TkinterMapView(panel, width=800, height=600, corner_radius=0)
+        mismap.grid(row=0, column=1, rowspan=3, columnspan=3, sticky="nsew", padx=10, pady=10)
 
+        def create_new_mission():
+            controller.show_frame(MISCREATOR)
+        def create_new_folder():
+            try:
+                makemissionfolder()
+            except FileAlreadyExistsError:
+                messagebox.showerror("Error","Mission File already exists! \nMake a new Mission instead!")
+        def load_mission():
+            misid = misidentry.get()
+            if not misid:
+                messagebox.showerror("Error", "Missing Mission ID!")
+                return
+            try:
+                mistitle, misloc, misdur, desc, goal, misstat = getmissioninfo(misid)
+                self.mistitle.set(f"Mission Info for {mistitle}")
+                self.misloc.set(f"Location: {misloc[0]}, {misloc[1]}")
+                self.misdur.set(f"Mission Duration: {misdur[0]} -> {misdur[1]}")
+                self.desc.set(f"Description:\n{desc}")
+                self.goal.set(f"Goal:\n{goal}")
+                self.misstat.set(f"Mission Status:\n{misstat}")
+            except NoMissionError:
+                messagebox.showerror("Error", "No Mission with given ID found!")
+        def markplace():
+            if not self.misloc.get():
+                messagebox.showerror("Error","No Mission Loaded!\nLoad Mission First!")
+                return
+            else:
+                try:
+                    latlon = self.misloc.get().replace("Location: ", "").replace("(","").replace(")","").replace("'","").replace('"','')
+                    lat, lon = map(float, latlon.split(","))
+                    mismap.set_position(lat, lon)
+                    mismap.set_marker(lat, lon, text=self.mistitle.get().replace("Mission Info for", ""))
+                except (ValueError, IndexError):
+                    messagebox.showerror("Error", "Invalid coordinates format.")
+
+        misidentry = tb.StringVar()
+        misid = tb.Entry(misinfdisplay, textvariable=misidentry)
+        misid.grid(row=0, column=0, columnspan=2, padx=5, sticky="ew") 
+        add_placeholder(misid, "Enter Mission ID")
+
+        tb.Button(misinfdisplay, text="Load Mission With ID",command=load_mission,      bootstyle=(PRIMARY, OUTLINE)).grid(row=0, column=2, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Create New Mission",  command=create_new_mission,bootstyle=(SUCCESS, OUTLINE)).grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Create New Folder",   command=create_new_folder, bootstyle=(SUCCESS, OUTLINE)).grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Edit Mission",        command=editmission,       bootstyle=(WARNING, OUTLINE)).grid(row=1, column=2, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Suspend Mission",     command=deacmission,       bootstyle=(WARNING, OUTLINE)).grid(row=28, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="End Mission",         command=endmission,        bootstyle=(DANGER,  OUTLINE)).grid(row=29, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Mark Mission Site",   command=markplace,         bootstyle=(SUCCESS, OUTLINE)).grid(row=21, column=2, padx=5, pady=5, sticky="ew")
+
+        tb.Label(misinfdisplay, textvariable=self.mistitle).grid(row=20, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Label(misinfdisplay, textvariable=self.misloc  ).grid(row=21, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+        tb.Label(misinfdisplay, textvariable=self.misdur  ).grid(row=22, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Label(misinfdisplay, textvariable=self.desc    ).grid(row=23, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Label(misinfdisplay, textvariable=self.goal    ).grid(row=24, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        tb.Label(misinfdisplay, textvariable=self.misstat ).grid(row=25, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+class MISCREATOR(tangobp):
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller, "Mission Creator")
+
+        panel = tb.Frame(self, bootstyle=SECONDARY)
+        panel.rowconfigure(list(range(30)), weight=1)
+        panel.columnconfigure((0, 1, 2, 3), weight=1)
+        panel.pack(expand=True, fill="both", padx=20, pady=20)
+
+        map = TkinterMapView(panel, width=800, height=600, corner_radius=0)
+        map.grid(row=0, column=1, rowspan=30, columnspan=3, sticky="news", padx=10, pady=10)
+
+        missionid = tb.Entry(panel)
+        title     = tb.Entry(panel)
+        mislon    = tb.Entry(panel)
+        mislat    = tb.Entry(panel)
+        misstart  = tb.Entry(panel)
+        misend    = tb.Entry(panel)
+        misdesc   = tb.Entry(panel)
+        misgoal   = tb.Entry(panel)
+        missionid.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
+        title.grid(    row=2, column=0, sticky="ew", padx=5, pady=5)
+        mislon.grid(   row=3, column=0, sticky="ew", padx=5, pady=5)
+        mislat.grid(   row=4, column=0, sticky="ew", padx=5, pady=5)
+        misstart.grid( row=5, column=0, sticky="ew", padx=5, pady=5)
+        misend.grid(   row=6, column=0, sticky="ew", padx=5, pady=5)
+        misdesc.grid(  row=7, column=0, sticky="ew", padx=5, pady=5)
+        misgoal.grid(  row=8, column=0, sticky="ew", padx=5, pady=5)
+        add_placeholder(missionid,"Mission ID")
+        add_placeholder(title,    "Mission Title")
+        add_placeholder(mislon,   "Mission Location Longitude")
+        add_placeholder(mislat,   "Mission Location Latitude")
+        add_placeholder(misstart, "Mission Start Date eg. '01.01.2025'")
+        add_placeholder(misend,   "Mission End Date eg. '01.01.2025'")
+        add_placeholder(misdesc,  "Mission Description")
+        add_placeholder(misgoal,  "Mission Goal")
+
+        def savemission():
+            if missionid.get() != "Mission ID" and title.get() != "Mission Title" and mislon.get() != "Mission Location Longitude" and mislat.get() != "Mission Location Latitude" and misstart.get() != "Mission Start Date eg. '01.01.2025'" and misend.get() != "Mission End Date eg. '01.01.2025'" and misdesc.get() != "Mission Description" and misgoal.get() != "Mission Goal":
+                try:
+                    if makemission(missionid.get(), title.get(), (mislon.get(), mislat.get()), misstart.get(), misend.get(), misdesc.get(), misgoal.get()):
+                        messagebox.showinfo("Success!",f"Created new Mission {title.get()}")
+                except DupedMissionIDError:
+                    messagebox.showerror("Error","Mission ID already in use!")
+            else:
+                messagebox.showerror("Error", "Please fill in all forms!")
+        def marklocation():
+            lat = float(mislat.get())
+            lon = float(mislon.get())
+            map.set_position(lat, lon)
+            map.set_marker(lat, lon, text=title.get())
+
+        save = tb.Button(panel, text="Save & Create Mission", command=savemission, bootstyle=(SUCCESS,OUTLINE))
+        mark = tb.Button(panel, text="Mark Mission Location", command=marklocation,bootstyle=(SUCCESS,OUTLINE))
+        save.grid(row=29, column=0, padx=5, pady=5, sticky="ew")
+        mark.grid(row=28, column=0, padx=5, pady=5, sticky="ew")   
 class MAP(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Map")
@@ -169,50 +363,46 @@ class MAP(tangobp):
 
         sidebar = tb.Frame(mappage)
         sidebar.grid(row=0, column=0, rowspan=3, sticky="nsew", padx=10, pady=10)
-        sidebar.rowconfigure(list(range(15)), weight=1)
+        sidebar.rowconfigure(list(range(30)), weight=1)
         sidebar.columnconfigure((0, 1), weight=1)
 
-        tb.Label(sidebar, text="Map Controls").grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
-
-        tb.Label(sidebar, text="Latitude").grid(row=1, column=0, padx=10, pady=5)
-        lat_entry = tb.Entry(sidebar)
-        lat_entry.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
-
+        tb.Label(sidebar, text="Map Controls", relief="solid", borderwidth=2, anchor="center").grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+        tb.Label(sidebar, text="Latitude", borderwidth=2,).grid(row=1, column=0, padx=10, pady=5)
         tb.Label(sidebar, text="Longitude").grid(row=1, column=1, padx=10, pady=5)
+
+        lat_entry = tb.Entry(sidebar)
         lon_entry = tb.Entry(sidebar)
+        lat_entry.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
         lon_entry.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
 
         map = TkinterMapView(mappage, width=800, height=600, corner_radius=0)
         map.grid(row=0, column=1, rowspan=3, columnspan=3, sticky="nsew", padx=10, pady=10)
+
+        markername = tb.StringVar()
+        markernameentry = tb.Entry(sidebar, textvariable=markername)
+        markernameentry.grid(row=3, columnspan=2, padx=10, pady=5, sticky="ew")
 
         def mark_position():
             try:
                 lat = float(lat_entry.get())
                 lon = float(lon_entry.get())
                 map.set_position(lat, lon)
-                map.delete_all_marker()
-                map.set_marker(lat, lon, text="Your Position")
+                map.set_marker(lat, lon, text=markername.get())
             except ValueError:
                 messagebox.showerror("Error", "Invalid latitude or longitude.")
 
-        tb.Button(sidebar, text="Mark Position", command=mark_position, bootstyle=SUCCESS).grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
-
+        tb.Button(sidebar, text="Mark Position", command=mark_position,         bootstyle=SUCCESS).grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="news")
+        tb.Button(sidebar, text="Clear Markers", command=map.delete_all_marker, bootstyle=WARNING).grid(row=5, column=0, columnspan=2, padx=10, pady=10, sticky="news")
 class STATUS(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Status")
-
 class COMM(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Communications")
-
 class USER(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "User Management")
 
 if __name__ == "__main__":
-    try:
-        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
-    except locale.Error:
-        pass 
     app = TANGOApp()
     app.mainloop()
