@@ -1,8 +1,13 @@
-import tkinter as tk
-from tkinter import scrolledtext
+# TACTICAL AEROSPACE NETWORKED GLOBAL OPERATOR
+
+
+import ttkbootstrap as tb
+from ttkbootstrap.constants import *
 from tkinter import messagebox
+from tkintermapview import TkinterMapView
 import hashlib
 import os
+import locale
 
 def hash_passord(passord):
     return hashlib.sha256(passord.encode()).hexdigest()
@@ -11,48 +16,39 @@ def login(email, pwd):
     try:
         with open("tangocred.txt", "r") as f:
             for linje in f:
-                if "," not in linje:
-                    continue
-                deler = linje.strip().split(",")
-                if len(deler) != 2:
-                    continue
-                lagret_email, lagret_hash = deler
-                if email == lagret_email and hashed_input == lagret_hash:
-                    return True
-        return False 
+                if "," in linje:
+                    e, h = linje.strip().split(",")
+                    if email == e and hashed_input == h:
+                        return True
     except FileNotFoundError:
-        return False
+        pass
+    return False
 def signup(email, pwd):
     hashed_pwd = hash_passord(pwd)
     if os.path.exists("tangocred.txt"):
         with open("tangocred.txt", "r") as f:
             for linje in f:
-                if "," not in linje:
-                    continue
-                deler = linje.strip().split(",")
-                if len(deler) != 2:
-                    continue
-                lagret_email = deler[0]
-                if email == lagret_email:
-                    return False
+                if "," in linje:
+                    e, _ = linje.strip().split(",")
+                    if email == e:
+                        return False
     with open("tangocred.txt", "a") as f:
         f.write(f"{email},{hashed_pwd}\n")
     return True
 
-class TANGOApp(tk.Tk):
+class TANGOApp(tb.Window):
     def __init__(self):
-        super().__init__()
+        super().__init__(themename="darkly")
         self.title("TANGO I")
         self.attributes("-fullscreen", True)
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
-        self.configure(bg="#1e1e1e")
         self.frames = {}
 
-        container = tk.Frame(self, bg="#1e1e1e")
+        container = tb.Frame(self)
         container.pack(fill="both", expand=True)
 
         for F in (loginpage, dashboard, MISCON, MAP, STATUS, COMM, USER):
-            frame = F(parent=container, controller=self)
+            frame = F(container, self)
             self.frames[F] = frame
             frame.place(relwidth=1, relheight=1)
 
@@ -62,30 +58,38 @@ class TANGOApp(tk.Tk):
         frame = self.frames[page_class]
         frame.tkraise()
 
-class loginpage(tk.Frame):
-    def __init__(self, parent, controller):
-        super().__init__(parent, bg="#1e1e1e")
+class tangobp(tb.Frame):
+    def __init__(self, parent, controller, label_text):
+        super().__init__(parent)
         self.controller = controller
 
-        label = tk.Label(self, text="T.A.N.G.O. login", font=("", 24), bg="#1e1e1e", fg="#e0e0e0")
-        label.pack(pady=20)
+        header = tb.Frame(self)
+        header.pack(fill="x", padx=20, pady=(20, 10))
 
-        self.username = tk.StringVar()
-        self.password = tk.StringVar()
+        tb.Label(header, text=label_text, font=("Arial", 20)).pack(side="left", padx=10, pady=10)
+        tb.Button(header, text="← Return", command=lambda: controller.show_frame(dashboard), bootstyle=SECONDARY).pack(side="right", padx=10, pady=10)
 
-        tk.Label(self, text="Username", bg="#1e1e1e", fg="#e0e0e0").pack()
-        tk.Entry(self, textvariable=self.username, bg="#2d2d2d", fg="#e0e0e0", insertbackground="white").pack(pady=5)
+class loginpage(tb.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
 
-        tk.Label(self, text="Password", bg="#1e1e1e", fg="#e0e0e0").pack()
-        tk.Entry(self, show="*", textvariable=self.password, bg="#2d2d2d", fg="#e0e0e0", insertbackground="white").pack(pady=5)
+        tb.Label(self, text="T.A.N.G.O. login", font=("", 24)).pack(pady=20)
 
-        frame = tk.Frame(self, bg="#1e1e1e")
+        self.username = tb.StringVar()
+        self.password = tb.StringVar()
+
+        tb.Label(self, text="Username").pack()
+        tb.Entry(self, textvariable=self.username).pack(pady=5)
+
+        tb.Label(self, text="Password").pack()
+        tb.Entry(self, show="*", textvariable=self.password).pack(pady=5)
+
+        frame = tb.Frame(self)
         frame.pack(pady=20)
 
-        btn_style = {"bg": "#2d2d2d", "fg": "white", "activebackground": "#3d3d3d", "activeforeground": "#00ffcc"}
-
-        tk.Button(frame, text="Login", command=self.log_in, **btn_style).grid(row=0, column=0, padx=10)
-        tk.Button(frame, text="Sign Up", command=self.sign_up, **btn_style).grid(row=0, column=1, padx=10)
+        tb.Button(frame, text="Login", command=self.log_in, bootstyle=PRIMARY).grid(row=0, column=0, padx=10)
+        tb.Button(frame, text="Sign Up", command=self.sign_up, bootstyle=SECONDARY).grid(row=0, column=1, padx=10)
 
     def log_in(self):
         email = self.username.get()
@@ -110,94 +114,105 @@ class loginpage(tk.Frame):
                 messagebox.showerror("Error", "Email already registered.")
         else:
             messagebox.showerror("Error", "Please enter both email and password.")
-class dashboard(tk.Frame):
+
+class dashboard(tb.Frame):
     def __init__(self, parent, controller):
-        super().__init__(parent, bg="#1e1e1e")
+        super().__init__(parent)
         self.controller = controller
 
-        tk.Label(self, text="TANGO I Dashboard", font=("Arial", 24), bg="#1e1e1e", fg="#e0e0e0").pack(pady=20)
-        frame = tk.Frame(self, bg="#1e1e1e")
+        tb.Label(self, text="TANGO I Dashboard", font=("Arial", 24)).pack(pady=20)
+        frame = tb.Frame(self)
         frame.pack(expand=True, fill="both", padx=20, pady=20)
 
-        btn_style = {"bg": "#2d2d2d", "fg": "white", "activebackground": "#3d3d3d", "activeforeground": "#00ffcc"}
-
         buttons = [
-            ("Mission Control", MISCON, 0, 0),
-            ("Map", MAP, 0, 1),
-            ("Status", STATUS, 0, 2),
-            ("Communications", COMM, 1, 0),
-            ("User Management", USER, 1, 2)
+            ("Mission Control", MISCON, 0, 0, 1),
+            ("Map", MAP, 0, 1, 2),
+            ("Status", STATUS, 0, 2, 1),
+            ("Communications", COMM, 1, 0, 1),
+            ("User Management", USER, 1, 2, 1)
         ]
 
+        frame.rowconfigure((0, 1, 2), weight=1)
         frame.columnconfigure((0, 2), weight=1)
         frame.columnconfigure(1, weight=2)
-        frame.rowconfigure((0, 1, 2), weight=1)
 
-        for text, page, r, c in buttons:
-            tk.Button(frame, text=text, command=lambda p=page: controller.show_frame(p), **btn_style).grid(row=r, column=c, sticky="nsew", padx=10, pady=10)
+        for text, page, r, c, span in buttons:
+            tb.Button(frame, text=text, command=lambda p=page: controller.show_frame(p), bootstyle=INFO).grid(
+                row=r, column=c, rowspan=span, sticky="nsew", padx=10, pady=10)
 
-        cmdsect = tk.Frame(self, bg="#1e1e1e")
-        cmdsect.columnconfigure((0,1,2,3,4,5,6,7,8,9), weight=1)
-        cmdsect.rowconfigure(0, weight=1)
-        exitbtn = tk.Button(cmdsect, text="Exit", command=self.controller.quit, **btn_style)
-        logout = tk.Button(cmdsect, text="Logout", command=lambda: controller.show_frame(loginpage), **btn_style)      
-        settings = tk.Button(cmdsect, text="Settings", command=lambda: messagebox.showinfo("Settings", "Settings not implemented yet."), **btn_style)
-        exitbtn.grid(row=0, column=0, padx=10, pady=10)
-        logout.grid(row=0, column=1, padx=10, pady=10)
-        settings.grid(row=0, column=2, padx=10, pady=10)
-        cmdsect.pack(fill="x", anchor="s", padx=5, pady=5)
-        
-class tangobp(tk.Frame):
-    def __init__(self, parent, controller, title):
-        super().__init__(parent, bg="#1e1e1e")
-        self.controller = controller
-        tk.Label(self, text=title, font=("Arial", 24), bg="#1e1e1e", fg="#e0e0e0").pack(pady=20)
-        tk.Button(self, text="< back", bg="#2d2d2d", fg="white", activebackground="#3d3d3d", activeforeground="#00ffcc", command=lambda: controller.show_frame(dashboard)).pack(pady=10)
+        footer = tb.Frame(self)
+        footer.pack(fill="x", padx=20, pady=10)
+        for i in range(3):
+            footer.columnconfigure(i, weight=1)
+        tb.Button(footer, text="Exit", command=controller.quit, bootstyle=DANGER).grid(row=0, column=0, padx=10)
+        tb.Button(footer, text="Logout", command=lambda: controller.show_frame(loginpage), bootstyle=SECONDARY).grid(row=0, column=1, padx=10)
+        tb.Button(footer, text="Settings", command=lambda: messagebox.showinfo("Settings", "Settings not implemented."), bootstyle=WARNING).grid(row=0, column=2, padx=10)
 
 class MISCON(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Mission Control")
+        panel = tb.Frame(self)
+        panel.pack(expand=True, fill="both", padx=20, pady=20)
 
-        misconpanel = tk.Frame(self, bg="#1e1e1e")
-        misconpanel.columnconfigure((0, 1, 2, 3), weight=1)
-        misconpanel.rowconfigure((0, 1, 2), weight=1)
+        tb.Label(panel, text="State: No active missions").pack(pady=10)
+        tb.Label(panel, text="Mission Data: No mission data available").pack(pady=10)
 
-        state = self.get_state()
-        mission_data = self.get_mission_data()
-
-        misconstate = tk.Label(misconpanel, text=f"State: {state}", bg="#1e1e1e", fg="#e0e0e0", bd=2, relief="solid", padx=10, pady=5)
-        misconstate.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        miscondata = tk.Label(misconpanel, text=f"Mission Data: {mission_data}", bg="#1e1e1e", fg="#e0e0e0", bd=2, relief="solid", padx=10, pady=5)
-        miscondata.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
-        
-    
-
-
-
-        misconpanel.pack(expand=True, fill="both", padx=20, pady=20)
-
-
-
-    def get_state(self):
-        # Placeholder for actual state retrieval logic
-        return "No active missions"
-    def get_mission_data(self):
-        # Placeholder for actual mission data retrieval logic
-        return "No mission data available"
-    
 class MAP(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Map")
+
+        mappage = tb.Frame(self)
+        mappage.pack(expand=True, fill="both", padx=20, pady=20)
+
+        mappage.rowconfigure((0, 1, 2), weight=1)
+        mappage.columnconfigure((0, 1, 2, 3), weight=1)
+
+        sidebar = tb.Frame(mappage)
+        sidebar.grid(row=0, column=0, rowspan=3, sticky="nsew", padx=10, pady=10)
+        sidebar.rowconfigure(list(range(15)), weight=1)
+        sidebar.columnconfigure((0, 1), weight=1)
+
+        tb.Label(sidebar, text="Map Controls").grid(row=0, column=0, columnspan=2, padx=10, pady=10, sticky="nsew")
+
+        tb.Label(sidebar, text="Latitude").grid(row=1, column=0, padx=10, pady=5)
+        lat_entry = tb.Entry(sidebar)
+        lat_entry.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+
+        tb.Label(sidebar, text="Longitude").grid(row=1, column=1, padx=10, pady=5)
+        lon_entry = tb.Entry(sidebar)
+        lon_entry.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
+
+        map = TkinterMapView(mappage, width=800, height=600, corner_radius=0)
+        map.grid(row=0, column=1, rowspan=3, columnspan=3, sticky="nsew", padx=10, pady=10)
+
+        def mark_position():
+            try:
+                lat = float(lat_entry.get())
+                lon = float(lon_entry.get())
+                map.set_position(lat, lon)
+                map.delete_all_marker()
+                map.set_marker(lat, lon, text="Your Position")
+            except ValueError:
+                messagebox.showerror("Error", "Invalid latitude or longitude.")
+
+        tb.Button(sidebar, text="Mark Position", command=mark_position, bootstyle=SUCCESS).grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
+
 class STATUS(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Status")
+
 class COMM(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Communications")
+
 class USER(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "User Management")
 
 if __name__ == "__main__":
+    try:
+        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+    except locale.Error:
+        pass 
     app = TANGOApp()
     app.mainloop()
