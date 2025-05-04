@@ -126,7 +126,7 @@ class TANGOApp(tb.Window):
         container = tb.Frame(self)
         container.pack(fill="both", expand=True)
 
-        for F in (loginpage, dashboard, MISCON, MISCREATOR, MAP, STATUS, COMM, USER):
+        for F in (loginpage, dashboard, MISCON, MISCREATOR, MISVIEWER, MAP, STATUS, COMM, USER):
             frame = F(container, self)
             self.frames[F] = frame
             frame.place(relwidth=1, relheight=1)
@@ -141,11 +141,11 @@ class tangobp(tb.Frame):
         super().__init__(parent)
         self.controller = controller
 
-        header = tb.Frame(self)
+        header = tb.Frame(self, bootstyle=SECONDARY)
         header.pack(fill="x", padx=20, pady=(20, 10))
 
-        tb.Label(header, text=label_text, font=("Arial", 20)).pack(side="left", padx=10, pady=10)
-        tb.Button(header, text="← Return", command=lambda: controller.show_frame(dashboard), bootstyle=SECONDARY).pack(side="right", padx=10, pady=10)
+        tb.Label(header, text=label_text, style="secondary.inverse.tlabel", font=("Arial", 20)).pack(side="left", padx=10, pady=10)
+        tb.Button(header, text="← Return", command=lambda: controller.show_frame(dashboard), bootstyle=(LIGHT, OUTLINE)).pack(side="right", padx=10, pady=10)
 
 class loginpage(tb.Frame):
     def __init__(self, parent, controller):
@@ -197,7 +197,7 @@ class dashboard(tb.Frame):
         super().__init__(parent)
         self.controller = controller
 
-        tb.Label(self, text="TANGO I Dashboard", bootstyle="secondary-inverse", anchor="center").pack(pady=30, fill="x", padx=20)
+        tb.Label(self, text="TANGO I Dashboard", font=("Arial", 20), bootstyle="secondary-inverse", anchor="center").pack(pady=30, fill="both", padx=20)
 
         frame = tb.Frame(self)
         frame.pack(expand=True, fill="both", padx=20, pady=20)
@@ -208,13 +208,13 @@ class dashboard(tb.Frame):
         frame.columnconfigure((0, 2), weight=1)
         frame.columnconfigure(1, weight=2)                                              
 
-        tb.Button(frame,text="Mission Control",command=lambda:controller.show_frame(MISCON),    bootstyle=(SECONDARY,OUTLINE)).grid(row=0,column=0,sticky="nsew",padx=10,pady=10)
+        tb.Button(frame,text="Communications", command=lambda:controller.show_frame(COMM),      bootstyle=(SECONDARY,OUTLINE)).grid(row=0,column=0,sticky="nsew",padx=10,pady=10)
         tb.Button(frame,text="Map",            command=lambda:controller.show_frame(MAP),       bootstyle=(SECONDARY,OUTLINE)).grid(row=0,column=1,sticky="nsew",padx=10,pady=10,rowspan=2)
         tb.Button(frame,text="Status",         command=lambda:controller.show_frame(STATUS),    bootstyle=(SECONDARY,OUTLINE)).grid(row=0,column=2,sticky="nsew",padx=10,pady=10)
-        tb.Button(frame,text="Communications", command=lambda:controller.show_frame(COMM),      bootstyle=(SECONDARY,OUTLINE)).grid(row=1,column=0,sticky="nsew",padx=10,pady=10)
+        tb.Button(frame,text="Mission Control",command=lambda:controller.show_frame(MISCON),    bootstyle=(SECONDARY,OUTLINE)).grid(row=1,column=0,sticky="nsew",padx=10,pady=10)
         tb.Button(frame,text="User Management",command=lambda:controller.show_frame(USER),      bootstyle=(SECONDARY,OUTLINE)).grid(row=1,column=2,sticky="nsew",padx=10,pady=10)
         tb.Button(frame,text="Mission Creator",command=lambda:controller.show_frame(MISCREATOR),bootstyle=(SECONDARY,OUTLINE)).grid(row=2,column=0,sticky="nsew",padx=10,pady=10)
-        tb.Button(frame,text="Mission Viewer", command=lambda:controller.show_frame(),bootstyle=(SECONDARY, OUTLINE)).grid(row=3, column=0, sticky="nsew", padx=10, pady=10)
+        tb.Button(frame,text="Mission Viewer", command=lambda:controller.show_frame(MISVIEWER), bootstyle=(SECONDARY,OUTLINE)).grid(row=3,column=0,sticky="nsew",padx=10,pady=10)
 
         command = tb.Frame(self)
         command.pack(fill="x", padx=20, pady=10)
@@ -319,7 +319,6 @@ class MISCON(tangobp):
         tb.Label(misinfdisplay, textvariable=self.goal    ).grid(row=24, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
         tb.Label(misinfdisplay, textvariable=self.misstat ).grid(row=25, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
         tb.Label(misinfdisplay, textvariable=self.pois    ).grid(row=26, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
-
 class MISCREATOR(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Mission Creator")
@@ -413,6 +412,44 @@ class MISCREATOR(tangobp):
         save.grid(    row=29,column=0,padx=5,pady=5,sticky="ew")
         mark.grid(    row=28,column=0,padx=5,pady=5,sticky="ew")   
         savemark.grid(row=27,column=0,padx=5,pady=5,sticky="ew")
+class MISVIEWER(tangobp):
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller, "Mission Viewer")
+
+        mainpanel = tb.Frame(self, bootstyle=DARK)
+        mainpanel.rowconfigure((0, 1, 2), weight=1)    
+        mainpanel.columnconfigure((0, 1, 2, 3), weight=1)
+        mainpanel.pack(expand=True, fill="both", padx=20, pady=20)
+
+        sidebar = tb.Frame(mainpanel, bootstyle=SECONDARY)
+        sidebar.grid(row=0, column=0, rowspan=3, padx=10, pady=10, sticky="news")
+        sidebar.rowconfigure((list(range(30))), weight=1)
+        sidebar.columnconfigure((0, 1), weight=1)
+
+        #tb.Scrollbar(sidebar, bootstyle="info-round", orient="horizontal")
+        mission_frames = []
+
+        
+        if os.path.exists(f"tango_missions.txt"):
+            with open(f"tango_missions.txt", "r") as mis:
+                counter = 1
+                for line in mis:
+                    if line == "":
+                        continue
+                    else:
+                        missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
+                        frame = tb.Frame(sidebar, bootstyle=PRIMARY)
+                        frame.grid(row=counter, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+                        tb.Label(frame, text=f"{mistitle} - {missionid}", bootstyle="inverse-primary").pack(padx=5, pady=5)
+
+                        mission_frames.append(frame)
+                        counter += 1
+        else:
+            messagebox.showerror("Error", "No mission folder found")
+            raise FileNotFoundError  
+
+
+
 class MAP(tangobp):
     def __init__(self, parent, controller):
         super().__init__(parent, controller, "Map")
