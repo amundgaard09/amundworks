@@ -429,26 +429,27 @@ class MISVIEWER(tangobp):
         #tb.Scrollbar(sidebar, bootstyle="info-round", orient="horizontal")
         mission_frames = []
 
-        
         if os.path.exists(f"tango_missions.txt"):
             with open(f"tango_missions.txt", "r") as mis:
-                counter = 1
-                for line in mis:
-                    if line == "":
-                        continue
-                    else:
-                        missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
-                        frame = tb.Frame(sidebar, bootstyle=PRIMARY)
-                        frame.grid(row=counter, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
-                        tb.Label(frame, text=f"{mistitle} - {missionid}", bootstyle="inverse-primary").pack(padx=5, pady=5)
+                if mis == None:
+                    pass
+                else:       
+                    counter = 1
+                    for line in mis:
+                        if line == "":
+                            continue
+                        else:
+                            missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
+                            frame = tb.Frame(sidebar, bootstyle=LIGHT)
+                            frame.grid(row=counter, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
+                            tb.Label(frame, text=f"{mistitle} - {missionid}", bootstyle="inverse-light", anchor="center").pack(expand=True, fill="both", padx=5, pady=20)
+                                                                                                        
 
-                        mission_frames.append(frame)
-                        counter += 1
+                            mission_frames.append(frame)
+                            counter += 1
         else:
             messagebox.showerror("Error", "No mission folder found")
             raise FileNotFoundError  
-
-
 
 class MAP(tangobp):
     def __init__(self, parent, controller):
