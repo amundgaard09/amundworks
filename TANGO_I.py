@@ -386,7 +386,6 @@ class MISCREATOR(tangobp):
 
             except (ValueError, TypeError):
                 messagebox.showerror("Error", "Invalid marker coordinates! Use format: lat, lon")
-
         def savemission():
             if all(entry.get().strip() for entry in [misid, title, mislat, mislon, misstart, misend, misdesc, misgoal]):
                 try:
@@ -417,8 +416,9 @@ class MISVIEWER(tangobp):
         super().__init__(parent, controller, "Mission Viewer")
 
         mainpanel = tb.Frame(self, bootstyle=DARK)
-        mainpanel.rowconfigure((0, 1, 2), weight=1)    
-        mainpanel.columnconfigure((0, 1, 2, 3), weight=1)
+        mainpanel.rowconfigure((0, 1, 2), weight=1)   
+        mainpanel.columnconfigure(0, weight=1) 
+        mainpanel.columnconfigure((1, 2, 3), weight=2)
         mainpanel.pack(expand=True, fill="both", padx=20, pady=20)
 
         sidebar = tb.Frame(mainpanel, bootstyle=SECONDARY)
@@ -426,30 +426,53 @@ class MISVIEWER(tangobp):
         sidebar.rowconfigure((list(range(30))), weight=1)
         sidebar.columnconfigure((0, 1), weight=1)
 
-        #tb.Scrollbar(sidebar, bootstyle="info-round", orient="horizontal")
-        mission_frames = []
+        active_missions   = []
+        inactive_missions = []
+        ended_missions    = []
 
-        if os.path.exists(f"tango_missions.txt"):
-            with open(f"tango_missions.txt", "r") as mis:
-                if mis == None:
-                    pass
-                else:       
-                    counter = 1
-                    for line in mis:
-                        if line == "":
-                            continue
-                        else:
-                            missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
-                            frame = tb.Frame(sidebar, bootstyle=LIGHT)
-                            frame.grid(row=counter, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
-                            tb.Label(frame, text=f"{mistitle} - {missionid}", bootstyle="inverse-light", anchor="center").pack(expand=True, fill="both", padx=5, pady=20)
-                                                                                                        
+        if os.path.exists("tango_missions.txt"):
+            with open("tango_missions.txt", "r") as mis:
+                counter = 0
+                for line in mis:
+                    if not line.strip():
+                        continue
+                    try:
+                        missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
+                    except ValueError:
+                        print(f"Feil i linje: {line}")
+                        continue
 
-                            mission_frames.append(frame)
-                            counter += 1
+                    frame = tb.Frame(sidebar)
+                    frame.columnconfigure((0,1,2,3,4),weight=1)
+                    label = tb.Label(frame, text=f"{mistitle} - {missionid}", anchor="center")
+                    button= tb.Button(frame, text="View Mission")
+                    button.pack(padx=10,pady=10, side="right")
+                    
+
+                    if missionstat == "Active":
+                        frame.configure(bootstyle=SUCCESS)
+                        label.configure(bootstyle="inverse-success")
+                        button.configure(bootstyle=(SUCCESS, OUTLINE))
+                        active_missions.append((frame, label))
+                    elif missionstat == "Inactive":
+                        frame.configure(bootstyle=WARNING)
+                        label.configure(bootstyle="inverse-warning")
+                        button.configure(bootstyle=(WARNING, OUTLINE))
+                        inactive_missions.append((frame, label))
+                    elif missionstat == "Ended":
+                        frame.configure(bootstyle=DARK)
+                        label.configure(bootstyle="inverse-dark")
+                        button.configure(bootstyle=(DARK, OUTLINE))
+                        ended_missions.append((frame, label))
+
+            all_missions = active_missions + inactive_missions + ended_missions
+
+            for i, (frame, label) in enumerate(all_missions):
+                frame.grid(row=i, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
+                label.pack(expand=True, fill="both", padx=5, pady=20)
         else:
             messagebox.showerror("Error", "No mission folder found")
-            raise FileNotFoundError  
+            raise FileNotFoundError("tango_missions.txt not found") 
 
 class MAP(tangobp):
     def __init__(self, parent, controller):

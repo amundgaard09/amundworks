@@ -1,7 +1,7 @@
 117|Test|61,21|1|1|1|1|Inactive|{}
-116|Test|61,21|1|1|1|1|Inactive|{}
+116|Test|61,21|1|1|1|1|Active|{}
 115|Test|61,21|1|1|1|1|Inactive|{}
-114|Test|61,21|1|1|1|1|Inactive|{}
+114|Test|61,21|1|1|1|1|Ended|{}
 113|Test|61,21|1|1|1|1|Inactive|{}
-112|Test|61,21|1|1|1|1|Inactive|{}
-111|Test|61,21|1|1|1|1|Inactive|{}
+112|Test|61,21|1|1|1|1|Active|{}
+111|Test|61,21|1|1|1|1|Active|{}
