@@ -27,7 +27,7 @@ def hash_passord(passord):
 def login(email, pwd):
     hashed_input = hash_passord(pwd)
     try:
-        with open("tangocred.txt", "r") as f:
+        with open("tango\\tangocred.txt", "r") as f:
             for linje in f:
                 if "," in linje:
                     e, h = linje.strip().split(",")
@@ -38,16 +38,17 @@ def login(email, pwd):
     return False
 def signup(email, pwd):
     hashed_pwd = hash_passord(pwd)
-    if os.path.exists("tangocred.txt"):
-        with open("tangocred.txt", "r") as f:
+    if os.path.exists("tango\\tangocred.txt"):
+        with open("tango\\tangocred.txt", "r") as f:
             for linje in f:
                 if "," in linje:
                     e, _ = linje.strip().split(",")
                     if email == e:
                         return False
-    with open("tangocred.txt", "a") as f:
+    with open("tang\\tangocred.txt", "a") as f:
         f.write(f"{email},{hashed_pwd}\n")
     return True
+
 def add_placeholder(entry: tb.Entry, placeholder: str):
     entry.insert(0, placeholder)
     entry.config(foreground="gray")
@@ -66,8 +67,8 @@ def add_placeholder(entry: tb.Entry, placeholder: str):
     entry.bind("<FocusOut>", on_focus_out)
 
 def getmissioninfo(missionid: str) -> list:
-    if os.path.exists(f"tango_missions.txt"):
-        with open(f"tango_missions.txt", "r") as mis:
+    if os.path.exists(f"tango\\tango_missions.txt"):
+        with open(f"tango\\tango_missions.txt", "r") as mis:
             for line in mis:
                 if line.startswith(f"{missionid}|"):
                     missionid: str
@@ -85,13 +86,13 @@ def getmissioninfo(missionid: str) -> list:
         raise FileNotFoundError     
 def makemission(missionid: str, title: str, location: tuple, start: str, end: str, desc: str, goal: str, markers: dict | None) -> bool:
     missionstat = "Inactive"
-    if os.path.exists("tango_missions.txt"):
-        with open("tango_missions.txt", "r") as mis:
+    if os.path.exists("tango\\tango_missions.txt"):
+        with open("tango\\tango_missions.txt", "r") as mis:
             for line in mis:
                 if line.startswith(f"{missionid}|"):
                     raise DupedMissionIDError
         
-        with open("tango_missions.txt", "a") as mis:
+        with open("tango\\tango_missions.txt", "a") as mis:
             mis.write("\n")
             mis.write(f"{missionid}|{title}|{location[0]},{location[1]}|{start}|{end}|{desc}|{goal}|{missionstat}|{str(markers)}")
             return True
@@ -106,8 +107,20 @@ def makemissionfolder() -> bool:
             f.write("")
             return True
 
-def deacmission(missionid: str) -> bool: ##
-    pass
+def deacmission(missionid: str) -> bool: #
+    if os.path.exists(f"tango\\tango_missions.txt"):
+        with open(f"tango\\tango_missions.txt", "r") as mis:
+            for line in mis:
+                if line.startswith(f"{missionid}|"):
+                    missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
+                    missionstat = "Inactive"
+                    line = f"{missionid}|{mistitle}|{misloc}|{misstart}|{misend}|{desc}|{goal}|{missionstat}|{str(markers)}"
+        with open(f"tango\\tango_missions.txt", "a") as mis:
+            mis.write(line)
+        raise NoMissionError
+    else:
+        messagebox.showerror("Error", "No mission folder found")
+        raise FileNotFoundError 
 def actimission(missionid: str) -> bool: ##
     pass
 def endmission(missionid: str)  -> bool: ##
@@ -298,7 +311,14 @@ class MISCON(tangobp):
             for name, (lat, lon) in self.pois_dict.items():
                 mismap.set_marker(lat, lon, text=name)
                 mismap.set_position(lat,lon)
-
+        def edit_mission():
+            pass
+        def deac_mission():
+            pass
+        def end_mission():
+            pass
+        def acti_mission():
+            pass
         misidentry = tb.StringVar()
         misid = tb.Entry(misinfdisplay, textvariable=misidentry)
         misid.grid(row=0, column=0, columnspan=2, padx=5, sticky="ew") 
@@ -307,9 +327,9 @@ class MISCON(tangobp):
         tb.Button(misinfdisplay, text="Load Mission With ID",command=load_mission,      bootstyle=(PRIMARY, OUTLINE)).grid(row=0, column=2, padx=5, pady=5, sticky="ew")
         tb.Button(misinfdisplay, text="Create New Mission",  command=create_new_mission,bootstyle=(SUCCESS, OUTLINE)).grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         tb.Button(misinfdisplay, text="Create New Folder",   command=create_new_folder, bootstyle=(SUCCESS, OUTLINE)).grid(row=1, column=1, padx=5, pady=5, sticky="ew")
-        tb.Button(misinfdisplay, text="Edit Mission",        command=editmission,       bootstyle=(WARNING, OUTLINE)).grid(row=1, column=2, padx=5, pady=5, sticky="ew")
-        tb.Button(misinfdisplay, text="Suspend Mission",     command=deacmission,       bootstyle=(WARNING, OUTLINE)).grid(row=28,column=0, padx=5, pady=5, sticky="ew",columnspan=3)
-        tb.Button(misinfdisplay, text="End Mission",         command=endmission,        bootstyle=(DANGER,  OUTLINE)).grid(row=29,column=0, padx=5, pady=5, sticky="ew",columnspan=3)
+        tb.Button(misinfdisplay, text="Edit Mission",        command=edit_mission,      bootstyle=(WARNING, OUTLINE)).grid(row=1, column=2, padx=5, pady=5, sticky="ew")
+        tb.Button(misinfdisplay, text="Suspend Mission",     command=deac_mission,      bootstyle=(WARNING, OUTLINE)).grid(row=28,column=0, padx=5, pady=5, sticky="ew",columnspan=3)
+        tb.Button(misinfdisplay, text="End Mission",         command=end_mission,       bootstyle=(DANGER,  OUTLINE)).grid(row=29,column=0, padx=5, pady=5, sticky="ew",columnspan=3)
         tb.Button(misinfdisplay, text="Mark Mission Site",   command=markplace,         bootstyle=(SUCCESS, OUTLINE)).grid(row=21,column=2, padx=5, pady=5, sticky="ew")
         tb.Button(misinfdisplay, text="Load POIs",           command=loadpois,          bootstyle=(INFO,    OUTLINE)).grid(row=26,column=2, padx=5, pady=5, sticky="ew")
         tb.Label(misinfdisplay, textvariable=self.mistitle).grid(row=20, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
@@ -430,8 +450,8 @@ class MISVIEWER(tangobp):
         inactive_missions = []
         ended_missions    = []
 
-        if os.path.exists("tango_missions.txt"):
-            with open("tango_missions.txt", "r") as mis:
+        if os.path.exists("tango\\tango_missions.txt"):
+            with open("tango\\tango_missions.txt", "r") as mis:
                 counter = 0
                 for line in mis:
                     if not line.strip():

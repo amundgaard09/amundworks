@@ -94,6 +94,7 @@ def fibonacci_int():
     goldenratio = lastfib / fib0
     print(f"{n}th fib: {lastfib}")
     print(f"golden ratio: {goldenratio:.100f}")
+
 def solve_quadratic():
     'quadratic equation solver'
     a = float(input("A-verdi:"))

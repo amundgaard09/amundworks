@@ -6,9 +6,9 @@
 
 import hashlib
 import os
-import amundworks_encryption_library as awel
-import amundworks_general_function_library as awgfl
-import amundworks_mathematics_library as awml
+from awlibs import amundworks_encryption_library as awel
+from awlibs import amundworks_general_function_library as awgfl
+from awlibs import amundworks_mathematics_library as awml
 import questionary
 
 def hash_passord(passord):
