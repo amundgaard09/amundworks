@@ -21,8 +21,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/hondo/.vscode/amundworks/main.c",
-      "program": "c:/Users/hondo/.vscode/amundworks/main.c/build/Debug/outDebug",
+      "cwd": "c:/Users/MAU/.vscode/amundworks/C",
+      "program": "c:/Users/MAU/.vscode/amundworks/C/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
