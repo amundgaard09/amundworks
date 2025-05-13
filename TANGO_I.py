@@ -445,7 +445,7 @@ class MISVIEWER(tangobp):
                     frame = tb.Frame(sidebar)
                     frame.columnconfigure((0,1,2,3,4),weight=1)
                     label = tb.Label(frame, text=f"{mistitle} - {missionid}", anchor="center")
-                    button= tb.Button(frame, text="View Mission")
+                    button= tb.Button(frame, text="View Mission", command=lambda:controller.show_frame(MISCON))
                     button.pack(padx=10,pady=10, side="right")
                     
 
