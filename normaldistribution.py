@@ -2,21 +2,22 @@
 
 import random
 
-rows = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-]
+
 
 while True:
+    rows = [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    ]
     try:
         thrownum = int(input("\nHow many throws?: "))
     except ValueError:
@@ -27,11 +28,9 @@ while True:
         dicethrow2 = random.randint(1,6)
         dicesum = dicethrow1 + dicethrow2
         rows[dicesum-2].append(dicesum)
-
     for row in rows:
         print(row)
     print("\n--------------------\n")
-    
     counter = 2
     for row in rows:
         list = len(row)

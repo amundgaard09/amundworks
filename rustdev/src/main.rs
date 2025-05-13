@@ -1,8 +1,9 @@
 
 
-fn has3asfactor(num: i32) -> bool {
+pub fn divby3(num: i32) -> bool {
     num % 3 == 0
 }
+
 fn main() {
     let mut counter: i32 = 1;
     while counter <= 100000 {
@@ -11,7 +12,7 @@ fn main() {
         } else {
             println!("{} is odd", counter);
         }
-        if has3asfactor(counter) {
+        if divby3(counter) {
                 println!("Number is divisible by 3");
             }
         counter += 1;
