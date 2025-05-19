@@ -6,12 +6,14 @@ try:
 except locale.Error:
     pass 
 
+MISSIONFILEPATH = f"python_\\tango\\tango_missions.txt"
+CREDFILEPATH   = f"python_\\tango\\tangocred.txt"
+
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from tkinter import messagebox
 from tkintermapview import TkinterMapView
 import hashlib
-import time
 import ast
 import os
 
@@ -27,7 +29,7 @@ def hash_passord(passord):
 def login(email, pwd):
     hashed_input = hash_passord(pwd)
     try:
-        with open("tango\\tangocred.txt", "r") as f:
+        with open(CREDFILEPATH, "r") as f:
             for linje in f:
                 if "," in linje:
                     e, h = linje.strip().split(",")
@@ -38,14 +40,14 @@ def login(email, pwd):
     return False
 def signup(email, pwd):
     hashed_pwd = hash_passord(pwd)
-    if os.path.exists("tango\\tangocred.txt"):
-        with open("tango\\tangocred.txt", "r") as f:
+    if os.path.exists(CREDFILEPATH):
+        with open(CREDFILEPATH, "r") as f:
             for linje in f:
                 if "," in linje:
                     e, _ = linje.strip().split(",")
                     if email == e:
                         return False
-    with open("tang\\tangocred.txt", "a") as f:
+    with open(CREDFILEPATH, "a") as f:
         f.write(f"{email},{hashed_pwd}\n")
     return True
 
@@ -67,8 +69,8 @@ def add_placeholder(entry: tb.Entry, placeholder: str):
     entry.bind("<FocusOut>", on_focus_out)
 
 def getmissioninfo(missionid: str) -> list:
-    if os.path.exists(f"tango\\tango_missions.txt"):
-        with open(f"tango\\tango_missions.txt", "r") as mis:
+    if os.path.exists(MISSIONFILEPATH):
+        with open(MISSIONFILEPATH, "r") as mis:
             for line in mis:
                 if line.startswith(f"{missionid}|"):
                     missionid: str
@@ -86,13 +88,13 @@ def getmissioninfo(missionid: str) -> list:
         raise FileNotFoundError     
 def makemission(missionid: str, title: str, location: tuple, start: str, end: str, desc: str, goal: str, markers: dict | None) -> bool:
     missionstat = "Inactive"
-    if os.path.exists("tango\\tango_missions.txt"):
-        with open("tango\\tango_missions.txt", "r") as mis:
+    if os.path.exists(MISSIONFILEPATH):
+        with open(MISSIONFILEPATH, "r") as mis:
             for line in mis:
                 if line.startswith(f"{missionid}|"):
                     raise DupedMissionIDError
-        
-        with open("tango\\tango_missions.txt", "a") as mis:
+
+        with open(MISSIONFILEPATH, "a") as mis:
             mis.write("\n")
             mis.write(f"{missionid}|{title}|{location[0]},{location[1]}|{start}|{end}|{desc}|{goal}|{missionstat}|{str(markers)}")
             return True
@@ -100,10 +102,10 @@ def makemission(missionid: str, title: str, location: tuple, start: str, end: st
         messagebox.showerror("Error", "No mission file found - Make a new file")
         raise FileNotFoundError
 def makemissionfolder() -> bool:
-    if os.path.exists("tango_missions.txt"):
+    if os.path.exists(MISSIONFILEPATH):
         raise FileAlreadyExistsError("Mission file already exists.")
     else:
-        with open("tango_missions.txt", "w") as f:
+        with open(MISSIONFILEPATH, "w") as f:
             f.write("")
             return True
 
@@ -311,6 +313,7 @@ class MISCON(tangobp):
             for name, (lat, lon) in self.pois_dict.items():
                 mismap.set_marker(lat, lon, text=name)
                 mismap.set_position(lat,lon)
+        
         def edit_mission():
             pass
         def deac_mission():
@@ -319,6 +322,7 @@ class MISCON(tangobp):
             pass
         def acti_mission():
             pass
+        
         misidentry = tb.StringVar()
         misid = tb.Entry(misinfdisplay, textvariable=misidentry)
         misid.grid(row=0, column=0, columnspan=2, padx=5, sticky="ew") 
@@ -450,8 +454,8 @@ class MISVIEWER(tangobp):
         inactive_missions = []
         ended_missions    = []
 
-        if os.path.exists("tango\\tango_missions.txt"):
-            with open("tango\\tango_missions.txt", "r") as mis:
+        if os.path.exists(MISSIONFILEPATH):
+            with open(MISSIONFILEPATH, "r") as mis:
                 counter = 0
                 for line in mis:
                     if not line.strip():

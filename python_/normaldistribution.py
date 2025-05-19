@@ -1,8 +1,5 @@
 
-
 import random
-
-
 
 while True:
     rows = [

@@ -247,5 +247,43 @@ def calculate():
             angle = float(input("angle:"))
             answer = 1 / math.sin(math.radians(angle))
             print(f"answer: {answer}")
-def placeholder():
-    pass
+
+def matrixmult(A, B):
+    """Multiplies two matrices A and B."""
+
+    if len(A[0]) != len(B):
+        raise ValueError("Incompatible dimensions for matrix multiplication.")
+    
+    result = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+    
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                result[i][j] += A[i][k] * B[k][j]
+
+    return result
+def vectorrotation3d(V,x,y,z):
+    """Rotates a 3D vector V by angles x, y, and z around the x, y, and z axes respectively."""
+    
+    import math
+    
+    rotx = math.radians(x)
+    roty = math.radians(y)
+    rotz = math.radians(z)
+    
+    Rx = [[1, 0, 0],
+          [0, math.cos(rotx), -math.sin(rotx)],
+          [0, math.sin(rotx), math.cos(rotx)]]
+    
+    Ry = [[math.cos(roty), 0, math.sin(roty)],
+          [0, 1, 0],
+          [-math.sin(roty), 0, math.cos(roty)]]
+    
+    Rz = [[math.cos(rotz), -math.sin(rotz), 0],
+          [math.sin(rotz), math.cos(rotz), 0],
+          [0, 0, 1]]
+    
+    R = matrixmult(Rz, matrixmult(Ry, Rx))
+    rotated_vector = matrixmult(R, [[V[0]], [V[1]], [V[2]]])
+    
+    return [rotated_vector[0][0], rotated_vector[1][0], rotated_vector[2][0]]

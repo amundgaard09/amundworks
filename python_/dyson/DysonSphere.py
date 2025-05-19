@@ -6,10 +6,12 @@
 
 import hashlib
 import os
-from awlibs import amundworks_encryption_library as awel
-from awlibs import amundworks_general_function_library as awgfl
-from awlibs import amundworks_mathematics_library as awml
+import python_.awlibs.amundworks_encryption_library as awel
+import python_.awlibs.amundworks_general_function_library as awgfl
+import python_.awlibs.amundworks_mathematics_library as awml
 import questionary
+
+CREDPATH = "python_\\dyson\\credentials.txt"
 
 def hash_passord(passord):
     '''hashing password function'''
@@ -27,8 +29,8 @@ def signup():
         print("Invalid role! Defaulting to user.\n")
         role = "user"
     hashed_pwd = hash_passord(pwd)
-    if os.path.exists("credentials.txt"):
-        with open("credentials.txt", "r") as f:
+    if os.path.exists(CREDPATH):
+        with open(CREDPATH, "r") as f:
             for linje in f:
                 if "," not in linje:
                     continue
@@ -36,7 +38,7 @@ def signup():
                 if email == lagret_email:
                     print("Email already registered. Please log in.\n")
                     return
-    with open("credentials.txt", "a") as f:
+    with open(CREDPATH, "a") as f:
         f.write(f"{email},{hashed_pwd},{role}\n")
     print(f"Registered successfully as {role}!\n")
     if role == "admin":
@@ -49,7 +51,7 @@ def login():
     pwd = input("Enter password: ").strip()
     hashed_input = hash_passord(pwd)
     try:
-        with open("credentials.txt", "r") as f:
+        with open(CREDPATH, "r") as f:
             for linje in f:
                 if "," not in linje:
                     continue
@@ -304,7 +306,7 @@ def main_admin():
 def listusers():
     '''list all users'''
     try:
-        with open("credentials.txt", "r") as f:
+        with open(CREDPATH, "r") as f:
             print("Registered Users:")
             for linje in f:
                 if "," not in linje:
@@ -317,9 +319,9 @@ def delete_user():
     '''delete a user'''
     email = input("Enter the email of the user to delete: ").strip()
     try:
-        with open("credentials.txt", "r") as f:
+        with open(CREDPATH, "r") as f:
             lines = f.readlines()
-        with open("credentials.txt", "w") as f:
+        with open(CREDPATH, "w") as f:
             for linje in lines:
                 if "," not in linje:
                     continue
