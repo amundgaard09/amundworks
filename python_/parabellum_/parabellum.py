@@ -1,1 +1,2 @@
-"""PARABELLUM SYSTEM CLUSTER - Amundgård Tactical Solutions"""
+"""Si Vicem Pacem, Para Bellum - If you want peace, prepare for war"""
+
