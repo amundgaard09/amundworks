@@ -86,7 +86,7 @@ def getmissioninfo(missionid: str) -> list:
     else:
         messagebox.showerror("Error", "No mission folder found")
         raise FileNotFoundError     
-def makemission(missionid: str, title: str, location: tuple, start: str, end: str, desc: str, goal: str, markers: dict | None) -> bool:
+def makemission(missionid: str, title: str, location: tuple, start: str, end: str, desc: str, goal: str, markers: dict | None = None) -> bool:
     missionstat = "Inactive"
     if os.path.exists(MISSIONFILEPATH):
         with open(MISSIONFILEPATH, "r") as mis:

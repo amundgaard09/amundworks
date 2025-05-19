@@ -31,7 +31,20 @@ def dices():
     print(f"sum of dices:{sumx}")
     print(f"avg of dices:{avgx}")
 
-
+def writefile(filepath: str, content: str, makenewfile: bool | None = None) -> bool:
+    """Write content to a file."""
+    import os
+    if makenewfile:
+        with open(filepath, 'x') as f:
+            f.write(content)
+            return True
+    elif makenewfile is None or not makenewfile:
+        if os.path.exists(filepath):
+            with open(filepath, 'w') as f:
+                f.write(content)
+                return True
+        else:
+            return FileNotFoundError(f"File {filepath} does not exist.")
 
 
 
