@@ -7,7 +7,7 @@
 import hashlib
 import os
 import python_.awlibs.amundworks_encryption_library as awel
-import python_.awlibs.amundworks_general_function_library as awgfl
+import python_.awlibs.amundworks_function_library as awgfl
 import python_.awlibs.amundworks_mathematics_library as awml
 import questionary
 

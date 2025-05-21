@@ -109,15 +109,15 @@ def makemissionfolder() -> bool:
             f.write("")
             return True
 
-def deacmission(missionid: str) -> bool: #
-    if os.path.exists(f"tango\\tango_missions.txt"):
-        with open(f"tango\\tango_missions.txt", "r") as mis:
+def deacmission(missionid: str) -> bool:
+    if os.path.exists(MISSIONFILEPATH):
+        with open(MISSIONFILEPATH, "r") as mis:
             for line in mis:
                 if line.startswith(f"{missionid}|"):
                     missionid, mistitle, misloc, misstart, misend, desc, goal, missionstat, markers = line.strip().split("|")
                     missionstat = "Inactive"
                     line = f"{missionid}|{mistitle}|{misloc}|{misstart}|{misend}|{desc}|{goal}|{missionstat}|{str(markers)}"
-        with open(f"tango\\tango_missions.txt", "a") as mis:
+        with open(MISSIONFILEPATH, "a") as mis:
             mis.write(line)
         raise NoMissionError
     else:
@@ -450,9 +450,7 @@ class MISVIEWER(tangobp):
         sidebar.rowconfigure((list(range(30))), weight=1)
         sidebar.columnconfigure((0, 1), weight=1)
 
-        active_missions   = []
-        inactive_missions = []
-        ended_missions    = []
+        active_missions, inactive_missions, ended_missions = [], [], []
 
         if os.path.exists(MISSIONFILEPATH):
             with open(MISSIONFILEPATH, "r") as mis:

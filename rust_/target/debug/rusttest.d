@@ -1,1 +1,1 @@
-C:\Users\MAU\.vscode\amundworks\rustdev\target\debug\rusttest.exe: C:\Users\MAU\.vscode\amundworks\rustdev\src\main.rs
+C:\Users\MAU\.vscode\amundworks\rust_\target\debug\rusttest.exe: C:\Users\MAU\.vscode\amundworks\rust_\src\main.rs

@@ -1,0 +1,61 @@
+
+SCALES
+    CLASSIFICATIONS
+        PARA PUBLIC     | GRADE I   | *
+        PARA RESTRICTED | GRADE II  | **
+        PARA CLASSIFIED | GRADE III | ***
+        PARA SECRET     | GRADE IV  | **** 
+        PARA TOP SECRET | GRADE V   | *****
+
+    RANKS
+        ARMY
+            OF-1 | 2ND LIEUTENANT     | * 
+            OF-1 | 1ST LIEUTENANT     | **
+            OF-2 | CAPTAIN            | ***
+            OF-3 | MAJOR              | |*  |
+            OF-4 | LIEUTENANT COLONEL | |** |
+            OF-5 | COLONEL            | |***|
+            OF-6 | BRIGADIER          | ||*   ||
+            OF-7 | MAJOR GENERAL      | ||**  ||
+            OF-8 | LIEUTENANT GENERAL | ||*** ||
+            OF-9 | GENERAL            | ||****||
+        NAVY
+            OF-1 | 2ND LIEUTENANT     | |O
+            OF-1 | 1ST LIEUTENANT     | ||O
+            OF-2 | LIEUTENANT CAPTAIN | |I|O
+            OF-3 | CAPTAIN            | |||O
+            OF-4 | COMMANDING CAPTAIN | ||I|O
+            OF-5 | COMMANDER          | ||||O
+            OF-6 | COMMODORE          | IO
+            OF-7 | COUNTER ADMIRAL    | I|O
+            OF-8 | VICE ADMIRAL       | I||O
+            OF-9 | ADMIRAL            | I|||O
+        AIR FORCE
+            OF-1 | 2ND LIEUTENANT     | * 
+            OF-1 | 1ST LIEUTENANT     | **
+            OF-2 | CAPTAIN            | ***
+            OF-3 | MAJOR              | |*  |
+            OF-4 | LIEUTENANT COLONEL | |** |
+            OF-5 | COLONEL            | |***|
+            OF-6 | BRIGADIER          | ||*   ||
+            OF-7 | MAJOR GENERAL      | ||**  ||
+            OF-8 | LIEUTENANT GENERAL | ||*** ||
+            OF-9 | GENERAL            | ||****||
+
+    FOREIGN ENTITIES SCALE
+        ALLY       | ALLIED FORCE WITH SHARED INTERESTS
+        FRIENDLY   | NON-ALLIED FORCE WITH SHARED INTERESTS/FIRENDS/ENEMIES
+        NEUTRAL    | NEUTRAL NON-THREATENING, NON-ALLIED FORCE - INACTIVE IN WAR CURRENT PERIOD(S)
+        UNFRIENDLY | UNFRIENDLY, RELATIONS/WORKS TOGETHER WITH ONE OR MORE OTHER UNFRIENDLY/HOSTILE/THREATENING FORCE(S)
+        HOSTILE    | INACTIVE THREATENING FORCE SEEKING TO HARM FRIENDLIES
+        THREAT     | ACTIVE THREATENING FORCE
+
+
+
+
+
+
+
+
+
+
