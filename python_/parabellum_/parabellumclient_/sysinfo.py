@@ -67,8 +67,8 @@ def serverconnect(ip: str, port: int) -> (tuple[socket.socket, bool]) | (tuple[N
         client.connect((ip, port))
         print("[CLIENT] Tilkoblet.")
         return client, True
-    except ConnectionRefusedError:
-        print("[CLIENT] Server er avslått.")
+    except (ConnectionRefusedError, TimeoutError) as e:
+        print(f"[CLIENT] Tilkobling feilet: {e}")
         return None, False
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
