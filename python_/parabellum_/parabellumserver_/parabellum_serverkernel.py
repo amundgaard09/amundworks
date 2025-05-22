@@ -14,9 +14,9 @@ def handle_client(conn, addr):
             data = conn.recv(1024).decode()
             if not data:
                 break
-            print(f"[{addr}] {data}")
+            print(f"[{addr}] {data}") # Mottatt data fra klient
             # Send svar tilbake hvis ønsket
-            conn.sendall(f"ACK: {data}".encode())
+            conn.sendall(f"ACK: {data}".encode()) # Bekreftelse til klient
         except:
             break
     print(f"[-] Frakoblet: {addr}")

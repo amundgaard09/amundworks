@@ -7,39 +7,22 @@ from ttkbootstrap import *
 from ttkbootstrap.constants import *
 import tkinter as tk
 from tkinter import *
-import tkintermapview as mv
-import parabellum_.parabellumclient_.sysinfo as sinf
-
-FILEPATH = f"python_\\parabellum_\\parabellum.py"
-USERPATH = f"python_\\parabellum_\\users.txt"
+import tkintermapview as tkmv
+import python_.parabellum_.parabellumclient_.sysinfo as sinf
+import socket
 
 CLASSIFICATIONS = sinf.CLASSIFICATIONS
+FILEPATH = f"python_\\parabellum_\\parabellum.py"
+SERVER_IP = '192.168.50.138'  # IP = Server PC IP (satt til laptop nå)
+PORT = 5000
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
-def login(user, pwd):
-    hashed_input = hash_password(pwd)
-    try:
-        with open(USERPATH, "r") as f:
-            for linje in f:
-                if "," in linje:
-                    u, h = linje.strip().split(",")
-                    if user == u and hashed_input == h:
-                        return True
-    except FileNotFoundError:
-        pass
-    return False
-def signup(user, pwd):
-    hashed_pwd = hash_password(pwd)
-    if os.path.exists(USERPATH):
-        with open(USERPATH, "r") as f:
-            for linje in f:
-                if "," in linje:
-                    u, _ = linje.strip().split(",")
-                    if user == u:
-                        return False
-    with open(USERPATH, "a") as f:
-        f.write(f"{user},{hashed_pwd}\n")
-    return True
+client, Connected = sinf.serverconnect(SERVER_IP, PORT)
+
+#while True:
+#msg = input("Send melding: ")
+#client.sendall(msg.encode())
+#data = client.recv(1024).decode()
+#print(f"[SERVER SVAR] {data}")
+
 
 
