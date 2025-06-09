@@ -14,15 +14,37 @@ from ttkbootstrap.constants import *
 import tkinter as tk
 from tkinter import *
 import tkintermapview as tkmv
-import sysinfo as sinf
+import python_.parabellum_.sysinfo as sinf
 import socket
 
 CLASSIFICATIONS = sinf.CLASSIFICATIONS
-FILEPATH = f"python_\\parabellum_\\parabellumclient\\parabellum.py"
-SERVER_IP = '192.168.0.141'  # IP = Server PC IP
+FILEPATH = str(f"python_\\parabellum_\\parabellumclient\\parabellum.py")
+SERVER_IP = str(f"192.168.0.141")  # IP = Server PC IP
 PORT = 5000
 
 client, Connected = sinf.serverconnect(SERVER_IP, PORT)
+
+class parabellumcontroller(ttk.Window):
+    def __init__(self):
+        super().__init__(themename="darkly")
+        self.title("TANGO I")
+        self.attributes("-fullscreen", True)
+        self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
+        self.frames = {}
+
+        container = ttk.Frame(self)
+        container.pack(fill="both", expand=True)
+
+        for F in (): # frames
+            frame = F(container, self)
+            self.frames[F] = frame
+            frame.place(relwidth=1, relheight=1)
+
+        self.show_frame() # login
+
+    def show_frame(self, page_class):
+        frame = self.frames[page_class]
+        frame.tkraise()
 
 while Connected:
     msg = input("Send melding: ")
