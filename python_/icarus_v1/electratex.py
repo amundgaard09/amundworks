@@ -1,4 +1,4 @@
-"""Electratex is a module for basic information gathering regarding electronic components. It serves as a electrical engineering assistant with the capacity to become a universal engineering assistant.\n
+"""Electratex is a module filled with functions for basic information gathering regarding electronic components. It is made for the ICARUS Complex which serves as an electrical engineering assistant with the capacity to become a universal engineering assistant.\n
    (C) AmundWorks"""
 
 class MissingColorsError(Exception):
@@ -29,7 +29,7 @@ def printresistor(c1, c2, c3, c4):
 
     print(f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{color_block(c1)}│{color_block(c2)}│{color_block(c3)}│{color_block(c4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->")      
 def resistancecalc(band1: str, band2: str, multi: str, toler: str) -> str | Exception:
-    """Takes in 4 colors of a resistor and returns the resistivity and tolerance range"""
+    """Takes in 4 colors of a resistor and returns the resistivity and tolerance range, as well as printing an ASCII representation of the resistor with colors."""
     if None in (band1, band2, multi, toler):
         return MissingColorsError
     
@@ -89,13 +89,10 @@ def resistancecalc(band1: str, band2: str, multi: str, toler: str) -> str | Exce
     print(f"Range: {low}Ω - {high}Ω ( {tolerance_percent}% )")
     printresistor(band1, band2, multi, toler)
 
-# voltage = resistance * amperage
-# amperage = voltage / resistance
-# resistance = voltage / amperage
-
 def voltcalc(amp: float, res: float) -> float:
     return amp * res
 def ampcalc(volt: float, res: float) -> float:
     return volt / res
 def rescalc(volt: float, amp: float) -> float:
     return volt / amp
+
