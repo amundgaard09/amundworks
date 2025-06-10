@@ -1,4 +1,4 @@
-"""Resistortex is a module for basic information gathering regarding resistors and possibly other electronic components in the future \n
+"""Electratex is a module for basic information gathering regarding electronic components. It serves as a electrical engineering assistant with the capacity to become a universal engineering assistant.\n
    (C) AmundWorks"""
 
 class MissingColorsError(Exception):
@@ -88,3 +88,14 @@ def resistancecalc(band1: str, band2: str, multi: str, toler: str) -> str | Exce
     print(f"Resistance: {resistance}Ω")
     print(f"Range: {low}Ω - {high}Ω ( {tolerance_percent}% )")
     printresistor(band1, band2, multi, toler)
+
+# voltage = resistance * amperage
+# amperage = voltage / resistance
+# resistance = voltage / amperage
+
+def voltcalc(amp: float, res: float) -> float:
+    return amp * res
+def ampcalc(volt: float, res: float) -> float:
+    return volt / res
+def rescalc(volt: float, amp: float) -> float:
+    return volt / amp
