@@ -5,7 +5,6 @@ import questionary
 import os 
 
 ### convert long if elif chains to function dicts
-### expand resistorspec() with 5-color decoding
 ### expand resistorspec with value-to-color encoding (use bool in function "color2value == True")
 
 def asciibanner():
@@ -67,7 +66,18 @@ def resistortools():
             case "2": rrc_wrapper()
             case "5": break
 def capacitortools():
-    pass
+    while True:
+        choice = questionary.select(
+            " --- FUTUREFORGE Resistor Tools --- ",
+            choices=[
+                questionary.Choice("1 - Total Capacitance Calculator", shortcut_key="1"),
+                questionary.Choice("2 - Return",                       shortcut_key="2"),
+            ]
+        ).ask()
+
+        match choice[0]:
+            case "1": tcc_wrapper()      
+            case "2": break
 def inductortools():
     pass
 def diodetools():
@@ -80,10 +90,13 @@ def transistortools():
 def rs_wrapper():
     """Asks user for colors on the resistor for Resistor Specs Function"""
     while True:
-        colors = str(input("Resistor Colors (4): "))
+        colors = str(input("Resistor Colors (4/5): "))
         colorlist: list = colors.strip().split(" ")
         try:
-            specs: tuple = toolsteel.resistorspec(colorlist[0],colorlist[1],colorlist[2],colorlist[3])
+            if len(colorlist) == 4:
+                specs: tuple = toolsteel.resistorspec(colorlist, 4, True, None)
+            elif len(colorlist) == 5:
+                specs: tuple = toolsteel.resistorspec(colorlist, 5, True, None)
             print(" - - SPECS - - ")
             print(f"{specs[0]}") # resistance
             print(f"{specs[1]}") # range
@@ -113,6 +126,31 @@ def rrc_wrapper():
         else: 
            print(" RETURNING... ")
            break            
+
+### 3. TIER CAPACITOR FUNCTIONS
+
+def tcc_wrapper():
+    while True:
+        allcaps = []
+        connectiontypes = ["parallel", "series"]
+        while True:
+            newcapstr = str(input("New Capacitor Values (Capcitance, Voltage Limit, ESR) (Enter Space to end)"))
+            if newcapstr == " ":
+                print(f"Added Capacitors: {allcaps}")
+                break
+            newcaptuple: tuple = newcapstr.strip().split(", ")
+            if None in newcaptuple:
+                print("Missing values! (Capacitance, Voltage Limit, ESR)")
+                return
+            allcaps.append(newcaptuple)
+        while True:
+            connectiontype = str(input("""Connection Type ("Parallel" or "Series"):""")) ### expand with questionary for speed
+            connectiontype.lower()
+            if connectiontype in connectiontypes:
+                break
+            else:
+                print("Unknown connection type!")
+        print(toolsteel.totalcapacitance(allcaps, connectiontype))
 
 ### FUTUREFORGE ANVIL CLI
 
