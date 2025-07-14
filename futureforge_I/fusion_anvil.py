@@ -136,7 +136,8 @@ def tcc_wrapper():
         while True:
             newcapstr = str(input("New Capacitor Values (Capcitance, Voltage Limit, ESR) (Enter Space to end)"))
             if newcapstr == " ":
-                print(f"Added Capacitors: {allcaps}")
+                for i in range(len(allcaps)):
+                    print(f"Added Capacitors: {allcaps[i]}")
                 break
             newcaptuple: tuple = newcapstr.strip().split(", ")
             if None in newcaptuple:

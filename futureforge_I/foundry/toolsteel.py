@@ -1,5 +1,7 @@
 """The TOOLSTEEL Module is the steel of which your creations are forged. Here lies the FUTUREFORGE functions and formulas that helps you innovate."""
 
+from typing import Literal
+
 ### - - - - MISCELLANEOUS - - - - ###
 
 def prefixer(value: int, unit: str) -> str:
@@ -39,87 +41,103 @@ class WrongColorError(Exception):
 
 ### - - - - ELECTRICAL SEGMENT - - - - ###
 
-def coloredresistor(c1: str, c2: str, c3: str, c4: str):
-    """Prints a visual representation of a resistor with the color code"""
-    ansi_colors = {
-        "black":  "\033[40m",
-        "brown":  "\033[48;5;94m",
-        "red":    "\033[41m",
-        "orange": "\033[48;5;208m",
-        "yellow": "\033[43m",
-        "green":  "\033[42m",
-        "blue":   "\033[44m",
-        "violet": "\033[48;5;93m",
-        "gray":   "\033[100m",
-        "white":  "\033[47m",
-        "gold":   "\033[48;5;178m",
-        "silver": "\033[48;5;7m",
-    }  
-    def color_block(color):
-        ansi = ansi_colors.get(color.lower(), "\033[0m")
-        reset = "\033[0m"
-        return f"{ansi}    {reset}" 
-    return f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{color_block(c1)}│{color_block(c2)}│{color_block(c3)}│{color_block(c4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->"     
-def resistorspec(band1: str, band2: str, multiplier: str, tolerance: str) -> tuple:
-    """Takes in 4 colors of a resistor and returns the resistivity and tolerance range, as well as printing an ASCII representation of the resistor with colors."""
+def resistorspec(colorlist: list, colorint: int, 
+                 color2value: bool = True, wantedvalue: int = None) -> tuple:
+    """Takes in 4/5 colors of a resistor and returns the resistivity and tolerance range, as well as printing an ASCII representation of the resistor with colors."""
     
-    if None in (band1, band2, multiplier, tolerance):
-        raise MissingColorsError
+    if color2value: # normal function (colors to ohm value)
+        if len(colorlist) != colorint:
+            raise MissingColorsError
     
-    BAND = {
-        "black":  0,
-        "brown":  1,
-        "red":    2,
-        "orange": 3,
-        "yellow": 4,
-        "green":  5,
-        "blue":   6,
-        "violet": 7,
-        "gray":   8,
-        "white":  9,
-    }
-    MULTIPLIER = {
-        "black":  1,
-        "brown":  10,
-        "red":    100,
-        "orange": 1000,
-        "yellow": 10000,
-        "green":  100000,
-        "blue":   1000000,
-        "violet": 10000000,
-        "gray":   100000000,
-        "white":  1000000000,
-        "gold":   0.1,
-        "silver": 0.01,
-    }
-    TOLERANCE = {
-        "brown":  1,
-        "red":    2,
-        "green":  0.5,
-        "blue":   0.25,
-        "violet": 0.1,
-        "gray":   0.05,
-        "gold":   5,
-        "silver": 10,
-    }
-
-    band1int = BAND.get(band1)
-    band2int = BAND.get(band2)
-    multiplierint = MULTIPLIER.get(multiplier)
-    tolerance_percent = TOLERANCE.get(tolerance)
-
-    if None in (band1int, band2int, multiplierint, tolerance_percent):
-        print("One or more colors are invalid.")
-        raise WrongColorError
-
-    resistance = (band1int * 10 + band2int) * multiplierint
-    tolerance_decimal = tolerance_percent / 100
-
-    low = resistance * (1 - tolerance_decimal)
-    high = resistance * (1 + tolerance_decimal)
-
-    resistancestr = f"Resistance: {resistance}Ω"
-    rangestr = f"Range: {low}Ω - {high}Ω ( {tolerance_percent}% )"
-
-    return (resistancestr, rangestr, coloredresistor(band1, band2, multiplier, tolerance))
+        BAND = {
+            "black":  0,
+            "brown":  1,
+            "red":    2,
+            "orange": 3,
+            "yellow": 4,
+            "green":  5,
+            "blue":   6,
+            "violet": 7,
+            "gray":   8,
+            "white":  9,
+        }
+        MULTIPLIER = {
+            "black":  1,
+            "brown":  10,
+            "red":    100,
+            "orange": 1000,
+            "yellow": 10000,
+            "green":  100000,
+            "blue":   1000000,
+            "violet": 10000000,
+            "gray":   100000000,
+         "white":  1000000000,
+            "gold":   0.1,
+            "silver": 0.01,
+        }
+        TOLERANCE = {
+            "brown":  1,
+            "red":    2,
+            "green":  0.5,
+            "blue":   0.25,
+            "violet": 0.1,
+            "gray":   0.05,
+            "gold":   5,
+            "silver": 10,
+        }
     
+        band1int = BAND.get(colorlist[0])
+        band2int = BAND.get(colorlist[1]) 
+
+        if colorint == 5:
+            band3int = BAND.get(colorlist[2])
+            multiplierint = MULTIPLIER.get(colorlist[3])
+            tolerance_percent = TOLERANCE.get(colorlist[4])
+
+        elif colorint == 4:
+            band3int = None
+            multiplierint = MULTIPLIER.get(colorlist[2])
+            tolerance_percent = TOLERANCE.get(colorlist[3])
+    
+        else:
+            raise MissingColorsError
+
+        if None in (band1int, band2int, multiplierint, tolerance_percent) or (None in (band1int, band2int, band3int, multiplierint, tolerance_percent) and colorint == 5):
+            print("One or more colors are invalid.")
+            raise WrongColorError
+
+        resistance = (band1int * 10 + band2int) * multiplierint
+        tolerance_decimal = tolerance_percent / 100
+
+        low = resistance * (1 - tolerance_decimal)
+        high = resistance * (1 + tolerance_decimal)
+
+        resistancestr = f"Resistance: {resistance}Ω"
+        rangestr = f"Range: {low}Ω - {high}Ω ( {tolerance_percent}% )"
+
+        return (resistancestr, rangestr)
+    else: # ohm value to colors
+        pass # Future expansion placeholder for now
+def total_esr(caps: list[tuple], connectiontype: Literal["parallel", "series"]) -> float:
+    if connectiontype == "series":
+        return sum(cap[2] for cap in caps)
+    elif connectiontype == "parallel":
+        try:
+            return 1 / sum(1 / cap[2] for cap in caps if cap[2] != 0)
+        except ZeroDivisionError:
+            return 0  
+    else:
+        raise ValueError("Connection type must be 'parallel' or 'series'")
+def totalcapacitance(caps: list[tuple], connectiontype: Literal["parallel", "series"]) -> tuple: ### caps (capacitance, voltage, esr) (for now)
+    if connectiontype == "parallel":
+        totalcap = 0
+        for i in range(len(caps)):
+            totalcap += caps[i][0]
+            voltlimit = min([cap[1] for cap in caps])
+    else: # series connection
+        rawtotalcap = 0
+        for i in range(len(caps)):
+            rawtotalcap += ((caps[i][0])**(-1))
+        totalcap = rawtotalcap**(-1)
+        voltlimit = sum([cap[1] for cap in caps])     
+    return (totalcap, voltlimit, total_esr(caps, connectiontype))
