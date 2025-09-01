@@ -248,7 +248,7 @@ def calculate():
             answer = 1 / math.sin(math.radians(angle))
             print(f"answer: {answer}")
 
-def matrixmult(A, B):
+def matrixmultiplication(A, B):
     """Multiplies two matrices A and B."""
 
     if len(A[0]) != len(B):
@@ -283,7 +283,7 @@ def vectorrotation3d(V,x,y,z):
           [math.sin(rotz), math.cos(rotz), 0],
           [0, 0, 1]]
     
-    R = matrixmult(Rz, matrixmult(Ry, Rx))
-    rotated_vector = matrixmult(R, [[V[0]], [V[1]], [V[2]]])
+    R = matrixmultiplication(Rz, matrixmultiplication(Ry, Rx))
+    rotated_vector = matrixmultiplication(R, [[V[0]], [V[1]], [V[2]]])
     
     return [rotated_vector[0][0], rotated_vector[1][0], rotated_vector[2][0]]
