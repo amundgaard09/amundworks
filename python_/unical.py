@@ -1,8 +1,6 @@
 
 import math
-import cmath
-import random
-
+from sympy import sympify, symbols, lambdify
 
 def execute(userinput: str) -> str:
     userinput = userinput.strip().split(" ")
@@ -80,6 +78,71 @@ def execute(userinput: str) -> str:
     
             except (ValueError, IndexError):
                 return "Invalid input for evalsf. Please provide a valid standard form expression like 3x10^5."
+        case "hm":
+            try:
+                usedvariable = userinput[1].lower().strip()
+                vrbl = symbols(usedvariable)
+                
+                function = userinput[2].lower().strip()
+                function = sympify(function)
+                f = lambdify(vrbl, function, modules=['math'])
+                
+                start = float(userinput[3])
+                end = float(userinput[4])
+                precision = float(userinput[5]) if len(userinput) > 5 else 0.0001
+                
+                if f(start) * f(end) > 0:
+                    return "f(start) and f(end) must have opposite signs."
+                if precision <= 0:
+                    return "Precision must be a positive number."
+                if f(start) * f(end) > 0:
+                    return "f(start) and f(end) must have opposite signs."
+
+                m = (start + end) / 2
+                
+                while (end - start) > precision:
+                    if f(m) == 0:
+                        return str(m)
+                    elif f(start) * f(m) < 0:
+                        end = m
+                    else:
+                        start = m
+                    m = (start + end) / 2
+                return str(m)
+            except (ValueError, IndexError):
+                return "Invalid input for Halveringsmetode. Please provide valid start, end, and optional precision."
+        case "primefactorize" | "pf":
+            try:
+                num = int(userinput[1])
+                if num <= 1:
+                    return "Number must be greater than 1 for prime factorization."
+                factors = []
+                divisor = 2
+                while num > 1:
+                    while num % divisor == 0:
+                        factors.append(divisor)
+                        num //= divisor
+                    divisor += 1
+                return " * ".join(map(str, factors))
+            except (ValueError, IndexError):
+                return "Invalid input for primefactorize. Please provide a valid integer greater than 1."
+        case "howto":
+            return (
+                "Available commands:\n"
+                "sqrt [number] - Calculate square root\n"
+                "cbrt [number] - Calculate cube root\n"
+                "log [number] [base=10] - Calculate logarithm\n"
+                "ln [number] - Calculate natural logarithm\n"
+                "sin [angle in degrees] - Calculate sine\n"
+                "cos [angle in degrees] - Calculate cosine\n"
+                "tan [angle in degrees] - Calculate tangent\n"
+                "sum/add [numbers...] - Sum multiple numbers\n"
+                "standardform/sf [number] - Convert to standard form\n"
+                "rstandardform/evalsf [expression] - Evaluate standard form expression\n"
+                "hm [variable] [function] [start] [end] [precision=0.0001] - Halveringsmetode for root finding\n"
+                "howto - Show this help message\n"
+                "exit - Exit the program"
+            )
         case "exit":
             exit()
 
