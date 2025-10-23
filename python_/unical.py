@@ -1,5 +1,6 @@
 
 import math
+import cmath
 from sympy import sympify, symbols, lambdify
 
 def execute(userinput: str) -> str:
@@ -78,7 +79,7 @@ def execute(userinput: str) -> str:
     
             except (ValueError, IndexError):
                 return "Invalid input for evalsf. Please provide a valid standard form expression like 3x10^5."
-        case "hm":
+        case "hm" | "halveringsmetode" | "bisection" | "binarysearch":
             try:
                 usedvariable = userinput[1].lower().strip()
                 vrbl = symbols(usedvariable)
@@ -91,13 +92,13 @@ def execute(userinput: str) -> str:
                 end = float(userinput[4])
                 precision = float(userinput[5]) if len(userinput) > 5 else 0.0001
                 
-                if f(start) * f(end) > 0:
+                if start * end > 0:
                     return "f(start) and f(end) must have opposite signs."
                 if precision <= 0:
                     return "Precision must be a positive number."
                 if f(start) * f(end) > 0:
                     return "f(start) and f(end) must have opposite signs."
-
+                
                 m = (start + end) / 2
                 
                 while (end - start) > precision:
@@ -110,7 +111,7 @@ def execute(userinput: str) -> str:
                     m = (start + end) / 2
                 return str(m)
             except (ValueError, IndexError):
-                return "Invalid input for Halveringsmetode. Please provide valid start, end, and optional precision."
+                return "Invalid input for Binary Search. Please provide valid start, end, and optional precision."
         case "primefactorize" | "pf":
             try:
                 num = int(userinput[1])
@@ -125,7 +126,29 @@ def execute(userinput: str) -> str:
                     divisor += 1
                 return " * ".join(map(str, factors))
             except (ValueError, IndexError):
-                return "Invalid input for primefactorize. Please provide a valid integer greater than 1."
+                return "Invalid input for Prime Factorization. Please provide a valid integer greater than 1."
+        case "divfinder" | "divs" | "df" :
+            try: 
+                num = int(userinput[1])
+                if num <= 0:
+                    return "Number must be a positive integer."
+                divisors = [i for i in range(1, num + 1) if num % i == 0]
+                return (", ".join(map(str, divisors)), len(divisors))
+            except (ValueError, IndexError):
+                return "Invalid input for divfinder. Please provide a valid positive integer."
+        case "nk":
+            try:
+                n = int(userinput[1])
+                k = int(userinput[2])
+                
+                if k > n or n < 0 or k < 0:
+                    return "Invalid values for n and k. Ensure that 0 <= k <= n."
+                def factorial(x):
+                    return 1 if x == 0 else x * factorial(x - 1)
+                result = factorial(n) / (factorial(k) * factorial(n - k))
+                return str(result)
+            except (ValueError, IndexError):
+                return "Invalid input for nk. Please provide valid integers n and k in the format n,k."
         case "howto":
             return (
                 "Available commands:\n"
@@ -140,6 +163,9 @@ def execute(userinput: str) -> str:
                 "standardform/sf [number] - Convert to standard form\n"
                 "rstandardform/evalsf [expression] - Evaluate standard form expression\n"
                 "hm [variable] [function] [start] [end] [precision=0.0001] - Halveringsmetode for root finding\n"
+                "primefactorize/pf [integer > 1] - Prime factorization\n"
+                "divfinder/df [positive integer] - Find divisors and count\n"
+                "nk [n] [k] - Calculate binomial coefficient\n"
                 "howto - Show this help message\n"
                 "exit - Exit the program"
             )
