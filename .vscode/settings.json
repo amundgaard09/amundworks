@@ -57,6 +57,7 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "python-envs.defaultEnvManager": "ms-python.python:system",
-  "python-envs.pythonProjects": []
+  "python-envs.pythonProjects": [],
   "python.defaultInterpreterPath": "C:/Users/Administrator/AppData/Local/Programs/Python/Python311/python.exe",
+  "cmake.sourceDirectory": "C:/Users/Administrator/.vscode/AmundWorks/amundworks/c++/openGL",
 }

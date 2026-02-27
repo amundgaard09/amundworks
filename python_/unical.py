@@ -1,6 +1,6 @@
 
 import math
-import cmath
+import os
 from sympy import sympify, symbols, lambdify
 
 def execute(userinput: str) -> str:
@@ -136,7 +136,7 @@ def execute(userinput: str) -> str:
                 return (", ".join(map(str, divisors)), len(divisors))
             except (ValueError, IndexError):
                 return "Invalid input for divfinder. Please provide a valid positive integer."
-        case "nk":
+        case "nk" | "binomial":
             try:
                 n = int(userinput[1])
                 k = int(userinput[2])
@@ -162,7 +162,7 @@ def execute(userinput: str) -> str:
                 "sum/add [numbers...] - Sum multiple numbers\n"
                 "standardform/sf [number] - Convert to standard form\n"
                 "rstandardform/evalsf [expression] - Evaluate standard form expression\n"
-                "hm [variable] [function] [start] [end] [precision=0.0001] - Halveringsmetode for root finding\n"
+                "hm [variable] [function] [start] [end] [precision=0.0001] - Binary Search for root finding\n"
                 "primefactorize/pf [integer > 1] - Prime factorization\n"
                 "divfinder/df [positive integer] - Find divisors and count\n"
                 "nk [n] [k] - Calculate binomial coefficient\n"
@@ -174,3 +174,4 @@ def execute(userinput: str) -> str:
 
 while True:
     print(execute(str(input(">>>"))))
+    

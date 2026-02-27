@@ -287,3 +287,14 @@ def vectorrotation3d(V,x,y,z):
     rotated_vector = matrixmultiplication(R, [[V[0]], [V[1]], [V[2]]])
     
     return [rotated_vector[0][0], rotated_vector[1][0], rotated_vector[2][0]]
+
+def lovelaces_algorithm(a: float, b: float, c: float, d: float, e: float, f: float) -> tuple:
+    '''Lovelace's algorithm for solving systems of linear equations'''
+    D = a*e - b*d
+    Dx = c*e - b*f
+    Dy = a*f - c*d
+    if D == 0:
+        raise ValueError("The system has no unique solution.")
+    x = Dx / D
+    y = Dy / D
+    return x, y

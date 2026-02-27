@@ -141,3 +141,6 @@ def totalcapacitance(caps: list[tuple], connectiontype: Literal["parallel", "ser
         totalcap = rawtotalcap**(-1)
         voltlimit = sum([cap[1] for cap in caps])     
     return (totalcap, voltlimit, total_esr(caps, connectiontype))
+
+
+print(LOGO)
