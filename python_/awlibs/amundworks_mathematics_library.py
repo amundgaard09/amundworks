@@ -2,7 +2,7 @@
 # copyright (c) 2025 AmundWorks
 
 import math
-import questionary
+#import questionary
 
 def serielån():
     lånbeløp = float(input("lånbeløp:"))
@@ -298,3 +298,6 @@ def lovelaces_algorithm(a: float, b: float, c: float, d: float, e: float, f: flo
     x = Dx / D
     y = Dy / D
     return x, y
+
+while True:
+   ctaa()
