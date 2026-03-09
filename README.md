@@ -1,3 +1,8 @@
-AMUNDWORKS
+# **AMUNDWORKS**
+***Written by Simon Stordal Amundgård***
 
-Written by Simon Stordal Amundgård
+## **Projects**
+
+### **SENTINEL**
+
+### **TALISMAN**
