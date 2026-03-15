@@ -40,7 +40,7 @@
                                        └──────────────────────────────────┘
 
 
-( SIGNAL / LOGIKK — felles jord er viktig )
+                                ( SIGNAL / LOGIKK — felles jord er viktig )
 
                                    ┌──────────────────────────────────┐
                                    │             ESP32                │

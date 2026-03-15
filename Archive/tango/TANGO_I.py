@@ -6,8 +6,8 @@ try:
 except locale.Error:
     pass 
 
-MISSIONFILEPATH = f"python_\\tango\\tango_missions.txt"
-CREDFILEPATH    = f"python_\\tango\\tangocred.txt"
+MISSIONFILEPATH = f"Archive\\tango\\tango_missions.txt"
+CREDFILEPATH    = f"Archive\\tango\\tangocred.txt"
 
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
