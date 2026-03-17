@@ -7,6 +7,7 @@
 using namespace std;
 
 int main() {
+    
     int Difficulty;
     int GuessCount = 0;
     int IncorrectGuessCount = 0;
@@ -53,7 +54,6 @@ int main() {
             cout << "Correct Guess!\n";
             cout << "Word: " << GuessWord << "\n";
             cout << "Guessed Letters: " << GuessedLetters << "\n";
-
 
         } else {
             IncorrectGuessCount += 1;
