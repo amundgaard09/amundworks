@@ -34,6 +34,7 @@ def SineRule(
             ReferenceRatio = Sides[idx] / math.sin(angles_rad[idx])
             break
 
+    ### Return None if no reference ratio could be established, meaning there is not enough information to solve the triangle.
     if ReferenceRatio is None:
         return None
 
@@ -46,6 +47,8 @@ def SineRule(
                 return None
             asin_val = math.asin(value)
             known_sum = sum(a for a in angles_rad if a is not None)
+            
+            ### Check for the ambiguous case of the sine rule, where there may be two possible angles that satisfy the equation
             if math.pi - asin_val + known_sum <= math.pi:
                 angles_rad[idx] = math.pi - asin_val
             else:

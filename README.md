@@ -1,5 +1,22 @@
 # **AMUNDWORKS**
-***Written by Simon Stordal Amundgård***
+
+Engineering systems that expand human capability through robotics, intelligent software and human-machine integration.
+
+***Written, Created, Iterated, Evolved and Built by Simon Stordal Amundgård***
+
+*What is AmundWorks?*
+AmundWorks is an independent engineering initiative focused on designing and building advanced technological systems at the intersection of robotics, software and human augmentation. Each project explores a different aspect of capability enhancement — from intelligent management software to autonomous robotics and wearable exosystems.
+
+The goal of AmundWorks is not only to build individual products, but to develop a unified ecosystem of technologies that will help develop *a better tomorrow*.
+
+## **Design Philosophy**
+
+AmundWorks projects follow a shared philosophy:
+- Human-Centered Engineering — technology should augment, not replace, the user.
+
+- Modular Development — systems evolve through iterative prototyping and experimentation.
+
+- Practical Innovation — ambitious ideas grounded in real engineering constraints.
 
 ## **Projects**
 

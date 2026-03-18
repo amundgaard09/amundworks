@@ -2,7 +2,7 @@
 # copyright (c) 2025 AmundWorks
 
 import math
-#import questionary
+import questionary
 
 def serielån():
     lånbeløp = float(input("lånbeløp:"))
@@ -67,7 +67,7 @@ def fibonacci_list():
         fibonacci_list()
     totalfib = [0, 1]
     fib0, fib1 = 0, 1
-    for i in range(0, (n - 2)):
+    for _ in range(0, (n - 2)):
         newfib = fib0 + fib1
         fib0 = fib1
         fib1 = newfib
