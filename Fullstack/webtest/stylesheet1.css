@@ -11,3 +11,7 @@ ul#navbarul {
     padding: 10px;
     
 }
+
+body {
+    background-color: color(srgb red green blue);
+}

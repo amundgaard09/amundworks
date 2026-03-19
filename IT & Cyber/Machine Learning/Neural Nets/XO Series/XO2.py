@@ -30,7 +30,6 @@ def DerivativeSigmoid(x: float) -> float:
 
 class DenseLayer:
     """_DenseLayer class for the layers of the network, containing the weight matrix, bias vector, activation function, and methods for forward and backward passes._"""
-    
     def __init__(
         self, 
         NInputs: int, 
@@ -157,7 +156,7 @@ class NeuralNetwork:
         pass
 
 
-XORnet = NeuralNetwork(
+MatrixNet = NeuralNetwork(
     InputNeuronCount = 2, 
     DenseLayerCount = 1, 
     DenseLayerNeuronCount = 8, 
