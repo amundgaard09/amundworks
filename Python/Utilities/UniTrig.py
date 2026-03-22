@@ -1,7 +1,13 @@
-### UniTrig x1 - AmundWorks Unified Trigonometry Calculation Library
+### UniTrig CLI - iteration II - AmundWorks Unified Trigonometry Assistant
 
+import sys
 import math
 from typing import Literal
+
+def D2R(Degrees: float) -> float:
+    return Degrees / 180 * math.pi
+def R2D(Radians: float) -> float:
+    return Radians / math.pi * 180
 
 def SineRule(
     Sides: list[float | None],
@@ -61,11 +67,6 @@ def SineRule(
 
     return [Angles_out, Sides]
 
-def D2R(Degrees: float) -> float:
-    return Degrees / 180 * math.pi
-def R2D(Radians: float) -> float:
-    return Radians / math.pi * 180
-
 def CosineRule(LengthA: float, LengthB: float, AngleA: float) -> float:
     return math.sqrt(LengthA ** 2 + LengthB ** 2 - ((2 * LengthA * LengthB) * math.cos(math.radians(AngleA))))
 def ReverseCosineRule(LengthA: float, LengthB: float, LengthC: float) -> float:
@@ -97,3 +98,54 @@ def HeronsFormula(LengthA: float, LengthB: float, LengthC: float) -> float:
     """
     SemiPerimiter = (LengthA + LengthB + LengthC) / 2
     return math.sqrt(SemiPerimiter * (SemiPerimiter - LengthA) * (SemiPerimiter - LengthB) * (SemiPerimiter - LengthC))
+
+def Executor(UserInput: str) -> str:
+    StrippedInput = UserInput.strip().split()
+    Command, Arguments = StrippedInput[0], StrippedInput[1:]
+    
+    ### Wanted Argument for each Function
+    ArgumentsForFunctions = {
+        "D2R":  1,
+        "R2D":  1,
+        "SR":   3,
+        "CSR":  3,
+        "RCSR": 3,
+        "CTA":  3,
+        "HF":   3,    
+    }
+    
+    GivenArgumentCount = len(Arguments) if len(StrippedInput) > 2 else 1
+    
+    ### Incorrect Arguments Error Catcher
+    if GivenArgumentCount != ArgumentsForFunctions[Command]:
+        print(f"Incorrect amount of arguments for {Command}! {Command} takes {ArgumentsForFunctions[Command]} arguments but was given {len(Arguments)}")
+    
+    ### Main Block
+    match Command:
+        case "D2R":
+            return str(D2R(float(Arguments[0])))
+        case "R2D":
+            return str(R2D(float(Arguments[0])))
+        case "SR":
+            sides = [float(x) if x != "None" else None for x in Arguments[0].split(",")]
+            angles = [float(x) if x != "None" else None for x in Arguments[1].split(",")]
+            mode = Arguments[2]
+            result = SineRule(sides, angles, mode)
+            return str(result) if result else "No solution"
+        case "CSR":
+            return str(CosineRule(float(Arguments[0]), float(Arguments[1]), float(Arguments[2])))
+        case "RCSR":
+            return str(ReverseCosineRule(float(Arguments[0]), float(Arguments[1]), float(Arguments[2])))
+        case "CTA":
+            return str(ConventionalTriangleArea(float(Arguments[0]), float(Arguments[1]), float(Arguments[2])))
+        case "HF":
+            return str(HeronsFormula(float(Arguments[0]), float(Arguments[1]), float(Arguments[2])))
+        case "help":
+            print("Functions: \nDegrees 2 Radians (D2R) \nRadians 2 Degrees (R2D) \nSine Rule (SR) \nCosineRule (CSR) \nReverse Cosine Rule (RCSR) \nConventional Triangle Area (CTA) \nHerons Formula (HF) \nbreak")
+        case "break":
+            sys.exit()
+        case _:
+            return "Unknown command"
+        
+while True:
+    print(Executor(input(">>>")))
