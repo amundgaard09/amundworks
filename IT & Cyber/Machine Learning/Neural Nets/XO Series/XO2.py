@@ -1,9 +1,37 @@
-""" Second Iteration - XO Neural Net Series | Matrix Based Neuron-less Neural Net"""
+""" Second Iteration - XO Neural Net Series | Matrix-Based Neuronless Neural Net"""
 
-import math
-import numpy
-import random
+import numpy as np
 import typing
+
+# Missing components for a complete neural network:
+# 1. Implement the Backward() method in NeuralNetwork class     .
+#    - Calculate loss gradient from target output               .
+#    - Propagate gradients backward through all layers          .
+#    - Use chain rule to compute dA for each layer              .
+#
+# 2. Add a loss function (e.g., Mean Squared Error)             DONE (MSE)
+#    - Measures difference between predicted and target output  DONE (MSE)
+#    - Returns scalar loss value                                DONE (MSE)
+#
+# 3. Add a derivative of loss function                          DONE (BinaryCrossEntropy from TensorFlow)
+#    - Needed for backpropagation to start                      DONE (BinaryCrossEntropy from TensorFlow)
+#
+# 4. Implement a training loop/method                           .
+#    - Takes training data and labels                           .
+#    - Calls Forward() then Backward() repeatedly               .
+#    - Tracks loss over epochs                                  .
+#
+# 5. Add a method to make predictions on new data               .
+#    - Calls Forward() and returns predictions                  .
+#    - Optional: add argmax for classification tasks            .
+#
+# 6. Add data preprocessing/loading                             .
+#    - Convert input data to numpy arrays                       DONE (ConvertToNPArray())
+#    - Normalize/scale input features if needed                 .
+#
+# 7. Add evaluation metrics                                     DONE (MSE, MAE, RMSE)
+#    - Accuracy, precision, recall for classification           DONE (MSE, MAE, RMSE)
+#    - Or MAE, RMSE for regression                              DONE (MSE, MAE, RMSE)
 
 def DotProduct(listA: list, listB: list) -> float:
     """Returns the dot product of two lists of the same length."""
@@ -18,7 +46,7 @@ def ReLU(x: float) -> float:
     return max(0, x)
 def Sigmoid(x: float) -> float:
     """Returns the sigmoid activation of x."""
-    return 1 / (1 + numpy.exp(-x))
+    return 1 / (1 + np.exp(-x))
 
 def DerivativeReLU(x: float) -> float:
     """Returns the derivative of the ReLU activation function."""
@@ -27,6 +55,19 @@ def DerivativeSigmoid(x: float) -> float:
     """Returns the derivative of the sigmoid activation function."""
     s = Sigmoid(x)
     return s * (1 - s)
+
+def ConvertToNPArray(ArrayLike) -> np.ndarray:
+    return np.array(ArrayLike)
+
+def MAE(Actual: list, Prediction: list) -> float:
+    if len(Prediction) != len(Actual):
+        return None
+    
+    return (sum((np.abs(Actual[i] - Prediction[i])) for i in range(len(Actual)))) / len(Actual)
+def MSE(Actual: list, Prediction: list) -> float:
+    return (sum(np.mean((Actual[i] - Prediction[i])**2) for i in range(len(Actual)))) / len(Actual)
+def RMSE(Actual: list, Prediction: list) -> float:
+    return np.sqrt(sum(np.mean((Actual[i] - Prediction[i])**2) for i in range(len(Actual))))
 
 class DenseLayer:
     """_DenseLayer class for the layers of the network, containing the weight matrix, bias vector, activation function, and methods for forward and backward passes._"""
@@ -38,19 +79,17 @@ class DenseLayer:
         DerivativeActivation: typing.Callable[[float], float]
     ):
         """Neuron Initialization with random weights and bias."""
-        self.WeightMatrix = numpy.random.uniform(-1,1,(NInputs, NOutputs))
-        self.Bias = numpy.random.uniform(-1, 1, NOutputs)
+        self.WeightMatrix = np.random.uniform(-1,1,(NInputs, NOutputs))
+        self.Bias = np.random.uniform(-1, 1, NOutputs)
         self.Activation = Activation
-        self.DerivativeActivation = DerivativeActivation
-        
-    def Forward(self, Input: numpy.ndarray) -> float: 
+        self.DerivativeActivation = DerivativeActivation  
+    def Forward(self, Input: np.ndarray) -> np.ndarray: 
         """Forward pass for the neuron."""
         self.Input = Input 
         self.Z = Input @ self.WeightMatrix + self.Bias
-        self.Output = self.Activation(self.Z)
+        self.Output = np.vectorize(self.Activation)(self.Z)
         return self.Output
-
-    def Backward(self, dA: numpy.ndarray, LearningRate: float) -> numpy.ndarray:
+    def Backward(self, dA: np.ndarray, LearningRate: float) -> np.ndarray:
         """Performs the backward pass for the dense layer.
 
         This function computes the gradients of the loss with respect to the
@@ -90,9 +129,9 @@ class DenseLayer:
             W = W - LearningRate * dW
             B = B - LearningRate * dB"""
             
-        dZ = dA * self.DerivativeActivation(self.Z)
+        dZ = dA * np.vectorize(self.DerivativeActivation)(self.Z)
 
-        dW = numpy.outer(self.Input, dZ)
+        dW = np.outer(self.Input, dZ)
         dB = dZ
 
         dInput = dZ @ self.WeightMatrix.T
@@ -101,7 +140,6 @@ class DenseLayer:
         self.Bias -= LearningRate * dB
 
         return dInput
-
 class NeuralNetwork:
     def __init__(
         self, 
@@ -137,8 +175,7 @@ class NeuralNetwork:
 
         # Output layer
         self.Layers.append(DenseLayer(PreviousNeuronCount, OutputNeuronCount, ActivationFunctionsPerLayer[len(ActivationFunctionsPerLayer)-1], DerivativeActivationFunctionsPerLayer[len(DerivativeActivationFunctionsPerLayer)-1]))
-
-    def Forward(self, Input: numpy.ndarray) -> numpy.ndarray:
+    def Forward(self, Input: np.ndarray) -> np.ndarray:
         """_Forward pass for the entire network._
 
         Args:
@@ -150,12 +187,19 @@ class NeuralNetwork:
         x = Input
         for layer in self.Layers:
             x = layer.Forward(x)
-        return x
-    
-    def Backward(self, TargetOutput: numpy.ndarray):
-        pass
-
-
+        return x  
+    def Backward(self, TargetOutput: np.ndarray):
+        """Backward pass for the entire network.
+        
+        Args:
+            TargetOutput (np.ndarray): Target output values for backpropagation.
+        """
+        OutputPrediction = self.Layers[-1].Output
+        dA = -(TargetOutput / OutputPrediction - (1 - TargetOutput) / (1 - OutputPrediction))
+        
+        for layer in reversed(self.Layers):
+            dA = layer.Backward(dA, self.LearningRate)
+        
 MatrixNet = NeuralNetwork(
     InputNeuronCount = 2, 
     DenseLayerCount = 1, 
