@@ -84,7 +84,7 @@ int main() {
         // Update and draw particles
         for (auto& p : particles) {
             p.UpdateParticleAcc();
-            p.UpdateParticlePos(0.016f); // Assuming 60 FPS, so dt = 1/60
+            p.UpdateParticlePos(0.016f);
             p.CheckForWallCollision();
             DrawParticle(window, p);
         }

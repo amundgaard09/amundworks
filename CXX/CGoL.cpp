@@ -28,7 +28,7 @@ int CheckNeighborCount(std::vector<int> CharCoordinate, std::vector<std::vector<
     return AliveNeighbors;
 }
 
-//tick update (1 Hz tick)
+//per tick update (1 Hz tick)
 void Update(std::vector<std::vector<char>>& grid) {
     std::vector<std::vector<char>> newGrid = grid;
 
@@ -52,7 +52,6 @@ void Update(std::vector<std::vector<char>>& grid) {
     grid = newGrid; 
 }
 
-// print grid
 void PrintGrid(std::vector<std::vector<char>>& grid){
     for (int row = 0; row < grid.size(); row++) {
         for (int col = 0; col < grid[row].size(); col++) {
@@ -62,7 +61,6 @@ void PrintGrid(std::vector<std::vector<char>>& grid){
     }
 }
 
-// main
 int main() {
     grid[4][3] = '#';
     grid[4][4] = '#';

@@ -1,4 +1,4 @@
-### UniTrig CLI - iteration II - AmundWorks Unified Trigonometry Assistant
+### UniTrig CLI - iteration I - AmundWorks Unified Trigonometry Assistant
 
 import sys
 import math
@@ -31,7 +31,7 @@ def SineRule(
 
     known_angle_indices = [i for i in range(3) if angles_rad[i] is not None]
     if len(known_angle_indices) == 2:
-        missing = 3 - sum(known_angle_indices)
+        missing = next(i for i in range(3) if angles_rad[i] is None)
         angles_rad[missing] = math.pi - sum(angles_rad[i] for i in known_angle_indices)
 
     ReferenceRatio = None
@@ -101,7 +101,11 @@ def HeronsFormula(LengthA: float, LengthB: float, LengthC: float) -> float:
 
 def Executor(UserInput: str) -> str:
     StrippedInput = UserInput.strip().split()
+    if len(StrippedInput) == 0:
+        return ""
+    
     Command, Arguments = StrippedInput[0], StrippedInput[1:]
+    CommandList = ["D2R", "R2D", "SR", "CSR", "RCSR", "CTA", "HF", "break"]
     
     ### Wanted Argument for each Function
     ArgumentsForFunctions = {
@@ -111,16 +115,22 @@ def Executor(UserInput: str) -> str:
         "CSR":  3,
         "RCSR": 3,
         "CTA":  3,
-        "HF":   3,    
+        "HF":   3,
+        "help": 0,
+        "break":0 
     }
     
-    GivenArgumentCount = len(Arguments) if len(StrippedInput) > 2 else 1
+    if Command not in CommandList:
+        print(f"unknown command! {Command}")
+        return ""
+    
+    GivenArgumentCount = len(Arguments)
     
     ### Incorrect Arguments Error Catcher
     if GivenArgumentCount != ArgumentsForFunctions[Command]:
         print(f"Incorrect amount of arguments for {Command}! {Command} takes {ArgumentsForFunctions[Command]} arguments but was given {len(Arguments)}")
+        return ""
     
-    ### Main Block
     match Command:
         case "D2R":
             return str(D2R(float(Arguments[0])))
@@ -144,8 +154,6 @@ def Executor(UserInput: str) -> str:
             print("Functions: \nDegrees 2 Radians (D2R) \nRadians 2 Degrees (R2D) \nSine Rule (SR) \nCosineRule (CSR) \nReverse Cosine Rule (RCSR) \nConventional Triangle Area (CTA) \nHerons Formula (HF) \nbreak")
         case "break":
             sys.exit()
-        case _:
-            return "Unknown command"
         
 while True:
     print(Executor(input(">>>")))
