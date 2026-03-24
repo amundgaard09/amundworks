@@ -30,13 +30,13 @@ import sys
 from typing import Literal
 from pathlib import Path
 
-LOGPATH = "python_\\olympus\\data\\olympus_log.txt"
-ROOTPATH = "python_\\olympus\\data\\json\\"
+LOGPATH = "python_\\utilities\\PRODIGY\\olympus\\data\\txt\\olympus_log.txt"
+JSONPATH = "python_\\utilities\\PRODIGY\\olympus\\data\\json\\"
 
-SCHEDULEPATH = Path(ROOTPATH + "schedule.json") 
-SESSIONFILE = Path(ROOTPATH + "sessions.json")
-EVENTFILE = Path(ROOTPATH + "events.json")
-PRFILE = Path(ROOTPATH + "prs.json")
+SCHEDULEPATH = Path(JSONPATH + "schedule.json") 
+SESSIONFILE = Path(JSONPATH + "sessions.json")
+EVENTFILE = Path(JSONPATH + "events.json")
+PRFILE = Path(JSONPATH + "prs.json")
 
 SCHEDULEPATH.touch() if not SCHEDULEPATH.exists() else None
 SESSIONFILE.touch() if not SESSIONFILE.exists() else None
