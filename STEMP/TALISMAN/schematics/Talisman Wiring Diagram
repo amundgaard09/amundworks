@@ -1,0 +1,88 @@
+                                   ┌─────────────────────────────┐
+                                   │     3S LiPo Pakke (11.1V)   │
+                                   │  XT60 (Strøm) + Balanse XT3 │
+                                   └────────────┬────────────────┘
+                                                │
+                                          ┌─────▼─────┐
+                                          │ MAIN FUSE │  ← 25–30 A bilsikring
+                                          └─────┬─────┘
+                                                │
+                                       ┌────────┴────────┐
+                                       │Nødlader(ekstern)│ ← kobles til XT60 + balanse
+                                       └───┬─────────────┘
+                                           │
+                      Sense linje ─────────┘  → ESP32 GPIO (via spenningsdeler)
+                                           │
+                                ┌──────────┴──────────┐
+                                │ Servo cutoff bryter │ ← MOSFET/e-fuse
+                                └──────────┬──────────┘
+                                           │
+                                   ┌───────┴────────┐
+                                   │  UBEC / Buck   │ ← 11.1V → 6–7.4 V @ 20–30 A
+                                   └───────┬────────┘
+                                           │ Servo-rail (6–7.4 V)
+                 ┌─────────────────────────┴─────────────────────────────────┐
+                 │                                                           │
+        ┌────────▼───────────┐                                   ┌───────────▼──────────┐
+        │ Servo Strømbuss    │─── tykke kabler ────────────────► │  Servoer (x18)       │
+        │ 6.0–7.4V (V+)      │                                   │ (DFRobot 25 kg + enc)│
+        └────────┬───────────┘                                   └───────────┬──────────┘
+                 │                                                           │
+                 │                                                           │
+                 │                     ┌──────────────────────────────────┐  │
+                 │                     │ PCA9685 #1 (16 kanaler)          │◄─┘
+                 │ signaltråder        │ VCC = 3.3 V (logikk)             │
+                 └─────────Signal─────►│ V+ = (servo V+) (valgfritt)      │
+                                       │ I2C SDA/SCL fra ESP32            │
+                                       └──────────────────────────────────┘
+                                       ┌──────────────────────────────────┐
+                                       │ PCA9685 #2 (resten av kanaler)   │
+                                       └──────────────────────────────────┘
+
+
+                                ( SIGNAL / LOGIKK — felles jord er viktig )
+
+                                   ┌──────────────────────────────────┐
+                                   │             ESP32                │
+                                   │  - VCC 3.3V                      │
+                                   │  - I2C SDA/SCL til PCA9685       │
+                                   │  - Lader-sense inn på GPIO       │
+                                   │  - INA219/INA226 strømsensor     │
+                                   └───────────┬──────────────────────┘
+                                               │
+                                ┌──────────────┴───────────────┐
+                                │ Strømtilførsel til ESP32     │
+                                │ (automatisk switchover)      │
+                                └──────────────┬───────────────┘
+                                               │
+                      ┌────────────────────────┴──────────────────────────┐
+                      │ Strømvelger (ideal diode / power multiplexer)     │
+                      │  Velger sterkeste kilde uten tilbakestrøm         │
+                      └─────────────┬─────────────────────────────────────┘
+                                    │
+                ┌───────────────────┴─────────────────┐
+                │                                     │
+         ┌──────▼──────┐                        ┌─────▼─────┐
+         │ 5V buck fra │                        │ Solcelle- │
+         │ hoved-LiPo  │                        │ modul     │
+         │ (→ 3.3V reg)│                        │ (DFR0559) │
+         └──────┬──────┘                        └─────┬─────┘
+                │                               5V ut │
+                └─────────────────────────────────────┘
+                        (begge inn på strømvelger)
+
+
+                          ┌────────────────────────────────────┐
+                          │                Jord                │
+                          │ ★ Alle jord må samles til et punkt │
+                          │   nær batteriets negative pol      │
+                          └────────────────────────────────────┘
+
+Summary
+
+ESP INPUTS:
+    1. 
+ESP OUTPUTS:
+    2.
+
+PCA 
