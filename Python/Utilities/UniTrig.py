@@ -156,4 +156,4 @@ def Executor(UserInput: str) -> str:
             sys.exit()
         
 while True:
-    print(Executor(input(">>>")))
+    print(Executor(str(input(" >>> "))))

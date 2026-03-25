@@ -5,11 +5,12 @@ import random
 
 def randstr():
     strlength = int(input("string length: "))
-    chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&()_+-=[]{|};:\<>?/~"
-    rand_str = ''.join(random.choice(chars) for _ in range(strlength))
     if strlength < 1:    
         print("string length must be greater than 0")
-        return
+        return None
+    
+    chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&()_+-=[]{|};:\<>?/~"
+    rand_str = ''.join(random.choice(chars) for _ in range(strlength))
     print("Random string:", rand_str)
     return rand_str
 def dices():
@@ -22,7 +23,7 @@ def dices():
     except ValueError:
         print("invalid input")
         dices()
-    for i in range(0,y):
+    for _ in range(0,y):
         addx = random.randint(1,6)
         x.append(addx)
         sumx = sum(x)
