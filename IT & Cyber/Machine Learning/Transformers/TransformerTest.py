@@ -1,0 +1,1 @@
+"""First Generation of AmundWorks Transformer Architechture Neural Nets"""

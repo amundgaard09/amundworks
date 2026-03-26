@@ -4,6 +4,7 @@ import numpy as np
 import typing
 
 # Missing components for a complete neural network:
+
 # 1. Implement the Backward() method in NeuralNetwork class     .
 #    - Calculate loss gradient from target output               .
 #    - Propagate gradients backward through all layers          .
