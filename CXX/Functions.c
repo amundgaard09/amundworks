@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-// recursion function tests
+// recursive functions
 
 uint64_t factorial(int i) {
     if (i == 0 || i == 1) {
@@ -11,7 +11,6 @@ uint64_t factorial(int i) {
         return (i * factorial(i - 1));
     }
 }
-
 uint64_t fibonacci(int i) {
     if (i==0) {
         return 0;

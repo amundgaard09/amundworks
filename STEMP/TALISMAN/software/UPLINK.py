@@ -1,1 +1,0 @@
-"""TALISMAN < - > SENTINEL UPLINK | _Enabling communication, autonomy, and mission capability._"""

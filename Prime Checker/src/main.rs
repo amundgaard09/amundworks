@@ -1,5 +1,5 @@
 
-use std::io;
+use std::{io};
 
 fn main() {
     println!("How many integers do you want to check for primes?:");
