@@ -665,7 +665,7 @@ ARGUMENTMAP: dict[str, set] = {
         "rctimeconstant": {2},
         "inductorimpedance": {2},
         "powerdissipation": {3},
-        "resistorsinsight": {4, 5},
+        "resistorinsight": {4, 5},
         "resistorviz": {4, 5},
         "capacitance": {2},
         "esr": {2},
