@@ -6,8 +6,8 @@ including command parsing, argument validation, and command dispatching.
 """
 
 from prompt_toolkit.completion import NestedCompleter
-from ...types.color_dtypes import color_text
-from ...commons import exceptions
+from ..types.color_sys import color_text
+from ..commons import exceptions
  
 import os, shlex, inspect
 

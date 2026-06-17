@@ -26,7 +26,7 @@ else:
     import numpy as xp
 
 import math, copy, typing, random
-from ...commons.exceptions import MissingParameters, InvalidInput
+from ..commons.exceptions import MissingParameters, InvalidInput
 
 EPSILON = 1e-9
 

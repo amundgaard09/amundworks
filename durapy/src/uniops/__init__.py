@@ -3,9 +3,9 @@ The `DuraPy` `UniOps` module for Control and Operations tasks.
 `UniOps` is built for tasks related to mechatronics control and operation tasks.
 """
 
-from conpidcon import (ContinuousPIDController,)
-from forward_kinematics import ()
-from inverse_kinematics import ()
+from .conpidcon import (ContinuousPIDController)
+#from forward_kinematics import ()
+#from inverse_kinematics import ()
 
 __all__ = [
     "conpidcon.py", 

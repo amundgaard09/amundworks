@@ -1,16 +1,16 @@
 """UniForge Engineering Assistant CLI - v1.1.5-beta"""
 
-from durapy.src.unipy.uniflight.uniflight import *
-from durapy.src.unipy.unispace.unispace import *
-from durapy.src.unipy.unicrypt.unicrypt import *
-from durapy.src.unipy.unipower.unipower import *
-from durapy.src.unipy.unimath.unimath import *
-from durapy.src.unipy.uniphys.mechanics import *
-from durapy.src.unipy.unialgo.unialgo import *
+from durapy.src.uniflight.uniflight import *
+from durapy.src.unispace.unispace import *
+from durapy.src.unicrypt.unicrypt import *
+from durapy.src.unipower.unipower import *
+from durapy.src.unimath.unimath import *
+from durapy.src.uniphys.mechanics import *
+from durapy.src.unialgo.unialgo import *
 
-from durapy.src.unipy import moduletools as mt
+from durapy.src import moduletools as mt
 
-from durapy.src.unipy.uniCLI.uniCLI import (
+from durapy.src.uniCLI.uniCLI import (
     ExitEnvironmentSignal,
     clear_terminal, 
     dispatcher, 

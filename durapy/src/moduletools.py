@@ -2,13 +2,13 @@
 
 import inspect
 
-from durapy.src.unipy.uniflight import uniflight
-from durapy.src.unipy.unispace import unispace
-from durapy.src.unipy.unicrypt import unicrypt
-from durapy.src.unipy.unipower import unipower
-from durapy.src.unipy.uniphys import mechanics
-from durapy.src.unipy.unimath import unimath
-from durapy.src.unipy.unialgo import unialgo
+from durapy.src.uniflight import uniflight
+from durapy.src.unispace import unispace
+from durapy.src.unicrypt import unicrypt
+from durapy.src.unipower import unipower
+from durapy.src.uniphys import mechanics
+from durapy.src.unimath import unimath
+from durapy.src.unialgo import unialgo
 
 def _generateDicts(Module) -> tuple[dict, dict]:
     """

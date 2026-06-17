@@ -1,10 +1,11 @@
 {
-    "name": "time",
+    "name": "get_time",
     "description": "Returns the current time.",
     "triggers": [
         "what time is it",
         "what's the time",
-        "current time"
+        "current time",
+        "time"
     ],
     "language": "python",
     "entrypoint": "execute.py"

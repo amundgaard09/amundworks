@@ -4,33 +4,31 @@ The DuraPy STEM Python Package from Durendal Engineering.
 DuraPy is the complete collection of all open-source Python projects from Durendal. 
 """
 
-from .src.unipy.unialgo import unialgo
-from .src.unipy.uniCLI import uniCLI
-from .src.unipy.unicogni import unicogni
-from .src.unipy.unicrypt import unicrypt
-from .src.unipy.uniflight import uniflight
-from .src.unipy.uniops import uniops
-from .src.unipy.unipower import unipower
-from .src.unipy.unispace import unispace
-from .src.unipy.univiz import univiz
+from .src.unialgo import unialgo
+from .src.uniCLI import uniCLI
+from .src.unicogni import unicogni
+from .src.unicrypt import unicrypt
+from .src.uniflight import uniflight
+from .src.unipower import unipower
+from .src.unispace import unispace
+from .src.univiz import univiz
 
-from .src.unipy.unimath import unimath
-from .src.unipy.unimath import linalg_dtypes
-
-from .src.unipy.uniphys.phys_dtypes import (Unit, UNITS, PhysicalConstant, Quantity)
-from .src.unipy.uniphys import (
-    mechanics, 
+from .src.unimath import (linalg_dtypes, coordinate_systems, unimath)
+from .src.uniops import (conpidcon, forward_kinematics, inverse_kinematics)
+from .src.uniphys.phys_dtypes import (Unit, UNITS, PhysicalConstant, Quantity)
+from .src.uniphys import (
     acoustics, 
     astrophys, 
     electromags, 
     fluidyn, 
-    quantum, 
-    thermodyn, 
-    nuclear
+    mechanics, 
+    nuclear, 
+    quantum,
+    thermodyn,
 )
 
 from .src.commons import exceptions, constants
-from .src.types.color_dtypes import (
+from .src.types.color_sys import (
     RGB, 
     CMYK, 
     HEX, 

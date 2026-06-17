@@ -1,26 +1,27 @@
+"""
+The `ICARUS` Complex Intent Engine
 
-import io, os, json, queue, dotenv, sounddevice
+This file contains dependencies for ICARUS linked to responding to the user, either via speech or text.
+
+---
+
+The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
+"""
+
+import io, os, dotenv
 import pydub, pydub.playback as pd_playback
 
 from core.utilities.decorators import logger
-from vosk import Model, KaldiRecognizer
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
 from durapy import uniCLI
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-
-_SPEECH_MODEL_PATH = ROOT / "core" / "models" / "vosk-model-small-en-us-0.15"
+# Load API keys and models
 dotenv.load_dotenv(Path(__file__).resolve().parents[3] / ".env", verbose=True, encoding="utf-8")
 
-_queue = queue.Queue()
-model = Model(str(_SPEECH_MODEL_PATH))
-recognizer = KaldiRecognizer(model, 16000)
+# Initializers
 elevenlabs = ElevenLabs(api_key=os.environ.get("ELEVENLABS_API_KEY"))
-
-def _callback(indata, frames, time, status):
-    _queue.put(bytes(indata))
 
 def _play_audio(audio_bytes: bytes) -> None:
     """Play the given audio bytes."""
@@ -50,30 +51,13 @@ def speak(text: str) -> None:
         if chunk:
             audio_stream.write(chunk)
 
+    # Go to start of stream, play the stream and print the response.
     audio_stream.seek(0)
     _play_audio(audio_stream.read())
     uniCLI.console_print("ICARUS", "blue", text)
 
-@logger   
-def listen() -> str:
-    with sounddevice.RawInputStream(
-        samplerate=16000, 
-        blocksize=8000, 
-        dtype="int16", 
-        channels=1, 
-        callback=_callback
-        ):
-    
-        while True:
-            data = _queue.get()
-
-            if recognizer.AcceptWaveform(data):
-                result: dict = json.loads(recognizer.Result())
-                uniCLI.console_print("USER", "green", result.get("text").capitalize())
-                return result.get("text", "")
-
 @logger
 def initialize() -> None:
-    """Placeholder for future init logic for the Comms Engine."""
-    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Communicative Engine...", "white")
+    """Placeholder for future init logic for the Feedback Engine."""
+    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
 

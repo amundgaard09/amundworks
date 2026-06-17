@@ -1,7 +1,6 @@
 
 import os, mcp.types as types
-from mcp.server import Server, NotificationOptions
-from mcp.server.models import InitializationOptions
+from mcp.server import Server
 
 server = Server("icarus-skill-engine")
 

@@ -7,10 +7,8 @@ including geometry, algebra, calculus, and more.
 
 import math, sympy, matplotlib.pyplot as plt
 
-from ...unipy import uniCLI
-from ...commons import exceptions, constants
-
-
+from .. import uniCLI
+from ..commons import exceptions, constants
 from typing import Literal
 
 PI = constants.PI
@@ -58,27 +56,24 @@ def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B
     Area = herons_formula(A, B, C)
     
     return f"""Area: {Area} - Sides: A: {A}, B: {B}, C: {C} - Sin({a}) = {SinA}, Sin({b}) = {SinB}, Sin({c}) = {SinC}"""
-def pythagoras(A: float | None = None, B: float | None = None, C: float | None = None) -> str:
+def pythagoras(A: float | None = None, B: float | None = None, C: float | None = None) -> float:
     """
     Calculates the missing side of a right-angled triangle using either normal or reverse pythagoras.
     Formula: `A² + B² = C²` for normal, and `A² = C² - B²` or  `B² = C² - A²` for reverse.
     
-    The function can take in any two sides and will return the missing side, as well as the values of all three sides. If more than one side is missing, the function will return `None`.
-    If no sides are missing, the function will return the values of all three sides.
+    The function can take in any two sides and will return the missing side. If more than one side is missing, the function will return `None`. Same thing when 3 values are given.
     """
     
-    if (A, B, C).count(None) > 1:
+    if (A, B, C).count(None) > 1 or (A, B, C).count(None) == 3:
         return None
     
     if A is None:
-        A = math.sqrt(C**2 - B**2)
+        return math.sqrt(C**2 - B**2)
     elif B is None:
-        B = math.sqrt(C**2 - A**2)
+        return math.sqrt(C**2 - A**2)
     elif C is None:
-        C = math.sqrt(A**2 + B**2)
+        return math.sqrt(A**2 + B**2)
     
-    return f"A: {A}, B: {B}, C: {C}"
-
 def sine_rule(
     Sides: list[float | None],
     Angles: list[float | None],

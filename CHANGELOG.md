@@ -59,9 +59,29 @@
 - Finished `execution_engine.py` Rev. 1. Routing, skill finding and skill execution now works. Full modularity as well.
 - Added methods for skipping __ pycache __ folders, so that they don't get loaded as skills and crash the system.
 - Removed `process()` from `communicative_engine.py` again, and added it to `execution_engine.py`. 
-- Added a testing environment.
+- Added a testing environment. (just a simple test.py file, but positioned so that all imports work correctly)
 
 ### Thursday 11.06.2026
 
 - Added `DAY_DEV_PLAN.md` for noting daily development plans.
 - Added `match_rev2()` and a new intent engine architecture for a score-based query classification system.
+
+### Tuesday 16.06.2026
+
+- Added the start of the plans for the future `Scepter` Durendal programming language.
+- Added error handling to `communicative_engine.py`, for `sounddevice`.`PortAudioError` errors.
+- Added functionality to the `get_time` skill. `get_time`.`execute()` is no longer a placeholder.
+- Optimized some dynamic path declarations in `utilities`/`txtfiletools.py`.
+- Replaced `communicative_engine.py` with `feedback_engine.py` and `perception_engine.py`. Perception will be responsible for listening and taking in terminal text inputs and feedback will be responsible for speaking and text printing in the terminal.
+- Updated ICARUS top-level init file docstring.
+- Started work on the new score intent routing system.
+- Started working on the ICARUS README.
+
+### Wednesday 17.06.2026
+
+- Restructured the `DuraPy` folder by removing the UniPy folder and instead adding everything to /src.
+- Added `coordinate_systems.py` with cartesian (1, 2 and 3 dims.), spherical, cylindrical and polar coordinate systems
+- Added error handling for when ICARUS is run without internet. Because of the fact that ElevenLabs TTS is the only part that needs internet, an offline-mode with only text output needs to be added.
+- Fixed a lot of bugs rooted in the use of "color_dtypes.color_text()" instead of just `color_text()`.
+
+

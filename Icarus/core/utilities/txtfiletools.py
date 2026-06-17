@@ -4,8 +4,8 @@ from pathlib import Path
 from durapy import uniCLI
 
 STD_LOG_PATH = Path(__file__).resolve().parents[2] / "logs"
-RUNTIME_LOG_PATH = Path(__file__).resolve().parents[2] / "logs" / "runtime_log.txt"
-DEBUG_LOG_PATH = Path(__file__).resolve().parents[2] / "logs" / "debug_log.txt"
+RUNTIME_LOG_PATH = STD_LOG_PATH / "runtime_log.txt"
+DEBUG_LOG_PATH = STD_LOG_PATH / "debug_log.txt"
 
 def log(content: str, path: Path = RUNTIME_LOG_PATH) -> bool:
     try:

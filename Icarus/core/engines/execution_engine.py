@@ -5,7 +5,7 @@ This file contains dependencies for ICARUS linked to execution of commands and t
 
 ---
 
-The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal/)
+The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
 import os
@@ -52,20 +52,20 @@ def build_tokenmap() -> dict[list[str], Callable[[], str]]:
         if isdunder(folder):
             continue
         
-        module, triggers = get_py_skill_and_tokens(_SKILLS_DIR / Path(folder))
-        for trigger in triggers:
-            if trigger in map:
-                raise ValueError(f"Duplicate trigger: {trigger}")
+        module, tokens = get_py_skill_and_tokens(_SKILLS_DIR / Path(folder))
+        for token in tokens: ### WRONG LOGIC HERE!!!!!
+            if token in map:
+                raise ValueError(f"Duplicate trigger: {token}")
             
-            map[trigger.lower().strip()] = module.execute
+            map[token.lower().strip()] = module.execute
     
     return map
 
 def handle_unknown() -> str: # Add closest function system
-    return "I didn't understand that."
+    return "I didn't understand that." # Did you mean: etc...
 
-def respond(user_input: str):
-    """The main Execution engine function for now."""
+def respond(user_input: str) -> Callable[[], str]:
+    """Generate a response to the user input. Returns a function."""
     func = match(user_input, TRIGGERMAP)
     
     if func is None:

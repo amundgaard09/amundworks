@@ -1,35 +1,67 @@
+"""
+The `ICARUS` Complex Main Entrypoint.
 
-from durapy import uniCLI
+This file contains the entrypoint for ICARUS.
+
+---
+
+The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
+"""
 
 from core.engines.intent_engine import (
-    initialize as intent_engine_init
+    initialize as intent_init
 )
 
 from core.engines.execution_engine import (
-    initialize as exec_engine_init, 
+    initialize as execution_init, 
     respond
 )
 
-from core.engines.communicative_engine import (
-    initialize as comms_engine_init, 
-    listen, speak
+from core.engines.feedback_engine import (
+    initialize as feedback_init, 
+    speak
 )
 
-def main() -> None:
-    """The main speech kernel for the Icarus Complex"""
-    uniCLI.console_print("ICARUS", "blue", "Listening...", "green")
-    while True:
-        user_input = listen()
-        
-        if "goodbye" in user_input:
-            speak("Goodbye, Simon")
-            exit(1)
-            
-        else:
-            response = respond(user_input)
-            speak(response)
+from core.engines.perception_engine import (
+    initialize as perception_init, 
+    listen
+)
 
-exec_engine_init()
-intent_engine_init()
-comms_engine_init()
-main()
+import subprocess
+
+from core.utilities.exceptions import NotConnectedError
+from core.utilities.decorators import logger
+from durapy import uniCLI
+
+def check_windows_wifi() -> bool:
+    try:
+        output = subprocess.check_output("netsh wlan show interfaces", shell=True).decode("utf-8")
+        if "State" in output and "connected" in output.lower():
+            return True
+    except subprocess.CalledProcessError:
+        pass
+    return False
+
+@logger
+def main_init() -> None:
+    uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus Engines...", "white")
+    
+    if not check_windows_wifi():
+        raise NotConnectedError
+    
+    execution_init()
+    intent_init()
+    perception_init()
+    feedback_init()
+    
+@logger
+def main() -> None:
+    """The main dialouge kernel for the Icarus Complex"""
+    uniCLI.console_print("ICARUS", "blue", "Listening...", "green")
+    
+    while True:
+        speak(respond(listen()))
+
+if __name__ == "__main__":
+    main_init()
+    main()

@@ -15,7 +15,7 @@ from src.modules.dtypes import (
     StudentAthleteProfile,
 )
 
-from durapy.src.types.color_dtypes import color_text as color_dtypes.color_text
+from durapy.src.types.color_sys import color_text as color_text
 from questionary import select, text
 from pathlib import Path
 from json import JSONDecodeError, load, dump 
@@ -190,15 +190,15 @@ def _get_distances(_sport: str) -> list[float] | None:
                 raw_distance = text(f"Enter {sport_part} distance (leave blank if none):").ask()
                 if raw_distance is None or raw_distance.strip() == "": return None
                 try: distances.append(float(raw_distance)); break
-                except ValueError: print(f"Only {color_dtypes.color_text('floats', 'blue', Bold=True)} or {color_dtypes.color_text('ints', 'blue', Bold=True)} are allowed!")
-        
+                except ValueError: print(f"Only {color_text('floats', 'blue', Bold=True)} or {color_text('ints', 'blue', Bold=True)} are allowed!")
+    
         return distances
 
     while True:
         raw_distance: str = text(f"Enter {_sport} distance (leave blank if none): ").ask()
         if raw_distance is None or raw_distance.strip() == "": return None
         try: return [float(raw_distance)]
-        except ValueError: print(f"Only {color_dtypes.color_text('floats', 'blue', Bold=True)} or {color_dtypes.color_text('ints', 'blue', Bold=True)} are allowed!")
+        except ValueError: print(f"Only {color_text('floats', 'blue', Bold=True)} or {color_text('ints', 'blue', Bold=True)} are allowed!")
 
 def cli_create_step() -> Step:
     """
@@ -492,10 +492,10 @@ def view_student_athlete_profile() -> None:
     """
     View the current student-athlete profile.
     """     
-def view_athlete_profile(_student: bool = False) -> None:
+def view_athlete_profile(student: bool = False) -> None:
     """
     View the current athlete profile.
     """
-    if _student:
+    if student:
         view_student_athlete_profile()
     

@@ -3,7 +3,7 @@
     "description": "Greets the user.",
     "triggers": [
         "hello",
-        "good morning",
+        "morning",
         "what's up"
     ],
     "language": "python",

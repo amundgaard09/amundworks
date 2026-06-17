@@ -37,22 +37,19 @@ Docs and other resources can be found in the [Durendal GitHub](https://github.co
 #|#                                                                    #|#
 ### ------------------------------------------------------------------ ###
 
-from durapy.src.types.color_dtypes import color_text as color_dtypes.color_text
-from durapy.src.unipy.uniCLI.uniCLI import clear_terminal
-
-#from src.modules.dtypes import (
-#    Step,
-#    Exercise,
-#    Session,
-#    DayPlan,
-#    WeekPlan,
-#    TrainingBlock,
-#    Event,
-#    SeasonPlan,
-#    AthleteProfile,
-#    StudentAthleteProfile,
-#    SeasonPlan,
-#)
+from src.modules.dtypes import (
+    Step,
+    Exercise,
+    Session,
+    DayPlan,
+    WeekPlan,
+    TrainingBlock,
+    Event,
+    SeasonPlan,
+    AthleteProfile,
+    StudentAthleteProfile,
+    SeasonPlan,
+)
 
 from src.modules.builders import (
     cli_create_event,
@@ -78,15 +75,8 @@ from src.modules.builders import (
 
 import json, time, datetime, questionary
 
-from awpc.src.types.color_dtypes import xColorText as colorText
-from awpc.src.unipy.uniCLI.uniCLI import clearTerminal
-from vulcan.olympus.src import (
-    Step,
-    Exercise,
-    Session,
-    DayPlan,
-    WeekPlan,
-    Event,)
+from durapy.src.types.color_sys import color_text
+from durapy.src.uniCLI.uniCLI import clear_terminal
 
 ### ------------------------------------------------------------------ ###
 

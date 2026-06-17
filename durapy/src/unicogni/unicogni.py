@@ -10,7 +10,7 @@ else:
     import numpy as xp
 
 from scipy import special
-from ...commons.constants import PI
+from ..commons.constants import PI
 
 ### ACTIVATION FUNCTIONS
 
