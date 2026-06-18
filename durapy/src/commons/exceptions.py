@@ -4,7 +4,7 @@ The `DuraPy` `Exceptions` module.
 This module contains all the custom exceptions used in the `DuraPy` library.
 """
 
-from ..types.color_sys import color_text
+from ..frameworks.color_sys import color_text
 
 class ImpossibleTriangleError(Exception):
     """Raise when the sum of the angles of a triangle is not 180 degrees, a mathematical impossibility."""

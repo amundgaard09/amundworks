@@ -13,7 +13,7 @@ typedef struct {
 } Matrix; 
 
 void init_matrix(Matrix *M, int rows, int cols);
-void get_dims(Matrix *M);
+void print_dims(Matrix *M);
 
 float get_element(Matrix *M, int row, int col);
 void set_element(Matrix *M, int row, int col, float value);

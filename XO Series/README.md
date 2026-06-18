@@ -7,7 +7,7 @@
 
 ## What is the XO Series?
 
-The XO Series is a collection of MLP-based neural networks designed applications, including image recognition, natural language processing, and more. 
+The XO Series is a collection of MLP-based neural networks designed applications, including image recognition, natural language processing, and more.
 
 ### XO Iteration I - Simple MLP Neural Network
 
@@ -19,7 +19,7 @@ The second iteration of the XO Series, XO II, is a more advanced MLP-based neura
 
 ### XO Iteration III - Advanced Matrix-based architecture, Numpy-accelerated MLP Neural Network
 
-The third iteration of the XO Series, XO III, is an even more advanced MLP-based neural network that builds upon the architecture and acceleration techniques of XO II. It is a MNIST classifier, demonstrating the potential for the XO Series to be applied to more complex tasks and datasets. 
+The third iteration of the XO Series, XO III, is an even more advanced MLP-based neural network that builds upon the architecture and acceleration techniques of XO II. It is a MNIST classifier, demonstrating the potential for the XO Series to be applied to more complex tasks and datasets.
 
 ### XO Iteration IV - Future Advanced Matrix-based architecture, Numpy-accelerated, GPU-accelerated MLP Neural Network
 
@@ -36,5 +36,3 @@ The Durendal Python Collective is part of the Durendal Github Repository, and by
 While this software and all other software under Durendal is licensed under the **MIT License** allowing full freedom of use, we strongly encourage all public projects built upon the Durendal repository to remain open source under the MIT License or a similarly permissive license. Projects that follow this philosophy may be recognized as part of the official Durendal ecosystem.
 
 By doing so, you help support an open, collaborative engineering ecosystem.
-
-

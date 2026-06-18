@@ -27,7 +27,7 @@ The interface is designed to be user-friendly and efficient, enabling athletes t
 SCHEDULEPATH, SESSIONFILE, SLEEP_SCORES, GOALS, LOGFILE, LOGPATH, EVENTFILE, SCHEDULE = (None for _ in range(8))
 
 import sys, json, time, datetime, questionary
-from durapy.src.types.color_sys import color_text
+from durapy.src.frameworks.color_sys import color_text
 from durapy.src.uniCLI.uniCLI import clear_terminal
 
 from Vulcan.olympus.src.modules.dtypes import (

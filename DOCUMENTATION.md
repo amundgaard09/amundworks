@@ -8,10 +8,10 @@ Whether you're using the tools, contributing to development, or exploring the sy
 
 - [Durendal Documentation & Wiki](#durendal-documentation--wiki)
   - [Table of Contents](#table-of-contents)
-  - [Durendal Overview](#durendal-overview)
+  - [Durendal Overview & Status](#durendal-overview--status)
   - [Quick Start Guide](#quick-start-guide)
   - [Project Documentation](#project-documentation)
-    - [DuraPy - Durendal Python](#durapy---durendal-python)
+    - [DuraPy - Durendal Python](#durapy---durendal-python-collection)
     - [UniForge CLI](#uniforge-cli)
     - [XO Neural Net Series](#xo-neural-net-series)
     - [Vulcan Personal Productivity Platform](#vulcan-personal-productivity-platform)
@@ -20,7 +20,7 @@ Whether you're using the tools, contributing to development, or exploring the sy
 
 ## Durendal Overview & Status
 
-Durendal is a independent multi-displine engineering conglomerate focused on creating innovative solutions at the intersection of technology and design. The organization focuses on building open-source resources, tools, and platforms that empower individuals and communities to create, learn, and innovate. Durendal is committed to fostering a collaborative environment where creativity and technology can thrive together.
+Durendal is a independent multi-displine engineering initiative focused on creating innovative solutions at the intersection of technology and design. The organization focuses on building open-source resources, tools, and platforms that empower individuals and communities to create, learn, and innovate. Durendal is committed to fostering a collaborative environment where creativity and technology can thrive together.
 
 [![Durendal Status](https://img.shields.io/badge/Status-Active%20Development-green.svg)](https://github.com/durendal/durendal)
 
@@ -54,29 +54,34 @@ Durendal is organized around several core pillars:
 To get started with the Durendal Python Collective, follow these steps:
 
 1. Install the DuraPy library from PyPI using pip:
+
    ```bash
    pip install durapy # latest stable version
    ```
 
 2. Import wanted modules in your Python script:
+
    ```python
    from durapy import unimath, unipower
    ```
 
 3. Start using the available functions and classes in your project.
+
     ```python
     result = unimath.LinearEvaluation(a=5, b=3, x=2)
     print(result)  # Output: 13
     ```
- 
+
 If you're interested in using the UniForge CLI, which is a command-line interface for tools and utilities built on top of DuraPy, you can access it as follows:
 
 1. Access the UniForge CLI by running:
+
     ```bash
     uniforge
     ```
 
 2. Test what the UniForge CLI can do by running a command, such as the pythagoras calculator (the underscore `_` is used to indicate the value to be calculated, which is the standard within the UniForge CLI):
+
     ```bash
     unimath pythagoras 3 4 _
     ```
@@ -87,14 +92,13 @@ If you're interested in using the UniForge CLI, which is a command-line interfac
     A: 3, B: 4, C: 5
     ```
 
-    
 ## Project Documentation
 
 The following sections provide detailed documentation for each of the major projects built by Durendal. Each project is described in terms of its purpose, features, and how to get started with using it.
 
 ### DuraPy - Durendal Python Collection
 
-The Durendal Python Collection (**DuraPy**) unites all the Python projects, modules and packages built by Durendal. The UniPy library is a core component of **DuraPy**, providing a set of utilities and functions that are used in Python-based projects within Durendal. All modules under UniPy follow a consistent naming convention, starting with the prefix "uni" to indicate their association with the UniPy library. For example, you might find modules like `unimath`, `unipower`, and `univiz` within the DuraPy, each offering specific functionalities related to mathematics, electrical systems, and visualizations, respectively, as well as many other modules, with some still in development. 
+The Durendal Python Collection (**DuraPy**) unites all the Python projects, modules and packages built by Durendal. The UniPy library is a core component of **DuraPy**, providing a set of utilities and functions that are used in Python-based projects within Durendal. All modules under UniPy follow a consistent naming convention, starting with the prefix "uni" to indicate their association with the UniPy library. For example, you might find modules like `unimath`, `unipower`, and `univiz` within the DuraPy, each offering specific functionalities related to mathematics, electrical systems, and visualizations, respectively, as well as many other modules, with some still in development.
 
 To install DuraPy, use pip:
 
@@ -138,4 +142,3 @@ Durendal is entirely open-source, and contributions from the community are alway
 [![License Details](https://img.shields.io/badge/License-Details-blue.svg)](LICENSE)
 
 All projects under Durendal are licensed under the MIT License, which allows for free use, modification, and distribution of the software. Users are encouraged to review the specific license files included in each project for more details on the terms and conditions of use. By using any of the DuraPy projects, you agree to comply with the terms of the MIT License and acknowledge that the software is provided "as is" without any warranties or liabilities.
-

@@ -6,7 +6,7 @@
 #include "../../types/dl_list/dllist.h"
 
 // Check if `Number` is prime via trial division up to the square root of `Number` 
-bool IsPrime(int Number) {
+bool is_prime(int Number) {
     if (Number <= 1) {
         return false;
     }
@@ -20,7 +20,7 @@ bool IsPrime(int Number) {
 }
 
 // Return a `DLList` constisting of the prime factors of `Number`
-DLList PrimeFactorize(int Number) {
+DLList prime_factorize(int Number) {
     DLList factors;
     init_list(&factors);
 
@@ -44,21 +44,21 @@ DLList PrimeFactorize(int Number) {
 }
 
 // Return the factorial of `I`
-uint64_t Factorial(int I) {
+uint64_t factorial(int I) {
     if (I == 0 || I == 1) {
         return 1;
     } else {
-        return (I * Factorial(I - 1));
+        return (I * factorial(I - 1));
     }
 }
 
 // Return the fibonacci number at index `I`
-uint64_t Fibonacci(int I) {
+uint64_t fibonacci(int I) {
     if (I==0) {
         return 0;
     } else if (I==1) {
         return 1;
     } else {
-    return Fibonacci(I-1) + Fibonacci(I-2);
+    return fibonacci(I-1) + fibonacci(I-2);
     }
 }

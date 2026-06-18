@@ -3,13 +3,21 @@
 ## Iterations
 
 ### XO I
-### XO II
-### XO III
-### XO IV
-### XO V
-### XO VI
-### XO VII
-### XO VIII
-### XO IX
-### XO X
 
+### XO II
+
+### XO III
+
+### XO IV
+
+### XO V
+
+### XO VI
+
+### XO VII
+
+### XO VIII
+
+### XO IX
+
+### XO X

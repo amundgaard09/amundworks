@@ -18,6 +18,7 @@ While this software and all other software under Durendal is licensed under the 
 By doing so, you help support an open, collaborative engineering ecosystem.
 
 ## Running UniForge in the Terminal
+
 ```shell
 uniforge
 ```
@@ -25,6 +26,7 @@ uniforge
 This command launches the UniForge CLI Enviroment.
 
 ## Example Usage
+
 ```shell
 unimath pythagoras 3 4 _ 
 ```

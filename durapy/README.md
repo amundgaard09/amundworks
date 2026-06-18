@@ -24,18 +24,20 @@ While this software and all other software under Durendal is licensed under the 
 By doing so, you help support an open, collaborative engineering ecosystem.
 
 ## Install
-```
+
+``` shell
 pip install durapy
 ```
 
 ## Example
+
 ```python
 from durapy.unimath import Pythagoras
 print(Pythagoras(3, 4, None))
 ```
+
 Result:
 
 ```shell
 A: 3, B: 4, C: 5.0
 ```
-

@@ -4,7 +4,7 @@ The Classical Mechanics module for `AWPC` `UniPhys`
 This module contains resources for calculations and simulations for Classical Mechanics. 
 """
 
-from ..types.color_sys import color_text
+from ..frameworks.color_sys import color_text
 from .phys_dtypes import Quantity, UNITS
 from ..commons.constants import EARTH_G, PI, C 
 

@@ -13,7 +13,7 @@ from .src.unipower import unipower
 from .src.unispace import unispace
 from .src.univiz import univiz
 
-from .src.unimath import (linalg_dtypes, coordinate_systems, unimath)
+from .src.unimath import (coordinate_sys, linalg_dtypes, unimath)
 from .src.uniops import (conpidcon, forward_kinematics, inverse_kinematics)
 from .src.uniphys.phys_dtypes import (Unit, UNITS, PhysicalConstant, Quantity)
 from .src.uniphys import (
@@ -28,7 +28,7 @@ from .src.uniphys import (
 )
 
 from .src.commons import exceptions, constants
-from .src.types.color_sys import (
+from .src.frameworks.color_sys import (
     RGB, 
     CMYK, 
     HEX, 

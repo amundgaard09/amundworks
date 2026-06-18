@@ -17,7 +17,7 @@ class Cartesian1D(_Coordinate):
         super().__init__(self, unit, dims)
         self.x = x
 
-class Cartesian2D:
+class Cartesian2D(_Coordinate):
     """The 2-dimensional Cartesian coordinate system."""
     def __init__(self, unit: str, dims: int, x: float, y: float) -> None:
         super().__init__(self, unit, dims)
@@ -33,7 +33,7 @@ class Cartesian2D:
     def distance_to_origo(self) -> float:
         return pythagoras(A = self.x, B = self.y)
 
-class Cartesian3D:
+class Cartesian3D(_Coordinate):
     """The 3-dimensional Cartesian coordinate system."""
     def __init__(self, unit: str, dims: int, x: float, y: float, z: float) -> None:
         super().__init__(self, unit, dims)
@@ -42,7 +42,10 @@ class Cartesian3D:
         self.z = z
     
     def to_spherical(self) -> Spherical:
-        p = pythagoras(pythagoras(self.x, self.y), self.z)
+        p = pythagoras(
+            A = pythagoras(self.x, self.y), 
+            B = self.z
+        )
         
         return Spherical(
             r = p,
@@ -52,7 +55,10 @@ class Cartesian3D:
         
     def to_cylindrical(self) -> Cylindrical:
         return Cylindrical(
-            r = pythagoras(pythagoras(self.x, self.y), self.z),
+            r = pythagoras(
+                A = pythagoras(A = self.x, B = self.y), 
+                B = self.z
+            ),
             θ = math.atan(self.y / self.x),
             z = self.z
         )
@@ -63,7 +69,7 @@ class Cartesian3D:
             B = self.z
         )
 
-class Polar:
+class Polar(_Coordinate):
     """The polar coordinate system."""
     def __init__(self, unit: str, dims: int, r: float, θ: float) -> None:
         super().__init__(self, unit, dims)
@@ -79,7 +85,7 @@ class Polar:
     def distanse_to_origo(self) -> float:
         return self.r
         
-class Spherical:
+class Spherical(_Coordinate):
     """The spherical coordinate system."""
     def __init__(self, unit: str, dims: int, r: float, θ: float, φ: float) -> None:
         super().__init__(self, unit, dims)
@@ -104,7 +110,7 @@ class Spherical:
     def distance_to_origo(self) -> float:
         return self.r
         
-class Cylindrical:
+class Cylindrical(_Coordinate):
     """The cylindrical coordinate system."""
     def __init__(self, unit: str, dims: int, r: float, θ: float, z: float) -> None:
         super().__init__(self, unit, dims)
@@ -121,7 +127,10 @@ class Cylindrical:
         
     def to_spherical(self) -> Spherical:
         
-        distance = pythagoras(self.r, self.z)
+        distance = pythagoras(
+            A = self.r, 
+            B = self.z
+        )
         
         return Spherical(
             r = distance,
@@ -130,4 +139,7 @@ class Cylindrical:
         )
     
     def distance_to_origo(self) -> float:
-        return pythagoras(self.r, self.z)
+        return pythagoras(
+            A = self.r, 
+            B = self.z
+        )

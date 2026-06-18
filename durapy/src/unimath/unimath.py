@@ -31,6 +31,9 @@ def R2D(Radians: float) -> float:
     """Return degrees from radians."""
     return Radians / PI * 180
 
+def avg(*args) -> float:
+    return sum(args) / len(args)
+
 def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> str:
     """Extrapolate the sides of a triangle from the AAAS case (3x Angle + 1x Side)"""
 

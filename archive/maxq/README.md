@@ -5,7 +5,8 @@
 
 *What is a Composable Systems Engine?*
 
-A CSE is the "glue" that connects various self-contained functional building blocks, often called Packaged Business Capabilities (PBCs), into a cohesive system. 
+A CSE is the "glue" that connects various self-contained functional building blocks, often called Packaged Business Capabilities (PBCs), into a cohesive system.
+
 Unlike traditional monolithic architectures where everything is tightly coupled, a CSE enables:
 
 - Modular Flexibility: Swap, update, or remove individual components without disrupting the entire application.
@@ -15,4 +16,3 @@ Unlike traditional monolithic architectures where everything is tightly coupled,
 *Why MAX-Q?*
 
 **MAX-Q** provides the infrastructure to build systems that are as dynamic as your business needs. Whether you are integrating specialized commerce modules, content management services, or custom microservices, max-q ensures your architecture remains resilient, future-proof, and easy to maintain.
-

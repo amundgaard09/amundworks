@@ -10,31 +10,35 @@
 
 *What is Durendal?*
 
-The **Durendal GitHub repository** is the open-source collection of all projects built by **Durendal**. It serves as a central hub for all the work and projects created by Durendal. It also provides a platform for sharing and collaborating on projects. The repository includes projects built for anything ranging from software development to defense application firmware. It is intended to be a resource for anyone interested in contributing to Durendal, and anyone that is interested in the work of Durendal. 
+The **Durendal GitHub repository** is the open-source collection of all projects built by **Durendal**. It serves as a central hub for all the work and projects created by Durendal. It also provides a platform for sharing and collaborating on projects. The repository includes projects built for anything ranging from software development to defense application firmware. It is intended to be a resource for anyone interested in contributing to Durendal, and anyone that is interested in the work of Durendal.
 
 ## PROJECTS
 
 [View Durendal Docs](DOCUMENTATION.md)
 
-This is the list of projects built / currently being built under Durendal. This list is subject to change. Archived projects can be found below this list. 
+This is the list of projects built / currently being built under Durendal. This list is subject to change. Archived projects can be found below this list.
 
 ### DuraPy - The Durendal Python Collection
 
 [View DuraPy README](durapy/README.md)
 
-**DuraPy** is the complete collection of all Python projects built under Durendal. It is a collection of Python libraries, tools, and applications that are designed to be used for scientific computing, data analysis, machine learning, and more. **DuraPy** is an open-source project that is constantly evolving and growing as new projects are added and existing ones are updated. It is intended to be a resource for developers, researchers, and anyone interested in using Python for their projects. **DuraPy** is organized into submodules, each of which contains a specific set of tools and libraries that are designed to work together to provide a comprehensive Python ecosystem for any purpose imaginable. 
+**DuraPy** is the complete collection of all Python projects built under Durendal. It is a collection of Python libraries, tools, and applications that are designed to be used for mathematics, scientific computing, data analysis, machine learning, and more. **DuraPy** is an open-source project that is constantly evolving and growing as new projects are added and existing ones are updated. It is intended to be a resource for developers, researchers, and anyone interested in using Python for their projects. **DuraPy** is organized into submodules, each of which contains a specific set of tools and libraries that are designed to work together to provide a comprehensive Python ecosystem for any purpose imaginable.
 
-### UniForge CLI - The Ultimate Command Line Interface STEMP Toolchain
+### ICARUS - Agentic AI Platform for engineering
 
-[View UniForge README](UniForge/README.md)
+[View ICARUS README](Icarus/README.md)
 
-**UniForge** is a Python-based CLI toolkit for performing calculations and simulations related to STEMP-engineering. It is built upon the UniPy Library from **DuraPy** and provides a user-friendly interface for engineers, scientists, and students to explore and analyze various aspects of science, technology, engineering, mathematics, and programming. Whether you're a student looking to learn more about STEMP or a professional engineer working on STEMP-related projects, **UniForge** is designed to be a valuable resource for your work and studies.
+**ICARUS** is a natural language interface inspired by the well-known fictional JARVIS system. **ICARUS** understands speech, has the ability to talk, and can execute tasks via skills. It also has the ability to make new skills for itself, as a way of self-learning. **ICARUS** is made to make engineering easier by streamlining develoment and taking care of the mentally heavy stuff.
+
+### Vanguard - Markdown Knowledge Database System
+
+[View Vanguard README](Vanguard/README.md)
 
 ### XO - Multi-architecture Neural Net Series
 
 [View XO README](IT&Cyber/ML/NNs/MLPs/XOSeries/README.md)
 
-**XO** is a series of MLP-based neural networks designed for applications such as image recognition, natural language processing, and more. The **XO** series is still in development, with new techniques, architectures and features being integrated regularly. When completed, the **XO** series will be a powerful tool for machine learning practitioners and researchers, providing a lightweight, flexible and efficient platform for building and deploying neural networks. The **XO** series is built upon the **DuraPy** ecosystem and is designed to be easily integrated with other tools and libraries built upon it.
+**XO** is a series of neural networks designed for applications such as image recognition, natural language processing, and more. The  series is still in development, with new techniques, architectures and features being integrated regularly. When completed, the **XO** series will be a powerful tool for machine learning practitioners and researchers, providing a lightweight, flexible and efficient platform for building and deploying neural networks. The **XO** series is built upon the **DuraPy** ecosystem and is designed to be easily integrated with other tools and libraries built upon it aswell.
 
 ### Vulcan - The All-In-One Life Operating System
 
@@ -58,6 +62,12 @@ This is the list of old projects no longer being maintained / further developed 
 
 **MAX-Q** is a *Composable Systems Engine* (**CSE**) designed to streamline the assembly and management of modular IT resources and business processes. By acting as a central orchestration layer, MAX-Q allows developers to "compose" sophisticated systems from independent, best-of-breed services and microservices. It enables rapid scalability, modularity and quick and easy maintenance.
 
+### UniForge CLI - The Ultimate Command Line Interface STEMP Toolchain
+
+[View UniForge README](UniForge/README.md)
+
+**UniForge** is a Python-based CLI toolkit for performing calculations and simulations related to STEMP-engineering. It is built upon the UniPy Library from **DuraPy** and provides a user-friendly interface for engineers, scientists, and students to explore and analyze various aspects of science, technology, engineering, mathematics, and programming. Whether you're a student looking to learn more about STEMP or a professional engineer working on STEMP-related projects, **UniForge** is designed to be a valuable resource for your work and studies.
+
 ## Durendal Open Source Philosophy
 
 The Durendal Github Repository is part of the Durendal Engineering Ecosystem.
@@ -67,5 +77,3 @@ While this software and all other software under Durendal is licensed under the 
 By doing so, you help support an open, collaborative engineering ecosystem.
 
 ### ***AD ASTRA PER ASPERA***
-
-

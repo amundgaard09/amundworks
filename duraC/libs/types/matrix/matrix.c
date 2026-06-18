@@ -15,7 +15,7 @@ void init_matrix(Matrix *M, int rows, int cols) {
     M->capacity = capacity;
 }
 
-void get_dims(Matrix *M) {
+void print_dims(Matrix *M) {
     printf("rows=%d, cols=%d\n", M->rows, M->cols);
 }
 
@@ -106,15 +106,3 @@ int main(void) {
     print_matrix(&Result);
     return 0;
 }
-
-// set_element(&result, i, j, 0);
-
-/*
-def __matmul__(self, other) -> Matrix | SquareMatrix:
-    for i in range(self._rows):
-        for j in range(other._cols):
-            for k in range(self._cols):
-                result[i][j] += (self[i][k] * other[k][j])
-
-    return SquareMatrix(array=result)
-*/

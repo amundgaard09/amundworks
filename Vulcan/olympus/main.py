@@ -29,11 +29,11 @@ Docs and other resources can be found in the [Durendal GitHub](https://github.co
 #|#                                                                    #|#
 #|# NOTE: ACRONYMS                                                     #|#
 #|#                                                                    #|#
-#|# HR(Z) - Heart Rate (Zone)                                          #|#
-#|# THRZ  - Target Heart Rate Zone                                     #|#
-#|# RPE   - Rate of Perceived Exertion (scale of 1-10)                 #|#
-#|# TRPE  - Target Rate of Perceived Exertion                          #|#
-#|# OPI   - Olympus Performance Index (performance metric)             #|#
+#|# HR(Z)  - Heart Rate (Zone)                                         #|#
+#|# THR(Z) - Target Heart Rate Zone                                    #|#
+#|# RPE    - Rate of Perceived Exertion (scale of 1-10)                #|#
+#|# TRPE   - Target Rate of Perceived Exertion                         #|#
+#|# OPI    - Olympus Performance Index (performance metric)            #|#
 #|#                                                                    #|#
 ### ------------------------------------------------------------------ ###
 
@@ -75,14 +75,10 @@ from src.modules.builders import (
 
 import json, time, datetime, questionary
 
-from durapy.src.types.color_sys import color_text
-from durapy.src.uniCLI.uniCLI import clear_terminal
-
 ### ------------------------------------------------------------------ ###
 
 def console():
     pass
 
 if __name__ == "__main__":
-    clear_terminal()
     cli_create_event() 

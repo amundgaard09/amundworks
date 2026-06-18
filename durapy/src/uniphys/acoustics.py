@@ -4,9 +4,10 @@ The Acoustic Physics module for `AWPC` `UniPhys`
 This module contains resources for calculations and simulations for Acoustic Physics. 
 """
 
+import math
+
 from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import MACH
-import math
 
 def sound_speed(temperature: float, γ: float = 1.4, molar_mass: float = 0.02897) -> float:
     """Calculate the speed of sound in a gas given the temperature, adiabatic index (gamma), and molar mass."""

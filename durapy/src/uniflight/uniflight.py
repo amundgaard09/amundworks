@@ -2,7 +2,7 @@
 The `AWPC` `UniFlight` module provides a collection of functions and classes for performing calculations and simulations related to flight dynamics, aerodynamics, and propulsion.
 """
 
-from durapy.src.types.color_sys import color_text
+from durapy.src.frameworks.color_sys import color_text
 from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import MACH
 

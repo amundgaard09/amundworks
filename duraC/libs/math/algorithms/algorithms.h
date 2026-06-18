@@ -6,9 +6,9 @@
 #ifndef ALGORITHMS.H
 #define ALGORITHMS.H
 
-bool IsPrime(int Number);
-DLList PrimeFactorize(int Number);
-uint64_t Factorial(int I);
-uint64_t Fibonacci(int I);
+bool is_prime(int Number);
+DLList prime_factorize(int Number);
+uint64_t factorial(int I);
+uint64_t fibonacci(int I);
 
 #endif

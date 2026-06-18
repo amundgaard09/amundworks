@@ -2,15 +2,7 @@
 
 import inspect
 
-from durapy.src.uniflight import uniflight
-from durapy.src.unispace import unispace
-from durapy.src.unicrypt import unicrypt
-from durapy.src.unipower import unipower
-from durapy.src.uniphys import mechanics
-from durapy.src.unimath import unimath
-from durapy.src.unialgo import unialgo
-
-def _generateDicts(Module) -> tuple[dict, dict]:
+def generate_dicts(Module) -> tuple[dict, dict]:
     """
     Generate an argument count dict and function call dict for a module. 
     
@@ -39,11 +31,3 @@ def _generateDicts(Module) -> tuple[dict, dict]:
         call_dict[name] = obj
     
     return arg_dict, call_dict
-
-UNIFLIGHTARGMAP, UNIFLIGHTCALLMAP = _generateDicts(uniflight)
-UNISPACEARGMAP,  UNISPACECALLMAP  = _generateDicts(unispace)
-UNIPOWERARGMAP,  UNIPOWERCALLMAP  = _generateDicts(unipower)
-UNICRYPTARGMAP,  UNICRYPTCALLMAP  = _generateDicts(unicrypt)
-UNIPHYSARGMAP,   UNIPHYSCALLMAP   = _generateDicts(mechanics)
-UNIMATHARGMAP,   UNIMATHCALLMAP   = _generateDicts(unimath)
-UNIALGOARGMAP,   UNIALGOCALLMAP   = _generateDicts(unialgo)

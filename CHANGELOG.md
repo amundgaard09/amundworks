@@ -53,12 +53,12 @@
 - Added `process()` back to `communicative_engine.py` for now.
 - Added `Icarus`/`logs`, with `runtime_log.txt` & `debug_log.txt`.
 - Added `Icarus`/`core`/`utilities`, with `decorators.py` & `txtfiletools.py`.
-    - Added `@logger` to `decorators.py` for logging a function's inputs, outputs and errors, as well as `log()`, a helper function for writing to a specified log txt file - defaults to `runtime_log.txt`.
+- Added `@logger` to `decorators.py` for logging a function's inputs, outputs and errors, as well as `log()`, a helper function for writing to a specified log txt file - defaults to `runtime_log.txt`.
 - Implemented ColorMyText, that highlights failed functions in `runtime_log.txt` as red, and successful ones as green.
 - Updated `pyproject.toml`.
 - Finished `execution_engine.py` Rev. 1. Routing, skill finding and skill execution now works. Full modularity as well.
-- Added methods for skipping __ pycache __ folders, so that they don't get loaded as skills and crash the system.
-- Removed `process()` from `communicative_engine.py` again, and added it to `execution_engine.py`. 
+- Added methods for skipping pycache (dunder) folders, so that they don't get loaded as skills and crash the system.
+- Removed `process()` from `communicative_engine.py` again, and added it to `execution_engine.py`.
 - Added a testing environment. (just a simple test.py file, but positioned so that all imports work correctly)
 
 ### Thursday 11.06.2026
@@ -84,4 +84,6 @@
 - Added error handling for when ICARUS is run without internet. Because of the fact that ElevenLabs TTS is the only part that needs internet, an offline-mode with only text output needs to be added.
 - Fixed a lot of bugs rooted in the use of "color_dtypes.color_text()" instead of just `color_text()`.
 
+### Thursday 18.06.2026
 
+- D
