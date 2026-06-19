@@ -72,7 +72,7 @@
 - Added error handling to `communicative_engine.py`, for `sounddevice`.`PortAudioError` errors.
 - Added functionality to the `get_time` skill. `get_time`.`execute()` is no longer a placeholder.
 - Optimized some dynamic path declarations in `utilities`/`txtfiletools.py`.
-- Replaced `communicative_engine.py` with `feedback_engine.py` and `perception_engine.py`. Perception will be responsible for listening and taking in terminal text inputs and feedback will be responsible for speaking and text printing in the terminal.
+- Replaced `communicative_engine.py` with `feedback_engine.py` and `perception_engine.py`. Perception will be responsible for listening and taking in terminal text inputs and Feedback will be responsible for speaking and text printing in the terminal.
 - Updated ICARUS top-level init file docstring.
 - Started work on the new score intent routing system.
 - Started working on the ICARUS README.
@@ -80,10 +80,12 @@
 ### Wednesday 17.06.2026
 
 - Restructured the `DuraPy` folder by removing the UniPy folder and instead adding everything to /src.
-- Added `coordinate_systems.py` with cartesian (1, 2 and 3 dims.), spherical, cylindrical and polar coordinate systems
+- Added `coordinate_systems.py` with cartesian (1, 2 and 3 dims), spherical, cylindrical and polar coordinate systems
 - Added error handling for when ICARUS is run without internet. Because of the fact that ElevenLabs TTS is the only part that needs internet, an offline-mode with only text output needs to be added.
 - Fixed a lot of bugs rooted in the use of "color_dtypes.color_text()" instead of just `color_text()`.
 
-### Thursday 18.06.2026
+### Friday 19.06.2026
 
-- D
+- Developed a semi-functional score-based intent engine, instead of the first-match system.
+- Fixed import errors in DuraPy.
+-  

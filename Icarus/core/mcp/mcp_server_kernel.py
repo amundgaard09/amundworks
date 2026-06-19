@@ -1,11 +1,11 @@
 
 import os, json
 from pathlib import Path
-from Icarus.core.mcp.types.mcptool import MCPTool
-from Icarus.core.mcp.types.input_schema import InputSchema
+from core.mcp.types.mcptool import MCPTool
+from core.mcp.types.input_schema import InputSchema
 from core.utilities.decorators import logger
 
-_SKILLS_DIR = r"C:\Users\Administrator\.vscode\durendal\Icarus\skills"
+_SKILLS_DIR = Path(__file__).parents[2].resolve() / "skills"
 
 # Depecrate?
 
@@ -23,15 +23,16 @@ def get_tools() -> list[MCPTool]:
         config_path = os.path.join(_SKILLS_DIR, folder, "config.json")
         if os.path.exists(config_path):
             with open(config_path, "r", encoding="utf-8") as f:
-                config = json.load(f)
-                
-                tools.append(MCPTool(
-                    name="",
-                    desc="",
-                    path=Path(os.path.join(_SKILLS_DIR, folder)),
-                    config=config,
-                    input_schema={
-                        
-                    }
-                ))
+                config = dict(json.load(f))
+            
+            new_tool = MCPTool(
+                name="",
+                desc="",
+                path=Path(os.path.join(_SKILLS_DIR, folder)),
+                config=config,
+                input_schema={}
+            )
+            tools.append(new_tool)
+    
+    return tools
             

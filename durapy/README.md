@@ -32,12 +32,12 @@ pip install durapy
 ## Example
 
 ```python
-from durapy.unimath import Pythagoras
-print(Pythagoras(3, 4, None))
+from durapy import unimath
+print(unimath.pythagoras(A=3, B=4))
 ```
 
 Result:
 
 ```shell
-A: 3, B: 4, C: 5.0
+5.0
 ```

@@ -12,6 +12,7 @@ venv/
 *.pyc
 *.onnx
 *.onnx.json
+logs/
 
 
 

@@ -19,7 +19,7 @@ def get_highest_score(scored_func_list: list[tuple[int, Callable[[], str]]]) -> 
 
     return max(scored_func_list, key=lambda item: item[0])[1]
         
-def get_most_probable_function(tokens: list[str], token_map: dict[str, Callable[[], str]]) -> Callable[[], str]:
+def most_probable_function(tokens: list[str], token_map: dict[str, Callable[[], str]]) -> Callable[[], str]:
     pass
 
 def match_rev2(query: str, token_map: dict[str, Callable[[], str]]) -> None:
@@ -27,7 +27,7 @@ def match_rev2(query: str, token_map: dict[str, Callable[[], str]]) -> None:
     
     tokens = [token for token in query.strip().split()]
     
-    return get_most_probable_function(tokens, token_map)
+    return most_probable_function(tokens, token_map)
 
 
 def normalize(string: str) -> str:

@@ -22,4 +22,4 @@ dependencies = [
 ]
 
 [project.scripts]
-icarus = "Icarus:entrypoint"
+icarus = "Icarus.entrypoint:main"

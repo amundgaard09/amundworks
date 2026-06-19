@@ -56,7 +56,7 @@ To get started with the Durendal Python Collective, follow these steps:
 1. Install the DuraPy library from PyPI using pip:
 
    ```bash
-   pip install durapy # latest stable version
+   pip install durapy
    ```
 
 2. Import wanted modules in your Python script:
@@ -68,7 +68,7 @@ To get started with the Durendal Python Collective, follow these steps:
 3. Start using the available functions and classes in your project.
 
     ```python
-    result = unimath.LinearEvaluation(a=5, b=3, x=2)
+    result = unimath.linear_evaluation(a=5, b=3, x=2)
     print(result)  # Output: 13
     ```
 

@@ -57,11 +57,12 @@ def main_init() -> None:
 @logger
 def main() -> None:
     """The main dialouge kernel for the Icarus Complex"""
+    main_init()
+    
     uniCLI.console_print("ICARUS", "blue", "Listening...", "green")
     
     while True:
         speak(respond(listen()))
 
 if __name__ == "__main__":
-    main_init()
     main()

@@ -1,8 +1,9 @@
 # Python (programming language)
 
 ## Summary
+
 Python is a high-level, general-purpose programming language that emphasizes code readability, simplicity, and ease-of-writing with the use of significant indentation, "plain English" naming, an extensive ("batteries-included") standard library, and garbage collection. Python supports multiple programming paradigms but with an emphasis on object-oriented programming and dynamic typing.
-Guido van Rossum began working on Python in the late 1980s as a successor to the ABC programming language. Python 3.0, released in 2008, was a major revision and not completely backward-compatible with earlier versions. Beginning with Python 3.5, capabilities and keywords for typing were added to the language, allowing optional static typing. As of 2026, the Python Software Foundation supports Python 3.10, 3.11, 3.12, 3.13, and 3.14, following the project's annual release cycle and five-year support policy. Python 3.15 is currently in the alpha development phase, and the stable release is expected to launch in October 2026. Earlier versions in the 3.x series have reached end-of-life and no longer receive security updates. 
+Guido van Rossum began working on Python in the late 1980s as a successor to the ABC programming language. Python 3.0, released in 2008, was a major revision and not completely backward-compatible with earlier versions. Beginning with Python 3.5, capabilities and keywords for typing were added to the language, allowing optional static typing. As of 2026, the Python Software Foundation supports Python 3.10, 3.11, 3.12, 3.13, and 3.14, following the project's annual release cycle and five-year support policy. Python 3.15 is currently in the alpha development phase, and the stable release is expected to launch in October 2026. Earlier versions in the 3.x series have reached end-of-life and no longer receive security updates.
 Python has gained extensive use in the machine learning community. It is widely taught as an introductory programming language. Since 2003, Python has consistently ranked among the top ten most popular programming languages in the  TIOBE Programming Community Index, which ranks programming languages based on searches across 24 platforms.
 
 ## History
@@ -75,8 +76,8 @@ Python does not support tail call optimization or first-class continuations; acc
 
 Python's expressions include the following:
 
-The +, -, and * operators for mathematical addition, subtraction, and multiplication are similar to other languages, but the behavior of division differs. There are two types of division in Python: floor division (or integer division) //, and floating-point division /. Python uses the ** operator for exponentiation.
-Python uses the + operator for string concatenation. The language uses the * operator for duplicating a string a specified number of times.
+The +, -, and '*' operators for mathematical addition, subtraction, and multiplication are similar to other languages, but the behavior of division differs. There are two types of division in Python: floor division (or integer division) //, and floating-point division /. Python uses the ** operator for exponentiation.
+Python uses the + operator for string concatenation. The language uses the '*' operator for duplicating a string a specified number of times.
 The @ infix operator is intended to be used by libraries such as [[NumPy]] for matrix multiplication.
 The syntax :=, called the "walrus operator", was introduced in Python 3.8. This operator assigns values to variables as part of a larger expression.
 In Python, == compares two objects by value. Python's is operator may be used to compare object identities (i.e., comparison by reference), and comparisons may be chained—for example, a <= b <= c.
@@ -286,6 +287,6 @@ Ramalho, Luciano (May 2022). Fluent Python. O'Reilly Media. ISBN 978-1-4920-5632
 
 ## External links
 
-Official website 
+Official website
 Python documentation
 The Python Tutorial

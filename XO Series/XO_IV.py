@@ -5,7 +5,7 @@ XO Neural Net Series Revision IV
 USE_GPU = False
 
 if USE_GPU:
-    import cupy as xp # type: ignore # type
+    import cupy as xp # type: ignore
 else:
     import numpy as xp
 

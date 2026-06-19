@@ -1,7 +1,47 @@
 """
-The DuraPy STEM Python Package from Durendal Engineering.
+The DuraPy Package from Durendal Engineering.
 
 DuraPy is the complete collection of all open-source Python projects from Durendal. 
+
+Packages:
+---------
+-  `UniAlgo` (Algorithms)
+-  `UniCLI` (CLI Frameworks and Tools)
+-  `UniCogni` (AI, ML, etc)
+-  `UniCrypt` (Encryption and Decryption tools)
+-  `UniFlight` (Aerospace)
+-  `UniPower` (Electrical and Electronics Engineering)
+-  `UniSpace` (Spaceflight)
+-  `UniViz` (Data visualization)
+---
+- Exceptions
+- Constants
+---
+- `UniMath` (Mathematics)
+    - Coordinate Systems
+    - Linear Algebra Data Types
+    - UniMath Core Package
+--- 
+- `UniOps` (Robotics/Mechatronics Operations and Control)
+    - Continuous PID Controller (conpidcon)
+    - Forward Kinematics
+    - Inverse Kinematics
+--- 
+- `UniPhys` (Physics)
+    - Acoustics
+    - Astrophysics
+    - Electromagnetics
+    - Fluid Dynamics
+    - Mechanics
+    - Nuclear
+    - Quantum
+    - Thermodynamics
+    - Physics Data Types
+        - `Unit`, `PhysicalConstant`, `Quantity`\n
+---
+- Frameworks
+    - Color Systems
+        - `RGB`, `HEX`, `CMYK`
 """
 
 from .src.unialgo import unialgo
@@ -18,13 +58,13 @@ from .src.uniops import (conpidcon, forward_kinematics, inverse_kinematics)
 from .src.uniphys.phys_dtypes import (Unit, UNITS, PhysicalConstant, Quantity)
 from .src.uniphys import (
     acoustics, 
-    astrophys, 
-    electromags, 
-    fluidyn, 
+    astrophysics,
+    electromagnetics,
+    fluid_dynamics, 
     mechanics, 
     nuclear, 
     quantum,
-    thermodyn,
+    thermodynamics,
 )
 
 from .src.commons import exceptions, constants

@@ -1,114 +1,111 @@
 """
-The `AWPC` `UNIx` `UniCrypt` module. 
-This module contains all the encryption and decryption functions of the `AWPC` library. 
+The `DuraPy` `UniCrypt` module. 
+This module contains all the encryption and decryption functions of the `DuraPy` library. 
 These include methods such as binary, ceasar, vigenere, railfence and OTP with encryption and decryption for all cryptography methods.
 """
 
-def binary_encrypt(InputString: str) -> str:
-    RawBinary = ''.join(format(ord(i), '08b') for i in InputString)
-    OutputString = ' '.join(RawBinary[i:i+8] for i in range(0, len(RawBinary), 8))
-    return OutputString
-def binary_decrypt(InputString: str) -> str:
-    OutputString = ''.join(chr(int(b, 2)) for b in InputString.split())
-    return OutputString
-def ceasar_encrypt(InputString: str, Shift: int) -> str:
-    OutputString = ""
-    for Character in InputString:
-        if Character.isalpha():               
-            Position = ord(Character.lower()) - 96 
-            NewPosition = (Position + Shift - 1) % 26 + 1   
-            NewCharacter = chr(NewPosition + 96)        
-            OutputString += NewCharacter                
+def binary_encrypt(plaintext: str) -> str:
+    binary = ''.join(format(ord(i), '08b') for i in plaintext)
+    return ' '.join(binary[i:i+8] for i in range(0, len(binary), 8))
+def binary_decrypt(binary: str) -> str:
+    return ''.join(chr(int(b, 2)) for b in binary.split())
+def ceasar_encrypt(plaintext: str, key: int) -> str:
+    cipher = ""
+    for char in plaintext:
+        if char.isalpha():               
+            pos = ord(char.lower()) - 96 
+            new_pos = (pos + key - 1) % 26 + 1   
+            new_char = chr(new_pos + 96)        
+            cipher += new_char                
         else:                                
-            OutputString += Character 
-    return OutputString
-def ceasar_decrypt(InputString: str, Shift: int) -> str:
-    OutputString = ""
-    for Character in InputString:
-        if Character.isalpha():               
-            Position = ord(Character.lower()) - 96
-            NewPosition = (Position - Shift - 1) % 26 + 1   
-            NewCharacter = chr(NewPosition + 96)        
-            OutputString += NewCharacter                
+            cipher += char 
+    return cipher
+def ceasar_decrypt(cipher: str, key: int) -> str:
+    plaintext = ""
+    for char in cipher:
+        if char.isalpha():               
+            pos = ord(char.lower()) - 96
+            new_pos = (pos - key - 1) % 26 + 1   
+            new_char = chr(new_pos + 96)        
+            plaintext += new_char                
         else:                                 
-            OutputString += Character
-    return OutputString 
-def vigenere_encrypt(InputString: str, KeyString: str) -> str:
-    OutputString = ""
+            plaintext += char
+    return plaintext 
+def vigenere_encrypt(plaintext: str, key: str) -> str:
+    cipher = ""
 
-    for idx, Character in enumerate(InputString):
-        if Character.isalpha():
-            if Character.isupper():
-                OutputString += chr((ord(Character) - ord(KeyString[idx % len(KeyString)].upper()) + 26) % 26 + ord("A"))
+    for idx, char in enumerate(plaintext):
+        if char.isalpha():
+            if char.isupper():
+                cipher += chr((ord(char) - ord(key[idx % len(key)].upper()) + 26) % 26 + ord("A"))
             else:
-                OutputString += chr((ord(Character) - ord(KeyString[idx % len(KeyString)].lower()) + 26) % 26 + ord("a"))
+                cipher += chr((ord(char) - ord(key[idx % len(key)].lower()) + 26) % 26 + ord("a"))
         else:
-            OutputString += Character
-    return OutputString
-def vigenere_decrypt(InputString: str, KeyString: str) -> str:
-    OutputString = ""
-    KeyString = KeyString.lower()
-    KeyIdx = 0
+            cipher += char
+    return cipher
+def vigenere_decrypt(cipher: str, key: str) -> str:
+    plaintext = ""
+    key = key.lower()
+    key_idx = 0
 
-    for Character in InputString:
-        if Character.isalpha():
-            Shift = ord(KeyString[KeyIdx % len(KeyString)]) - ord('a')
-            if Character.isupper():
-                DecryptedCharacter = chr((ord(Character) - ord('A') - Shift + 26) % 26 + ord('A'))
+    for char in cipher:
+        if char.isalpha():
+            shift = ord(key[key_idx % len(key)]) - ord('a')
+            if char.isupper():
+                decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
             else:
-                DecryptedCharacter = chr((ord(Character) - ord('a') - Shift + 26) % 26 + ord('a'))
-            OutputString += DecryptedCharacter
-            KeyIdx += 1
+                decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))
+            plaintext += decrypted_char
+            key_idx += 1
         else:
-            OutputString += Character
+            plaintext += char
 
-    return OutputString
-def railfence_encrypt(InputString: str, Key: int) -> str:
-    Key = int(Key)
-    Position = 0
-    Direction = 1
-    Rows = [[] for _ in range(Key)]
+    return plaintext
+def railfence_encrypt(plaintext: str, key: int) -> str:
+    key = int(key)
+    pos, direction = 0, 1
+    rows = [[] for _ in range(key)]
 
-    for Character in InputString:
-        Rows[Position].append(Character)
+    for char in plaintext:
+        rows[pos].append(char)
     
-        Position += Direction
-        if Position == 0 or Position == Key - 1:
-            Direction *= -1
+        pos += direction
+        if pos == 0 or pos == key - 1:
+            direction *= -1
     
-    return ''.join([''.join(Row) for Row in Rows])
-def railfence_decrypt(InputString: str, Key: int) -> str:
-    Key = int(Key)
-    Pattern, Rows = [], []
-    Position, Idx =  0, 0
+    return ''.join([''.join(Row) for Row in rows])
+def railfence_decrypt(cipher: str, key: int) -> str:
+    key = int(key)
+    pattern, rows = [], []
+    pos, idx =  0, 0
     direction = 1
-    Plaintext = ''
+    plaintext = ''
     
-    for _ in range(len(InputString)):
-        Pattern.append(Position)
-        Position += direction
-        if Position == 0 or Position == Key - 1:
+    for _ in range(len(cipher)):
+        pattern.append(pos)
+        pos += direction
+        if pos == 0 or pos == key - 1:
             direction *= -1
 
-    Counts = [Pattern.count(r) for r in range(Key)]
+    counts = [pattern.count(r) for r in range(key)]
     
-    for c in Counts:
-        Rows.append(list(InputString[Idx:Idx + c]))
-        Idx += c
+    for c in counts:
+        rows.append(list(cipher[idx:idx + c]))
+        idx += c
 
-    RowPointers = [0] * Key
+    row_ptrs = [0] * key
     
-    for r in Pattern:
-        Plaintext += Rows[r][RowPointers[r]]
-        RowPointers[r] += 1
+    for r in pattern:
+        plaintext += rows[r][row_ptrs[r]]
+        row_ptrs[r] += 1
 
-    return Plaintext
-def OTP_encrypt(InputString: str, KeyString: str) -> str:
-    BinaryText = ''.join(format(ord(i), '08b') for i in InputString)
-    BinaryKey = ''.join(format(ord(i), '08b') for i in KeyString)
-    Cipher = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(BinaryText, BinaryKey))
-    return ' '.join(Cipher[i:i+8] for i in range(0, len(Cipher), 8))
-def OTP_decrypt(InputString: str, KeyString: str) -> str:
-    BinaryKey = ''.join(format(ord(i), '08b') for i in KeyString)
-    plaintext_bits = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(InputString, BinaryKey))
+    return plaintext
+def OTP_encrypt(plaintext: str, key: str) -> str:
+    bintext = ''.join(format(ord(i), '08b') for i in plaintext)
+    binkey = ''.join(format(ord(i), '08b') for i in key)
+    cipher = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(bintext, binkey))
+    return ' '.join(cipher[i:i+8] for i in range(0, len(cipher), 8))
+def OTP_decrypt(cipher: str, key: str) -> str:
+    bintext = ''.join(format(ord(i), '08b') for i in key)
+    plaintext_bits = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(cipher, bintext))
     return ''.join(chr(int(plaintext_bits[i:i+8], 2)) for i in range(0, len(plaintext_bits), 8))

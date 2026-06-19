@@ -2,7 +2,7 @@
 The Vanguard Wikipedia API Search Engine System
 """
 
-import os, re
+import os, re as regex
 from collections import defaultdict
 
 _DATA_PATH = r"C:\\Users\\Administrator\\.vscode\\durendal\\Vanguard\\data"
@@ -13,7 +13,7 @@ _DATA_PATH = r"C:\\Users\\Administrator\\.vscode\\durendal\\Vanguard\\data"
 
 def build_index(directory_path):
     inverted_index = defaultdict(set)
-    word_regex = re.compile(r'\b\w+\b')
+    word_regex = regex.compile(r'\b\w+\b')
     filename: str
     
     for filename in os.listdir(directory_path):

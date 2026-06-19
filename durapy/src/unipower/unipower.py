@@ -1,5 +1,5 @@
 """
-The UniPower function library for the `DuraPy` library. 
+The UniPower function package for the `DuraPy` library. 
 This library contains functions for electrical calculations and simulations. The functions are designed to be easy to use and understand, with clear input and output formats. 
 The library is still in development and may contain some unstable functions that are not yet fully tested.
 """
@@ -72,12 +72,12 @@ def ohms_law(V: float | None = None, I: float | None = None, R: float | None = N
     if R is not None: R = float(R)
             
     if (V, I, R).count(None) > 1:
-        MissingParams = []
+        missing_params = []
         for idx, value in enumerate((V, I, R)):
             if value is None:
-                MissingParams.append(("V", "I", "R")[idx])
+                missing_params.append(("V", "I", "R")[idx])
         
-        raise MissingParameters(ohms_law, MissingParams)
+        raise MissingParameters(ohms_law, missing_params)
     
     if V is None:
         V = I * R
@@ -90,21 +90,21 @@ def ohms_law(V: float | None = None, I: float | None = None, R: float | None = N
 def volt_divider(VIn: float, R1: float, R2: float) -> Quantity:
     """Calculates the output voltage of a voltage divider from input voltage and the two resistances."""
     return Quantity((VIn * (R2 / (R1 + R2))), UNITS["V"])
-def rc_time_constant(Capacitance: float, Resistance: float) -> Quantity:
+def rc_time_constant(capacitance: float, resistance: float) -> Quantity:
     """Calculates the time constant of an RC circuit from capacitance in farads and resistance in ohms."""
-    return Quantity((Capacitance * Resistance), UNITS["S"])
-def inductor_impedance(Hertz: float, Inductance: float) -> Quantity:
+    return Quantity((capacitance * resistance), UNITS["S"])
+def inductor_impedance(hertz: float, inductance: float) -> Quantity:
     """Calculates the impedance of an inductor at a given frequency in hertz and inductance in henrys."""
-    return Quantity((2 * math.pi * Hertz * Inductance), UNITS["Ω"])
+    return Quantity((2 * math.pi * hertz * inductance), UNITS["Ω"])
 def power_dissipation(V: float | None = None, I: float | None = None, R: float | None = None) -> Quantity:
     """Calculates power dissipation from voltage, current and resistance. If all three parameters are given, it checks for consistency between the three formulas P = I^2 * R, P = V^2 / R and P = V * I."""
     if (V, I, R).count(None) > 1:
-        MissingParams = []
+        missing_params = []
         for idx, value in enumerate((V, I, R)):
             if value is None:
-                MissingParams.append(("V", "I", "R")[idx])
+                missing_params.append(("V", "I", "R")[idx])
         
-        raise MissingParameters(power_dissipation, MissingParams)
+        raise MissingParameters(power_dissipation, missing_params)
 
     if (V, I, R).count(None) == 1:
         if V is None:
@@ -141,8 +141,22 @@ def resistor_visual(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -
         return f"    <----------------------------->\n    |                             |\n    |  ┌────┬────┬────┬────┬────┐ |\n   ----│{color_block(C1)}│{color_block(C2)}│{color_block(C3)}│{color_block(C4)}│{color_block(C5)}|----\n    |  └────┴────┴────┴────┴────┘ |\n    |                             |\n    <----------------------------->" 
     else:
         return f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{color_block(C1)}│{color_block(C2)}│{color_block(C3)}│{color_block(C4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->" 
-def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple:
-    """Takes in 4 or 5 colors of a resistor and returns the resistivity and tolerance range."""
+def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
+    """Takes in the colors of a resistor and returns its resistivity and tolerance range.
+
+    Args:
+        C1 (str): Color band 1
+        C2 (str): Color band 2
+        C3 (str): Color band 3
+        C4 (str): Color band 4
+        C5 (str | None, optional): Color band 5. Defaults to None.
+
+    Raises:
+        InvalidColors: Raised if user gives a color that is invalid for that band.
+
+    Returns:
+        tuple[float, float, float, float]: Ohm value, tolerance precent (+-), lower and upper bound of the tolerance range.
+    """
     
     b1 = BANDS.get(C1, None)
     b2 = BANDS.get(C2, None)
@@ -171,19 +185,16 @@ def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) ->
     tolerance_decimal = tolerance / 100
     lower = ohms * (1 - tolerance_decimal)
     upper = ohms * (1 + tolerance_decimal)
-    
-    resistance_str = f"Resistance: {ohms}Ω"
-    range_str = f"Range: {lower}Ω - {upper}Ω ( {tolerance}% )"
 
-    return (resistance_str, range_str)
+    return (ohms, tolerance, lower, upper)
 
 ### TODO finish wrapping these functions
-def total_esr(caps: list[tuple], ConnectionType: Literal["parallel", "series"]) -> float:
+def total_esr(caps: list[tuple], connection: Literal["parallel", "series"]) -> float:
     """Calculates total ESR of a list of capacitors based on their connection type. Caps are in the format (capacitance, voltage, esr) for now."""
-    if ConnectionType == "series":
+    if connection == "series":
         return sum(cap[2] for cap in caps)
     
-    elif ConnectionType == "parallel":
+    elif connection == "parallel":
         try:
             return 1 / sum(1 / cap[2] for cap in caps if cap[2] != 0)
         except ZeroDivisionError:
@@ -191,18 +202,18 @@ def total_esr(caps: list[tuple], ConnectionType: Literal["parallel", "series"]) 
         
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
-def total_capacitance(caps: list[tuple], ConnectionType: Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
+def total_capacitance(caps: list[tuple], connection: Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
     """Calculates total capacitance, voltage limit and ESR of a list of capacitors based on their connection type."""
         
-    if ConnectionType == "parallel":
-        totalCapacitance = sum(cap[0] for cap in caps)
-        VoltLimit = min([cap[1] for cap in caps])
+    if connection == "parallel":
+        total_capacitance = sum(cap[0] for cap in caps)
+        volt_limit = min([cap[1] for cap in caps])
         
-    elif ConnectionType == "series":
-        totalCapacitance = 1 / sum(1/cap[0] for cap in caps)
-        VoltLimit = sum([cap[1] for cap in caps])   
+    elif connection == "series":
+        total_capacitance = 1 / sum(1/cap[0] for cap in caps)
+        volt_limit = sum([cap[1] for cap in caps])   
         
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
 
-    return f"Total Capacitance: {totalCapacitance}, Volt Limit: {VoltLimit}, Total ESR: {total_esr(caps, ConnectionType)}"
+    return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"
