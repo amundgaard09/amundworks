@@ -10,8 +10,8 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any
 from wikipediaapi import Wikipedia, WikipediaPage
-from modules.article import Article
-from modules.metadata import Metadata
+from types.article import Article
+from types.metadata import Metadata
 from md_compiler.compiler.main import main as md_compile
 from durapy import uniCLI
 

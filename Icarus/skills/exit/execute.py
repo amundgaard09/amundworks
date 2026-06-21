@@ -1,6 +1,8 @@
 
 from durapy import uniCLI
 
-def execute() -> None:
+def execute() -> str:
     uniCLI.console_print("ICARUS", "blue", "Exiting ICARUS...", "white")
-    exit(1)
+    return "Goodbye, Simon!"
+
+    

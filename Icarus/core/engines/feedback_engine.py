@@ -11,6 +11,8 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 import io, os, dotenv
 import pydub, pydub.playback as pd_playback
 
+from core.types.response import Response
+from core.types.query import Query
 from core.utilities.decorators import logger
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
@@ -30,12 +32,12 @@ def _play_audio(audio_bytes: bytes) -> None:
     pd_playback.play(audio_segment)
 
 @logger
-def speak(text: str) -> None:
+def speak(response: Response) -> None:
     """Speak the given text through `ElevenLabs` TTS. Also logs the text to the terminal"""
-    response = elevenlabs.text_to_speech.stream(
+    speech = elevenlabs.text_to_speech.stream(
         voice_id="pNInz6obpgDQGcFmaJgB",
         output_format="mp3_22050_32",
-        text=text,
+        text=response.text,
         model_id="eleven_multilingual_v2",
         voice_settings = VoiceSettings(
             stability = 0.0,
@@ -47,17 +49,18 @@ def speak(text: str) -> None:
     )
     
     audio_stream = io.BytesIO()
-    for chunk in response:
+    for chunk in speech:
         if chunk:
             audio_stream.write(chunk)
 
     # Go to start of stream, play the stream and print the response.
     audio_stream.seek(0)
     _play_audio(audio_stream.read())
-    uniCLI.console_print("ICARUS", "blue", text)
+    uniCLI.console_print("ICARUS", "blue", response.text)
 
 @logger
-def initialize() -> None:
+def initialize(debug: bool) -> None:
     """Placeholder for future init logic for the Feedback Engine."""
-    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
-
+    if debug: 
+        uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
+        uniCLI.console_print("ICARUS", "blue", "Success!", "green")

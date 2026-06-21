@@ -1,0 +1,9 @@
+{
+    "name": "Use DuraPy Function",
+    "description": "Uses a function from DuraPy",
+    "triggers": [
+        "durapy"
+    ],
+    "language": "python",
+    "entrypoint": "execute.py"
+}

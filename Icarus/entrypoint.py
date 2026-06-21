@@ -28,7 +28,6 @@ from core.engines.perception_engine import (
 )
 
 import subprocess
-
 from core.utilities.exceptions import NotConnectedError
 from core.utilities.decorators import logger
 from durapy import uniCLI
@@ -43,26 +42,30 @@ def check_windows_wifi() -> bool:
     return False
 
 @logger
-def main_init() -> None:
+def main_init(debug: bool) -> None:
     uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus Engines...", "white")
     
     if not check_windows_wifi():
         raise NotConnectedError
     
-    execution_init()
-    intent_init()
-    perception_init()
-    feedback_init()
+    execution_init(debug)
+    intent_init(debug)
+    perception_init(debug)
+    feedback_init(debug)
     
 @logger
 def main() -> None:
     """The main dialouge kernel for the Icarus Complex"""
-    main_init()
+    main_init(debug=False)
     
     uniCLI.console_print("ICARUS", "blue", "Listening...", "green")
     
     while True:
-        speak(respond(listen()))
+        input = listen()
+        response = respond(input)
+        speak(response) 
+        if "Goodbye" in response.text:
+            exit(1)
 
 if __name__ == "__main__":
     main()

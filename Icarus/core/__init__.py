@@ -13,9 +13,13 @@ Models
 ------
 The `models` directory manages system models, like speech models and LLMs.
 
+Types
+-----
+The `types` directory contains custom classes such as `Response`, `Query`, etc.
+
 Utilities
 ---------
 `Utilities` manages dependencies for ICARUS, such as runtime logging tools and package decorators.
 """
 
-__all__ = ["engines", "mcp", "models", "utilities"]
+__all__ = ["engines", "mcp", "models", "types", "utilities"]

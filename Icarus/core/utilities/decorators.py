@@ -16,7 +16,7 @@ def logger(func):
             result = func(*args, **kwargs)
             duration = time.perf_counter() - start_time
             
-            dec_log(f"Finished {func.__name__} in {duration:.4f}s. Result: {result} \n")
+            dec_log(f"Finished {func.__name__} in {duration:.4f}s. Result: {repr(result)} \n")
             return result
             
         except Exception as e:

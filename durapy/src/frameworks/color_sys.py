@@ -7,20 +7,30 @@ This module includes terminal text coloring tools and color data classes such as
 from __future__ import annotations
 
 ANSI_COLORS = {
-    "black":  "\033[30m",
-    "brown":  "\033[38;5;94m",
-    "red":    "\033[31m",
-    "orange": "\033[38;5;208m",
-    "yellow": "\033[33m",
-    "green":  "\033[32m",
-    "cyan":   "\033[36m",
-    "blue":   "\033[34m",
-    "violet": "\033[38;5;93m",
-    "gray":   "\033[90m",
-    "white":  "\033[97m",
-    "gold":   "\033[38;5;178m",
-    "silver": "\033[38;5;7m",
-} 
+    "black":      "\033[30m",
+    "brown":      "\033[38;5;94m",
+    "red":        "\033[31m",
+    "crimson":    "\033[38;5;161m",
+    "orange":     "\033[38;5;208m",
+    "yellow":     "\033[33m",
+    "green":      "\033[32m",
+    "cyan":       "\033[36m",
+    "blue":       "\033[34m",
+    "navy":       "\033[38;5;17m",
+    "light blue": "\033[38;5;117m",
+    "pastel blue":"\033[38;5;153m",
+    "violet":     "\033[38;5;93m",
+    "magenta":    "\033[35m",
+    "pink":       "\033[38;5;205m",
+    "light gray": "\033[37m",
+    "gray":       "\033[90m",
+    "dark gray":  "\033[38;5;240m",
+    "white":      "\033[97m",
+    "gold":       "\033[38;5;178m",
+    "silver":     "\033[38;5;246m",
+    "teal":       "\033[38;5;30m",
+    "lime":       "\033[38;5;154m",
+}
 
 def color_text(Text: str, Color: str, Bold: bool = False, Underline: bool = False, Italic: bool = False) -> str:
     """Returns the given text in the given color using `ANSI` escape codes. If the color is not found, it returns the text without coloring."""

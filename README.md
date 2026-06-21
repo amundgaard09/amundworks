@@ -28,7 +28,7 @@ This is the list of projects built / currently being built under Durendal. This 
 
 [View ICARUS README](Icarus/README.md)
 
-**ICARUS** is a natural language interface inspired by the well-known fictional JARVIS system. **ICARUS** understands speech, has the ability to talk, and can execute tasks via skills. It also has the ability to make new skills for itself, as a way of self-learning. **ICARUS** is made to make engineering easier by streamlining develoment and taking care of the mentally heavy stuff.
+**ICARUS** is a natural language interface inspired by the well-known fictional JARVIS system. **ICARUS** understands speech, has the ability to talk, and can execute tasks via skills. It also has the ability to make new skills for itself, as a way of self-learning. **ICARUS** is made to make engineering easier by streamlining development and taking care of the mentally heavy stuff.
 
 ### Vanguard - Markdown Knowledge Database System
 
@@ -36,7 +36,7 @@ This is the list of projects built / currently being built under Durendal. This 
 
 ### XO - Multi-architecture Neural Net Series
 
-[View XO README](IT&Cyber/ML/NNs/MLPs/XOSeries/README.md)
+[View XO README](XO-Series/README.md)
 
 **XO** is a series of neural networks designed for applications such as image recognition, natural language processing, and more. The  series is still in development, with new techniques, architectures and features being integrated regularly. When completed, the **XO** series will be a powerful tool for machine learning practitioners and researchers, providing a lightweight, flexible and efficient platform for building and deploying neural networks. The **XO** series is built upon the **DuraPy** ecosystem and is designed to be easily integrated with other tools and libraries built upon it aswell.
 
@@ -64,7 +64,7 @@ This is the list of old projects no longer being maintained / further developed 
 
 ### UniForge CLI - The Ultimate Command Line Interface STEMP Toolchain
 
-[View UniForge README](UniForge/README.md)
+[View UniForge README](archive/UniForge/README.md)
 
 **UniForge** is a Python-based CLI toolkit for performing calculations and simulations related to STEMP-engineering. It is built upon the UniPy Library from **DuraPy** and provides a user-friendly interface for engineers, scientists, and students to explore and analyze various aspects of science, technology, engineering, mathematics, and programming. Whether you're a student looking to learn more about STEMP or a professional engineer working on STEMP-related projects, **UniForge** is designed to be a valuable resource for your work and studies.
 

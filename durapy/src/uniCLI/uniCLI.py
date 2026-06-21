@@ -5,6 +5,7 @@ It provides the necessary functions and classes to create a command-line interfa
 including command parsing, argument validation, and command dispatching.
 """
 
+from typing import Callable
 from prompt_toolkit.completion import NestedCompleter
 from ..frameworks.color_sys import color_text
 from ..commons import exceptions
@@ -16,6 +17,14 @@ class ExitEnvironmentSignal(Exception):
     def __init__(self):
         super().__init__()
         
+class CommandMap:
+    def __init__(self):
+        pass
+
+class ArgumentMap:
+    def __init__(self):
+        pass
+        
 def exit_env() -> None:
     """Exit the current environment and return to MAINEnv."""
     raise ExitEnvironmentSignal
@@ -23,43 +32,43 @@ def exit_env() -> None:
 def generate_completer(Map: dict[str, dict]) -> NestedCompleter:
     """Generate a `NestedCompleter` dict with parameter names for each function."""
     
-    CompleterDict = {}
+    completer_dict = {}
     
-    for Module, Subcommand in Map.items():
-        CompleterDict[Module] = {}
-        for SubcommandName, CommandFunction in Subcommand.items():
-            Signature = inspect.signature(CommandFunction)
-            CompleterDict[Module][SubcommandName] = {param: None for param in Signature.parameters}
+    for module, subcmd in Map.items():
+        completer_dict[module] = {}
+        for subcmd_name, cmd_func in subcmd.items():
+            sig = inspect.signature(cmd_func)
+            completer_dict[module][subcmd_name] = {param: None for param in sig.parameters}
     
-    return NestedCompleter.from_nested_dict(CompleterDict)
-def tokenize(RawCommandString: str) -> list[str]:
+    return NestedCompleter.from_nested_dict(completer_dict)
+def tokenize(raw_cmd_str: str) -> list[str]:
     """Tokenize a raw command string and return token list."""
-    Tokens = shlex.split(RawCommandString)
-    ProcessedTokens = []
-    for Token in Tokens:
-        if Token.startswith("[") and Token.endswith("]"):
-            ProcessedValue = [float(x.strip()) for x in Token.strip("[]").split(",") if x.strip()]
-            ProcessedTokens.append(ProcessedValue)
+    tokens = shlex.split(raw_cmd_str)
+    proc_tokens = [] # Processed tokens
+    for token in tokens:
+        if token.startswith("[") and token.endswith("]"):
+            proc_val = [float(x.strip()) for x in token.strip("[]").split(",") if x.strip()]
+            proc_tokens.append(proc_val)
         else:
-            ProcessedTokens.append(Token)
-    return ProcessedTokens
-def dispatcher(RawCommandString: str, CommandMap: dict[str, dict[str, callable]], ArgMap: dict[str, dict[str, set]]) -> callable:
+            proc_tokens.append(token)
+    return proc_tokens
+def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_map: dict[str, dict[str, set]]) -> Callable:
     """The main dispatcher function that takes in a raw command string, tokenizes it, verifies the tokens, validates the arguments and dispatches the command to the correct function."""
-    Tokens = tokenize(RawCommandString) 
-    validate_command(Tokens, CommandMap, ArgMap)
-    Module, Command, RawArgs = Tokens[0], Tokens[1], Tokens[2:]
-    Args = []
-    for arg in RawArgs:
+    tokens = tokenize(raw_cmd_str) 
+    validate_command(tokens, cmd_map, arg_map)
+    module, cmd, raw_args = tokens[0], tokens[1], tokens[2:]
+    args = []
+    for arg in raw_args:
         if arg == "_":
-            Args.append(None)
+            args.append(None)
         else:
             try:
-                Args.append(float(arg))
+                args.append(float(arg))
             except ValueError:
-                Args.append(arg)
+                args.append(arg)
             
-    return CommandMap[Module][Command](*Args)
-def validate_command(tokens: list, cmd_map: dict, arg_map: dict):
+    return cmd_map[module][cmd](*args)
+def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
     if not tokens:
         raise exceptions.EmptyTokenList
 
@@ -81,17 +90,17 @@ def validate_command(tokens: list, cmd_map: dict, arg_map: dict):
 def clear_terminal() -> None:
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def _console_msg(sender: str, sender_color: str, info: str, info_color: str = "white") -> str:
+def console_msg(sender: str, sender_color: str, info: str, info_color: str = "white") -> str:
     return f"[{color_text(sender, sender_color)}] >>> {color_text(info, info_color)}"
 def console_print(sender: str, sender_color: str, info: str, info_color: str = "white") -> None:
-    print(_console_msg(sender, sender_color, info, info_color))
+    print(console_msg(sender, sender_color, info, info_color))
 def console_input(sender: str, sender_color: str, prompt_info: str, prompt_color: str = "white") -> str | float:
-    user_input = input(_console_msg(sender, sender_color, prompt_info, prompt_color) + " ")
+    user_input = input(console_msg(sender, sender_color, prompt_info, prompt_color) + " ")
     try:               return float(user_input)
     except ValueError: return user_input
 def console_confirm(sender: str, sender_color: str, prompt_info: str, prompt_color: str = "white") -> bool:
     while True:
-        user_input = input(_console_msg(sender, sender_color, prompt_info + ":", prompt_color) + " ").lower().strip()
+        user_input = input(console_msg(sender, sender_color, prompt_info + ":", prompt_color) + " ").lower().strip()
         if user_input in ["y", "ye", "yes"]:
             return True
         elif user_input in ["n", "no"]:

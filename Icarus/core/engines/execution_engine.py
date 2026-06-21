@@ -11,6 +11,8 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 import os
 from pathlib import Path
 from typing import Callable
+from core.types.query import Query
+from core.types.response import Response
 from core.mcp.skill_loaders import get_py_skill_and_triggers, get_py_skill_and_tokens
 from core.engines.intent_engine import match
 from durapy import uniCLI
@@ -64,16 +66,19 @@ def build_tokenmap() -> dict[list[str], Callable[[], str]]:
 def handle_unknown() -> str: # Add closest function system
     return "I didn't understand that." # Did you mean: etc...
 
-def respond(user_input: str) -> Callable[[], str]:
+def respond(query: Query) -> Response:
     """Generate a response to the user input. Returns a function."""
-    func = match(user_input, TRIGGERMAP)
-    
-    if func is None:
-        return handle_unknown()
-    else:
-        return func()
+    func = match(query, TRIGGERMAP)
+    response = Response(
+        text=func() if func is not None else handle_unknown(),
+        emotions=None
+    )
+     
+    return response
 
-def initialize() -> None:
-    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Execution Engine...", "white")
-    
+def initialize(debug: bool) -> None:
+    if debug: 
+        uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Execution Engine...", "white")
+        uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+
 

@@ -14,8 +14,8 @@ from durapy import unicogni
 ACTIVATIONS = {
     "relu":    (lambda Z: xp.maximum(0, Z), lambda Z: (Z > 0).astype(float)),
     "linear":  (lambda Z: Z,                lambda Z: xp.ones_like(Z)),
-    "sigmoid": (unicogni.sigmoid,                   unicogni.d_sigmoid),
-    "softmax": (unicogni.softmax,                   None) # Softmax derivative is handled differently in backpropagation, so we set it to None here.
+    "sigmoid": (unicogni.sigmoid,           unicogni.d_sigmoid),
+    "softmax": (unicogni.softmax,           None) # Softmax derivative is handled differently in backpropagation, so we set it to None here.
 }
 
 class Denselayer:
@@ -32,7 +32,7 @@ class Denselayer:
         self.output = self.act(self.Z)
         return self.output
     
-    def Backward(self, dA: xp.ndarray, learning_rate: float) -> xp.ndarray:
+    def backward(self, dA: xp.ndarray, learning_rate: float) -> xp.ndarray:
         """Backward pass for the layer. Calculates gradients and updates weights and biases."""
         dZ: xp.ndarray = dA * self.d_act(self.Z)                                              # dA -> Output GOL. dZ -> Z GOL.
         X:  xp.ndarray = self.input if self.input.ndim > 1 else self.input.reshape(1, -1)     # X  -> Reshaped input.
@@ -77,7 +77,7 @@ class Sequential:
         # Output layer
         self.layers.append(Denselayer(prev_neuron_count, output_neuron_count, act_per_layer[-1]))
     
-    def Forward(self, input: xp.ndarray) -> xp.ndarray:
+    def forward(self, input: xp.ndarray) -> xp.ndarray:
         """Forward pass for the entire network."""
         
         x = input
@@ -85,7 +85,7 @@ class Sequential:
             x = layer.Forward(x)
         return x  
     
-    def Backward(self, out_target: xp.ndarray):
+    def backward(self, out_target: xp.ndarray):
         """
         Backward pass for the entire network. Computes gradients and updates weights and biases based on the target output.
 
@@ -101,9 +101,9 @@ class Sequential:
         loss_gradient = (unicogni.softmax(out_pred) - out_target) / batch_size 
         
         for layer in reversed(self.layers):
-            loss_gradient = layer.Backward(loss_gradient, self.learning_rate)
+            loss_gradient = layer.backward(loss_gradient, self.learning_rate)
     
-    def Train(self, x: xp.ndarray, y: xp.ndarray, epochs: int, batch_size: int):
+    def train(self, x: xp.ndarray, y: xp.ndarray, epochs: int, batch_size: int):
         """Training loop for the network.
         
         Args:
@@ -127,8 +127,8 @@ class Sequential:
                 X_batch = x[batches:batches+batch_size]
                 y_batch = y[batches:batches+batch_size]
                 
-                self.Forward(X_batch)
-                self.Backward(y_batch)
+                self.forward(X_batch)
+                self.backward(y_batch)
                 
                 epoch_loss += unicogni.cross_entropy_loss(y_batch, self.layers[-1].output)
                 
@@ -136,7 +136,7 @@ class Sequential:
             print(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss:.6f} {"\033[92m ### \033[0m" if epoch_loss < last_loss else "\033[91m ### \033[0m"}")
             last_loss = epoch_loss     
     
-    def Predict(self, X: xp.ndarray) -> xp.ndarray:
+    def predict(self, X: xp.ndarray) -> xp.ndarray:
         """Make predictions on new data.
         
         Args:
@@ -145,10 +145,10 @@ class Sequential:
         Returns:
             np.ndarray: Predictions.
         """
-        return self.Forward(X) 
+        return self.forward(X) 
     
     @staticmethod
-    def NormalizeData(X: xp.ndarray) -> xp.ndarray:
+    def normalize_data(X: xp.ndarray) -> xp.ndarray:
         mean = xp.mean(X, axis=0)
         std  = xp.std(X, axis=0)
         std  = xp.where(std == 0, 1, std)

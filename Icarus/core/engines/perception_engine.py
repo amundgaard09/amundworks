@@ -10,6 +10,8 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 
 import json, queue, sounddevice
 
+from core.types.query import Query
+from core.types.emotion_matrix import EmotionMatrix
 from core.utilities.decorators import logger
 from vosk import Model, KaldiRecognizer
 from durapy import uniCLI
@@ -29,8 +31,12 @@ recognizer = KaldiRecognizer(model, 16000)
 def callback(indata, frames: int, time, status) -> None:
     _queue.put(bytes(indata))
 
+def interpolate_emotions(query: Query) -> Query:
+    query.emotions = EmotionMatrix()
+    return query #placeholder for emotion extrapolation
+
 @logger   
-def listen() -> str:
+def listen() -> Query:
     """Listen for speech with `sounddevice`.`RawInputStream()`"""
     with sounddevice.RawInputStream(
         samplerate=16000, 
@@ -39,24 +45,28 @@ def listen() -> str:
         channels=1, 
         callback=callback
     ):
-
         try:
             while True:
                 data = _queue.get()
-
                 if recognizer.AcceptWaveform(data):
                     raw_result = recognizer.Result()
                     result_dict = dict(json.loads(raw_result))
                     result_text = str(result_dict.get("text", ""))
-                        
-                    uniCLI.console_print("USER", "green", result_text.capitalize())
+                    query = Query(
+                        text=result_text,
+                        emotions=None,
+                        toi=None
+                    )
                     
-                    return result_text
+                    uniCLI.console_print("USER", "green", result_text.capitalize())
+                    return query
                 
         except sounddevice.PortAudioError as e:
             uniCLI.console_print("ICARUS PERCEPTION ENGINE", "red", f"An error occured: {e}", "orange")
 
 @logger
-def initialize() -> None:
+def initialize(debug: bool) -> None:
     """Placeholder for future init logic for the Perception Engine."""
-    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Perception Engine...", "white")
+    if debug: 
+        uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Perception Engine...", "white")
+        uniCLI.console_print("ICARUS", "blue", "Success!", "green")

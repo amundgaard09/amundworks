@@ -46,7 +46,7 @@
 - Added `skil_loaders.py`, with the `get_py_skill()` to load the `execute()` function for each python-based skill, following the future multi-language execute-file architecture.
 - Moved the comms. kernel from `communicative_engine.py` to `entrypoint.py`. which will serve as the main entrypoint to ICARUS. This will also make combining the three engines much easier.
 
-### Wednesday 10.06.2026
+### Wednesday - 10.06.2026
 
 - Stopped use of hardcoded paths for good - Only Path().parents[x] ... from now on.
 - Fixed path in `communicative_engine.py`.
@@ -61,12 +61,12 @@
 - Removed `process()` from `communicative_engine.py` again, and added it to `execution_engine.py`.
 - Added a testing environment. (just a simple test.py file, but positioned so that all imports work correctly)
 
-### Thursday 11.06.2026
+### Thursday - 11.06.2026
 
 - Added `DAY_DEV_PLAN.md` for noting daily development plans.
 - Added `match_rev2()` and a new intent engine architecture for a score-based query classification system.
 
-### Tuesday 16.06.2026
+### Tuesday - 16.06.2026
 
 - Added the start of the plans for the future `Scepter` Durendal programming language.
 - Added error handling to `communicative_engine.py`, for `sounddevice`.`PortAudioError` errors.
@@ -77,15 +77,24 @@
 - Started work on the new score intent routing system.
 - Started working on the ICARUS README.
 
-### Wednesday 17.06.2026
+### Wednesday - 17.06.2026
 
 - Restructured the `DuraPy` folder by removing the UniPy folder and instead adding everything to /src.
 - Added `coordinate_systems.py` with cartesian (1, 2 and 3 dims), spherical, cylindrical and polar coordinate systems
 - Added error handling for when ICARUS is run without internet. Because of the fact that ElevenLabs TTS is the only part that needs internet, an offline-mode with only text output needs to be added.
 - Fixed a lot of bugs rooted in the use of "color_dtypes.color_text()" instead of just `color_text()`.
 
-### Friday 19.06.2026
+### Friday - 19.06.2026
 
 - Developed a semi-functional score-based intent engine, instead of the first-match system.
 - Fixed import errors in DuraPy.
--  
+
+### Saturday - 20.06.2026
+
+- Fixed wrong paths in toplevel README.md.
+- Started work on the CLI part of Vanguard.
+- Added various init-files to the ICARUS complex.
+- Added a better docstring to the `Icarus`/`Core`/`engines` directory.
+- Added the `EmotionMatrix` class, to be used in the future for giving ICARUS a better way to understand the user.
+- Added `Response` and `Query` classes for making dialouge-related development easier.
+- Major architectural updates in the engines of ICARUS.

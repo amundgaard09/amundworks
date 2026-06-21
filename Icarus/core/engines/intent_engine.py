@@ -10,6 +10,7 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 
 from durapy import uniCLI
 from typing import Callable
+from core.types.query import Query
 from core.utilities.decorators import logger
 
 def get_highest_score(scored_func_list: list[tuple[int, Callable[[], str]]]) -> Callable[[], str] | None:
@@ -30,21 +31,23 @@ def match_rev2(query: str, token_map: dict[str, Callable[[], str]]) -> None:
     return most_probable_function(tokens, token_map)
 
 
-def normalize(string: str) -> str:
-    return string.lower().strip()
+def normalize(query: Query) -> Query:
+    query.text = query.text.lower().strip()
+    return query
 
 @logger
-def match(query: str, trigger_map: dict) -> Callable[[], str] | None:
+def match(query: Query, trigger_map: dict) -> Callable[[], str] | None:
     """Extracts triggers from query and returns the most probable function."""
     query = normalize(query)
 
     for trigger in trigger_map: # Loop over all triggers (sentences) in the trigger map
-        if trigger in query:
+        if trigger in query.text:
             return trigger_map[trigger] # Return function for given trigger
 
     return None
 
 @logger
-def initialize() -> None:
-    uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
-    
+def initialize(debug: bool) -> None:
+    if debug: 
+        uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
+        uniCLI.console_print("ICARUS", "blue", "Success!", "green")
