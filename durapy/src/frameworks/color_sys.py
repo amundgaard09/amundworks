@@ -45,6 +45,7 @@ def color_text(Text: str, Color: str, Bold: bool = False, Underline: bool = Fals
     if Underline: ANSI += '\033[4m'
     if Italic:    ANSI += '\033[3m'
     return        ANSI + Text + '\033[0m'
+
 def _intclip(val: int, lower: int, upper: int) -> int:
     if val <= lower:
         return lower

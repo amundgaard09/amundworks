@@ -98,3 +98,21 @@
 - Added the `EmotionMatrix` class, to be used in the future for giving ICARUS a better way to understand the user.
 - Added `Response` and `Query` classes for making dialouge-related development easier.
 - Major architectural updates in the engines of ICARUS.
+
+### Sunday - 21.06.2026
+
+- Made the UX cleaner, added optional terminal notifications controlled by a `debug` bool flag.
+
+### Monday - 22.06.2026
+
+- Added correct type hints to errors in `exceptions.py`.
+
+### Tuesday - 23.06.2026
+
+- Rewrote a large part of DuraPy as per the snake_case naming convention.
+- Made ICARUS a class: `IcarusInstance`, and added speak(), respond() and listen() as staticmethods.
+- Cleaned up toplevel init upimports.
+- Updated docs (README, DuraPy.md).
+- Added dunders to `Response`, `Query` and `EmotionMatrix`.
+- Added `IntentResult`.
+- Added `__init__` files and filled pre-existing init files with `__all__` variables.

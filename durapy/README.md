@@ -1,43 +1,53 @@
 # DuraPy - The Durendal Python Collection
 
-***Written, Created, Iterated, Evolved and Built by Simon Stordal Amundgård***
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-## What is DuraPy?
+DuraPy is a growing toolbox for science, engineering, and STEMP workflows. It brings together helpful utilities for mathematics, physics, robotics, chemistry-adjacent calculations, and more under one Python package.
 
-The Durendal Python Collection is the open-source collection of all Python projects built under Durendal, either by collabarators or Durendal itself. It features subpackages like the UniPy collection, which is a comprehensive toolchain built for STEMP projects.
+## What makes it useful
 
-### Why DuraPy?
+- A practical math layer for geometry, trigonometry, and algebra
+- Physics constants and helper modules for scientific exploration
+- A lightweight foundation for future CLI tools and engineering utilities
+- A simple package structure that is easy to extend
 
-DuraPy serves as a central hub for all Python projects under Durendal, fostering collaboration and sharing of tools and libraries. By consolidating these projects into a single collective, we aim to create a more cohesive and efficient development environment for our community.
+## Installation
 
-If you have a Python project that you think would be a good fit for DuraPy, please feel free to contribute! We welcome all contributions, big or small, and are always looking for ways to improve our ecosystem.
-
-## Durendal Open Source Philosophy
-
-The Durendal Python Collective is part of the Durendal Github Repository, and by extension, the Durendal Engineering Ecosystem.
-
-While this software and all other software under Durendal is licensed under the **MIT License** allowing full freedom of use, we strongly encourage all public projects built upon the Durendal repository to remain open source under the MIT License or a similarly permissive license. Projects that follow this philosophy may be recognized as part of the official Durendal ecosystem.
-
-By doing so, you help support an open, collaborative engineering ecosystem.
-
-## Install
-
-``` shell
+```bash
 pip install durapy
 ```
 
-## Example
+## Quick start
 
 ```python
 from durapy import unimath
+
 print(unimath.pythagoras(A=3, B=4))
 ```
 
-Result:
+Output:
 
-```shell
+```text
 5.0
 ```
+
+## Example: constants and units
+
+```python
+from durapy import constants
+
+print(constants.PI.value)
+print(constants.C.value)
+```
+
+## Suggested next improvements
+
+If you want to evolve the package further, the most impactful next steps are:
+
+- Add more polished examples and tutorials
+- Create a small CLI for common calculations
+- Add documentation pages for each submodule
+- Introduce a richer test suite and versioned release workflow
+
+DuraPy is intentionally open-ended, so it can grow into whatever your STEMP projects need next.

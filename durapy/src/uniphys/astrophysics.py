@@ -12,29 +12,29 @@ import math
 from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import G, C, PI, EARTH_M, EARTH_R, HUBBLE 
 
-def SchwarzschildRadius(M: float) -> Quantity:
+def schwarzschild_radius(M: float) -> Quantity:
     return Quantity(((2 * G * M) / C * C), UNITS["m"])
 
-def Redshift(λobs: float, λrest: float) -> Quantity:
+def redshift(λobs: float, λrest: float) -> Quantity:
     return Quantity(((λobs - λrest) / λrest), UNITS["nm"])
 
-def OrbitalPeriod(SemiMajorAxis: float, M: float, m: float) -> Quantity:
-    return Quantity((2 * PI * math.hypot(0, SemiMajorAxis ** 3 / (G * (M + m)))), UNITS["S"])
-def OrbitalVelocity(OrbitalRadius: float = EARTH_R, Mass: float = EARTH_M) -> Quantity:
-    return Quantity((math.hypot(0, (G * Mass) / OrbitalRadius)), UNITS["m/s"])
-def EscapeVelocity(Radius: float = EARTH_R, Mass: float = EARTH_M) -> Quantity:
-    return Quantity((math.hypot(0, 2) * OrbitalVelocity(Radius, Mass)), UNITS["m/s"])
+def orbital_period(semi_major_axis: float, M: float, m: float) -> Quantity:
+    return Quantity((2 * PI * math.hypot(0, semi_major_axis ** 3 / (G * (M + m)))), UNITS["S"])
+def orbital_velocity(orbital_radius: float = EARTH_R, mass: float = EARTH_M) -> Quantity:
+    return Quantity((math.hypot(0, (G * mass) / orbital_radius)), UNITS["m/s"])
+def escape_velocity(radius: float = EARTH_R, mass: float = EARTH_M) -> Quantity:
+    return Quantity((math.hypot(0, 2) * orbital_velocity(radius, mass)), UNITS["m/s"])
 
-def NewtonsGravitation(Mass1: float, Mass2: float, Distance: float) -> Quantity:
-    return Quantity((G * Mass1 * Mass2 / Distance ** 2), UNITS["N"])
-def SurfaceGravity(Mass: float, Radius: float) -> Quantity:
-    return Quantity((G * Mass / Radius ** 2), UNITS["m/s^2"])
+def newtonian_gravitation(mass1: float, mass2: float, distance: float) -> Quantity:
+    return Quantity((G * mass1 * mass2 / distance ** 2), UNITS["N"])
+def surface_gravity(mass: float, radius: float) -> Quantity:
+    return Quantity((G * mass / radius ** 2), UNITS["m/s^2"])
 
-def TsiolkovskyRocketEquation(ExhaustVelocity: float, InitialMass: float, FinalMass: float) -> Quantity:
-    if FinalMass > InitialMass:
+def tsiolkovsky_rocket_equation(exhaust_vel: float, initial_mass: float, final_mass: float) -> Quantity:
+    if final_mass > initial_mass:
         return Quantity(0, UNITS["Δv"])
     
-    return Quantity((ExhaustVelocity * math.log(InitialMass / FinalMass)), UNITS["Δv"])
+    return Quantity((exhaust_vel * math.log(initial_mass / final_mass)), UNITS["Δv"])
 
-def HubbleLaw(Distance: float) -> Quantity:
+def hubbles_law(Distance: float) -> Quantity:
     return Quantity((HUBBLE * Distance), UNITS["m/s"])

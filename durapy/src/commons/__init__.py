@@ -1,6 +1,5 @@
-"""Common utilities for `DuraPy`."""
+"""Common utilities for DuraPy."""
 
-__all__ = [
-    "constants.py",
-    "exceptions.py",
-]
+from . import constants, exceptions
+
+__all__ = ["constants", "exceptions"]

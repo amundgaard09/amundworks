@@ -31,13 +31,13 @@ recognizer = KaldiRecognizer(model, 16000)
 def callback(indata, frames: int, time, status) -> None:
     _queue.put(bytes(indata))
 
-def interpolate_emotions(query: Query) -> Query:
-    query.emotions = EmotionMatrix()
-    return query #placeholder for emotion extrapolation
+def interpolate_emotions(text: str) -> EmotionMatrix:
+    emotions = EmotionMatrix()
+    return emotions #placeholder for emotion interpolation
 
 @logger   
 def listen() -> Query:
-    """Listen for speech with `sounddevice`.`RawInputStream()`"""
+    """Listen for speech with `sounddevice`.`RawInputStream()`. Part of the Perception Engine."""
     with sounddevice.RawInputStream(
         samplerate=16000, 
         blocksize=8000, 
@@ -54,18 +54,17 @@ def listen() -> Query:
                     result_text = str(result_dict.get("text", ""))
                     query = Query(
                         text=result_text,
-                        emotions=None,
-                        toi=None
+                        emotions=interpolate_emotions(result_text),
                     )
                     
-                    uniCLI.console_print("USER", "green", result_text.capitalize())
+                    print(query)
                     return query
                 
         except sounddevice.PortAudioError as e:
             uniCLI.console_print("ICARUS PERCEPTION ENGINE", "red", f"An error occured: {e}", "orange")
 
 @logger
-def initialize(debug: bool) -> None:
+def initialize_perception(debug: bool) -> None:
     """Placeholder for future init logic for the Perception Engine."""
     if debug: 
         uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Perception Engine...", "white")

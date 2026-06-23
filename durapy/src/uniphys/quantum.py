@@ -1,5 +1,5 @@
 """
-The Quantum Physics module for `AWPC` `UniPhys`
+The Quantum Physics module for `DuraPy` `UniPhys`
 
 This module contains resources for calculations and simulations for Quantum Physics. 
 """

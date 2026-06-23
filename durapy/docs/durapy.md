@@ -6,50 +6,47 @@
   - [Table of Contents](#table-of-contents)
   - [DuraPy Overview](#durapy-overview)
   - [Quick Start Guide](#quick-start-guide)
-  - [Project Documentation](#project-documentation)
-    - [UniPy](#unipy)
-      - [UniAlgo](#unialgo)
-      - [UniCLI](#unicli)
-      - [UniCrypt](#unicrypt)
-      - [UniFlight](#uniflight)
-      - [UniMath](#unimath)
-      - [UniOps](#uniops)
-      - [UniPhys](#uniphys)
-      - [UniPower](#unipower)
-      - [UniSpace](#unispace)
-      - [UniViz](#univiz)
-  - [Contributing to DuraPy](#contributing-to-durapy)
+  - [Packages](#packages)
+    - [UniCLI](#unicli)
+    - [UniCogni](#unicogni)
+    - [UniCrypt](#unicrypt)
+    - [UniFlight](#uniflight)
+    - [UniMath](#unimath)
+    - [UniOps](#uniops)
+    - [UniPhys](#uniphys)
+    - [UniPower](#unipower)
+    - [UniSignal](#unisignal)
   - [License and Usage](#license-and-usage---durendal-open-source-philosophy)
 
 ## DuraPy Overview
 
 ## Quick Start Guide
 
-## Project Documentation
+## Packages
 
-### UniPy
+### UniCLI
 
-#### UniAlgo
+UniCLI is a package that supercharges CLIs via effective I/O solutions, data visualization and more.
 
-#### UniCLI
+### UniCogni
 
-#### UniCrypt
+UniCogni is a machine learning toolkit filled with everything a developer might need while developing the next generation of AI. This includes activation functions, loss functions, and more.
 
-#### UniFlight
+### UniCrypt
 
-#### UniMath
+UniCrypt is a function library for data encryption and decryption.
 
-#### UniOps
+### UniFlight
 
-#### UniPhys
+### UniMath
 
-#### UniPower
+### UniOps
 
-#### UniSpace
+### UniPhys
 
-#### UniViz
+### UniPower
 
-## Contributing to DuraPy
+### UniSignal
 
 ## License and Usage - Durendal Open Source Philosophy
 

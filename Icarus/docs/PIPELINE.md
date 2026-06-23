@@ -1,15 +1,19 @@
 # ICARUS Complex Pipeline
 
+User Speech
+    \/
 Perception Engine
     \/
-Only-text-Query
+  Query
     \/
 Intent Engine
     \/
-Complete Query
-    \/
-Execution Engine
-    \/
-Response
-    \/
-Feedback Engine
+IntentResult    MCP and Skill Directory
+    \/              \/
+     Execution Engine
+        \/
+    Response
+        \/
+    Feedback Engine
+        \/
+    Respond to user

@@ -15,7 +15,7 @@ from src.modules.dtypes import (
     StudentAthleteProfile,
 )
 
-from durapy.src.frameworks.color_sys import color_text as color_text
+from durapy.src.frameworks.color_sys import color_text as _ct
 from questionary import select, text
 from pathlib import Path
 from json import JSONDecodeError, load, dump 
@@ -190,7 +190,7 @@ def _get_distances(_sport: str) -> list[float] | None:
                 raw_distance = text(f"Enter {sport_part} distance (leave blank if none):").ask()
                 if raw_distance is None or raw_distance.strip() == "": return None
                 try: distances.append(float(raw_distance)); break
-                except ValueError: print(f"Only {color_text('floats', 'blue', Bold=True)} or {color_text('ints', 'blue', Bold=True)} are allowed!")
+                except ValueError: print(f"Only {_ct('floats', 'blue', Bold=True)} or {_ct('ints', 'blue', Bold=True)} are allowed!")
     
         return distances
 
@@ -198,7 +198,7 @@ def _get_distances(_sport: str) -> list[float] | None:
         raw_distance: str = text(f"Enter {_sport} distance (leave blank if none): ").ask()
         if raw_distance is None or raw_distance.strip() == "": return None
         try: return [float(raw_distance)]
-        except ValueError: print(f"Only {color_text('floats', 'blue', Bold=True)} or {color_text('ints', 'blue', Bold=True)} are allowed!")
+        except ValueError: print(f"Only {_ct('floats', 'blue', Bold=True)} or {_ct('ints', 'blue', Bold=True)} are allowed!")
 
 def cli_create_step() -> Step:
     """
@@ -409,7 +409,7 @@ def cli_create_event() -> Event:
     """
     
     event_name: str = text("Enter Event name:").ask()
-    start_time: int = int(text("Enter session start time (military time e.g. 1430):").ask())
+    start_time = int(text("Enter session start time (military time e.g. 1430):").ask())
     event_date: str = text("Enter Event Date (DD-MM-YYYY):").ask()
     event_sport: str = text("Enter Event Sport:").ask()
     event_city: str = text("Enter Event City:").ask()
@@ -433,7 +433,7 @@ def cli_create_event() -> Event:
     )
     
     with open(_JSON_ROOT / "events.json", "r") as f:
-        existing_events = load(f)
+        existing_events = list(load(f))
         existing_events.append(new_event.to_dict())
     
     with open(_JSON_ROOT / "events.json", "w") as f:

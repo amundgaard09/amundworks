@@ -26,5 +26,3 @@ def execute() -> str:
         return random.choice(_EVENING_GREETINGS + _GENERIC_GREETINGS)
     else:
         return random.choice(_MORNING_GREETINGS + _GENERIC_GREETINGS)
-
-print(int(time.strftime("%H")), int(time.strftime("%M")))

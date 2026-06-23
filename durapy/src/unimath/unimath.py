@@ -1,64 +1,110 @@
 """
-The UniMath function library for the `DuraPy` library. 
-This module provides a collection of functions for performing various mathematical calculations, 
-including geometry, algebra, calculus, and more.
+The UniMath function library for the `DuraPy` library.
 """
 
+import math, sympy
 
-import math, sympy, matplotlib.pyplot as plt
-
-from .. import uniCLI
+from ..frameworks.color_sys import color_text as _ct
 from ..commons import exceptions, constants
 from typing import Literal
 
 PI = constants.PI
 
-def plot(XVals: list[float], YVals: list[float]) -> None:
-    """Initialize a plot where `x`[`idx`] and `y`[`idx`] are coordinate pairs of a function."""
-    plt.plot(XVals, YVals, color='red', linestyle='-', marker='o')
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.axhline(0, color='black')
-    plt.axvline(0, color='black')
-    plt.show()
-    
-    return
-
-def D2R(Degrees: float) -> float:
+def D2R(deg: float) -> float:
     """Return radians from degrees."""
-    return Degrees / 180 * PI
-def R2D(Radians: float) -> float:
+    return deg / 180 * PI
+def R2D(rad: float) -> float:
     """Return degrees from radians."""
-    return Radians / PI * 180
+    return rad / PI * 180
 
 def avg(*args) -> float:
     return sum(args) / len(args)
 
-def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> str:
-    """Extrapolate the sides of a triangle from the AAAS case (3x Angle + 1x Side)"""
+def fibonacci_list(list_len: float) -> list[int]:
+    """Fibonacci sequence generator that returns a list of the sequence up to the given length."""
+    
+    try:
+        list_len = int(list_len)  
+    except ValueError:
+        raise ValueError("FibonacciInteger does not take floats or strings!")      
+    
+    fib0, fib1 = 0, 1
+    fib_list = [fib0, fib1]
+    
+    if list_len < 2:
+        raise ValueError("FibonacciList does not take integers less than 2!")
+    
+    for _ in range(0, (list_len - 2)):
+        fib2 = fib0 + fib1
+        fib0, fib1 = fib1, fib2
+        fib_list.append(fib2)
+        
+    return fib_list  
+ 
+def fibonacci_integer(fib_idx: float) -> int:
+    """Fibonacci integer generator that returns the Fibonacci integer at the given index.""" 
+    
+    try:
+        fib_idx = int(fib_idx)  
+    except ValueError:
+        raise ValueError("fibonacci_integer does not take floats or strings!") 
+    
+    if fib_idx < 2:
+        raise ValueError("fibonacci_integer does not take integers less than 2!")
+    
+    if fib_idx == 2:
+        return 1  
+      
+    fib0, fib1, fib2 = 0, 1, 1
+    
+    for _ in range(0, (fib_idx - 2)):
+        fib2 = fib0 + fib1
+        fib0, fib1 = fib1, fib2
+        
+    return fib2
+
+def lovelace(a: float, b: float, c: float, d: float, e: float, f: float) -> tuple:
+    """Lovelace's algorithm for solving systems of linear equations."""
+    if a*e == b*d: 
+        raise ValueError("The system has no unique solution.")
+    
+    Dx = c*e - b*f
+    Dy = a*f - c*d
+    x = Dx / (a*e - b*d)
+    y = Dy / (a*e - b*d)
+    return (x, y)
+
+def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> tuple[float, tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]:
+    """
+    Extrapolate the sides of a triangle from the AAAS case (3x Angle + 1x Side)
+    
+    Returns
+    -------
+        Area, (A, B, C), (a, b, c), (sin(a), sin(b), sin(c))
+    """
 
     if sum((a, b, c)) != 180:
         raise exceptions.ImpossibleTriangleError
 
-    SinA = math.sin(D2R(a))
-    SinB = math.sin(D2R(b))
-    SinC = math.sin(D2R(c))
+    sin_A = math.sin(D2R(a))
+    sin_B = math.sin(D2R(b))
+    sin_C = math.sin(D2R(c))
 
     if A is not None:
-        B = (A * SinB) / SinA
-        C = (A * SinC) / SinA
+        B = (A * sin_B) / sin_A
+        C = (A * sin_C) / sin_A
         
     elif B is not None:
-        A = (B * SinA) / SinB
-        C = (B * SinC) / SinB
+        A = (B * sin_A) / sin_B
+        C = (B * sin_C) / sin_B
         
     elif C is not None:
-        A = (C * SinA) / SinC
-        B = (C * SinB) / SinC
+        A = (C * sin_A) / sin_C
+        B = (C * sin_B) / sin_C
     
-    Area = herons_formula(A, B, C)
+    area = herons_formula(A, B, C)
     
-    return f"""Area: {Area} - Sides: A: {A}, B: {B}, C: {C} - Sin({a}) = {SinA}, Sin({b}) = {SinB}, Sin({c}) = {SinC}"""
+    return (area, (A, B, C), (a, b, c), (sin_A, sin_B, sin_C))
 def pythagoras(A: float | None = None, B: float | None = None, C: float | None = None) -> float:
     """
     Calculates the missing side of a right-angled triangle using either normal or reverse pythagoras.
@@ -67,7 +113,7 @@ def pythagoras(A: float | None = None, B: float | None = None, C: float | None =
     The function can take in any two sides and will return the missing side. If more than one side is missing, the function will return `None`. Same thing when 3 values are given.
     """
     
-    if (A, B, C).count(None) > 1 or (A, B, C).count(None) == 3:
+    if (A, B, C).count(None) > 1:
         return None
     
     if A is None:
@@ -144,9 +190,9 @@ def sine_rule(
         Angles_out = angles_rad
 
     return [Angles_out, Sides]
-def cosine_rule(LengthA: float, LengthB: float, AngleA: float) -> float:
-    return math.sqrt(LengthA ** 2 + LengthB ** 2 - ((2 * LengthA * LengthB) * math.cos(D2R(AngleA))))
-def reverse_cosine_rule(LengthA: float, LengthB: float, LengthC: float) -> tuple[float, float, float]:
+def cosine_rule(len_A: float, len_B: float, angle_A: float) -> float:
+    return math.sqrt(len_A ** 2 + len_B ** 2 - ((2 * len_A * len_B) * math.cos(D2R(angle_A))))
+def reverse_cosine_rule(len_A: float, len_B: float, len_C: float) -> tuple[float, float, float]:
     """ 
     Returns a tuple of the three angles in degrees, in the order of AngleA, AngleB, and AngleC.
     
@@ -155,18 +201,18 @@ def reverse_cosine_rule(LengthA: float, LengthB: float, LengthC: float) -> tuple
     """
 
     return (
-        R2D(math.acos((LengthB ** 2 + LengthC ** 2 - LengthA ** 2) / (2 * LengthB * LengthC))),  # AngleA
-        R2D(math.acos((LengthC ** 2 + LengthA ** 2 - LengthB ** 2) / (2 * LengthC * LengthA))),  # AngleB
-        R2D(math.acos((LengthA ** 2 + LengthB ** 2 - LengthC ** 2) / (2 * LengthA * LengthB)))   # AngleC
+        R2D(math.acos((len_B ** 2 + len_C ** 2 - len_A ** 2) / (2 * len_B * len_C))),  # AngleA
+        R2D(math.acos((len_C ** 2 + len_A ** 2 - len_B ** 2) / (2 * len_C * len_A))),  # AngleB
+        R2D(math.acos((len_A ** 2 + len_B ** 2 - len_C ** 2) / (2 * len_A * len_B)))   # AngleC
     )
 
-def SAS_area(LengthA: float, LengthB: float, AngleC: float) -> float:
+def SAS_area(len_A: float, len_B: float, angle_C: float) -> float:
     """
     Returns the area of a triangle from two sides and the included angle.
     Formula: `Area = 0.5 * LengthA * LengthB * sin(AngleC)` where AngleC is in degrees.
     """
-    return (0.5 * LengthA * LengthB * math.sin(D2R(AngleC)))
-def herons_formula(LengthA: float, LengthB: float, LengthC: float) -> float:
+    return (0.5 * len_A * len_B * math.sin(D2R(angle_C)))
+def herons_formula(len_A: float, len_B: float, len_c: float) -> float:
     """
     Returns the area of a triangle from the side lengths.
     Formula::
@@ -175,51 +221,51 @@ def herons_formula(LengthA: float, LengthB: float, LengthC: float) -> float:
         Area: float = math.sqrt(S * (S - LengthA) * (S - LengthB) * (S - LengthC))
 
     """
-    S = (LengthA + LengthB + LengthC) / 2
-    return math.sqrt(S * (S - LengthA) * (S - LengthB) * (S - LengthC))
+    S = (len_A + len_B + len_c) / 2
+    return math.sqrt(S * (S - len_A) * (S - len_B) * (S - len_c))
 
-def slope(x1: float, y1: float, x2: float, y2: float) -> str:
+def slope(x1: float, y1: float, x2: float, y2: float) -> float:
     """Returns the slope of a line from two points `(x1, y1)` and `(x2, y2)`"""
-    return f"Slope = {(y2 - y1) / (x2 - x1)}"
+    return (y2 - y1) / (x2 - x1)
 def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     """Return the distance between two points `(x1, y1)` and `(x2, y2)`"""
     return math.sqrt((x2-x1)**2 + (y2-y1)**2)
-def derivative(Function: str, x: float | None = None, h: float = 1e-5) -> float:
+def derivative(func: str, x: float | None = None, h: float = 1e-5) -> float:
     """Returns `f'(x)` if `x` is not given, else returns the numerical derivative of the function at the given x-value using the definition of the derivative."""
     x_sym = sympy.symbols('x')
-    f = sympy.sympify(Function)
+    f = sympy.sympify(func)
     if x is None:
         return sympy.diff(f, x_sym)
     else:
         return (f.subs(x_sym, x + h) - f.subs(x_sym, x - h)) / (2 * h)
 
-def line_intersection(m1: float, b1: float, m2: float, b2: float) -> str:
+def line_intersection(m1: float, b1: float, m2: float, b2: float) -> tuple[float, float]:
     """"Return the point of intersection of two lines in the form of `(x, y)`"""
     x = (b2 - b1) / (m1 - m2)
     y = m1*x + b1
-    return f"Intersection Point: ({x:.3f}, {y:.3f})"
-def line_from_points(x1: float, y1: float, x2: float, y2: float) -> str:
-    """Returns the equation of a line in the form of `y = mx + b` from two points `(x1, y1)` and `(x2, y2)`."""
+    return (x, y)
+def line_from_points(x1: float, y1: float, x2: float, y2: float) -> tuple[float, float]:
+    """Returns `m`, `b` as parts of the equation `y = mx + b` from the two given points `(x1, y1)` and `(x2, y2)`."""
     m = (y2 - y1) / (x2 - x1)
     b = y1 - m * x1
-    return f"y = {m}x + {b}"
+    return (m, b)
 def linear_zero(m: float, b: float) -> float:
     """Find the x-value where the line `y = mx + b` crosses the x-axis"""
     return -b / m
-def linear_evaluation(m: float, b: float, x: float) -> str:
-    return f"{m}x + {b} = {m*x + b}"    
+def linear_evaluation(m: float, b: float, x: float) -> float:
+    return m*x + b   
 
-def quadratic_vertex(a: float, b: float, c: float) -> str:
+def quadratic_vertex(a: float, b: float, c: float) -> tuple[tuple[float, float], str]:
     """Returns the vertex (aka the minimum/maximum point) of a quadratic function in the form of `(x, y)`."""
     xv = -b / (2*a)
-    yv = quadratic_evaluation(a, b, c, xv).split('= ')[-1]
+    yv = quadratic_evaluation(a, b, c, xv)
 
-    return f"Vertex: ({xv}, {yv}) - {'Minimum' if a > 0 else 'Maximum' if a < 0 else 'Linear'}"
-def quadratic_numRoots(a: float, b: float, c: float) -> int:
+    return (xv, yv), f"{'Minimum' if a > 0 else 'Maximum' if a < 0 else 'Linear'}"
+def quadratic_num_roots(a: float, b: float, c: float) -> int:
     """Returns the number of roots of a quadratic function based on the discriminant."""
     D = b**2 - 4*a*c
     return 2 if D > 0 else 1 if D == 0 else 0
-def quadratic_solutions(A: float, B: float, C: float) -> str:
+def quadratic_solutions(A: float, B: float, C: float) -> tuple[float, float] | tuple[float] | None:
     """Solves quadratic equations and returns x-values in a tuple."""
     if A == 0:
         return ValueError("Invalid quadratic equation! A cannot be 0.")
@@ -227,13 +273,13 @@ def quadratic_solutions(A: float, B: float, C: float) -> str:
     if D > 0:
         x1 = (-B - math.hypot(0, D)) / (2 * A)
         x2 = (-B + math.hypot(0, D)) / (2 * A)
-        return f"x1: {uniCLI.color_text(x1, 'green')}, x2: {uniCLI.color_text(x2, 'green')}"
+        return (x1, x2)
     
     elif D == 0:
         x1 = -B / (2 * A)
-        return f"x: {uniCLI.color_text(x1, 'green')}"
+        return (x1)
     else: 
-        return uniCLI.color_text('No real solutions', 'red')
+        return None
 def quadratic_factorized(a: float, b: float, c: float) -> str:
     """Returns the factorized form of a quadratic function in the form of `a(x - x1)(x - x2)` where `x1` and `x2` are the roots of the function."""
     D = b**2 - 4*a*c
@@ -250,79 +296,54 @@ def quadratic_factorized(a: float, b: float, c: float) -> str:
         x1 = -b / (2 * a)
         return f"{a}(x {sign(x1)} {x1})^2"
     else: 
-        return uniCLI.color_text('No real solutions', 'red')
-def quadratic_zeros(a: float, b: float, c: float) -> str:
-    """Returns the x-values where the quadratic function crosses the x-axis."""
-    D = b**2 - 4*a*c
-    if D > 0:
-        x1 = (-b - math.hypot(0, D)) / (2 * a)
-        x2 = (-b + math.hypot(0, D)) / (2 * a)
-        return f"Zeros: {uniCLI.color_text((x1, 0), 'green')}, {uniCLI.color_text((x2, 0), 'green')}"
-    
-    elif D == 0:
-        x1 = -b / (2 * a)
-        return f"Zero: {uniCLI.color_text((x1, 0), 'green')}"
-    else: 
-        return uniCLI.color_text('No real zeros', 'red')
-def quadratic_evaluation(a: float, b: float, c: float, x: float) -> str:
-    return f"{a}x² + {b}x + {c} = {a*x**2 + b*x + c}"
+        return _ct('No real solutions', 'red')
+def quadratic_evaluation(a: float, b: float, c: float, x: float) -> float:
+    return a*x**2 + b*x + c
 
-def cubic_vertex(a: float, b: float, c: float, d: float) -> str:
+def cubic_vertex(a: float, b: float, c: float, d: float) -> list:
     """Returns the vertex (aka the minimum/maximum point) of a cubic function in the form of `(x, y)`."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x**3 + {b}*x**2 + {c}*x + {d}")
-    df = sympy.diff(f, x)
-    critical_points = sympy.solve(df, x)
+    dif = sympy.diff(f, x)
+    critical_points = sympy.solve(dif, x)
     
     vertices = []
     for point in critical_points:
         y = f.subs(x, point)
         vertices.append((point, y))
     
-    return f"Vertices: {uniCLI.color_text(vertices, 'green' if all(v[1].is_real for v in vertices) else 'red')}"
+    return vertices
 def cubic_num_roots(a: float, b: float, c: float, d: float) -> int:
     """Returns the number of roots of a cubic function based on the discriminant."""
     D = 18*a*b*c*d - 4*b**3*d + b**2*c**2 - 4*a*c**3 - 27*a**2*d**2
     return 3 if D > 0 else 2 if D == 0 else 1
-def cubic_solutions(a: float, b: float, c: float, d: float) -> str:
+def cubic_solutions(a: float, b: float, c: float, d: float) -> list:
     """Returns the roots of a cubic function in a tuple."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x**3 + {b}*x**2 + {c}*x + {d}")
     solutions = sympy.solve(f, x)
-    return f"Solutions: {uniCLI.color_text(solutions, 'green' if all(sol.is_real for sol in solutions) else 'red')}"
-def cubic_zeros(a: float, b: float, c: float, d: float) -> str:
+    return solutions
+def cubic_zeros(a: float, b: float, c: float, d: float) -> list:
     """Returns the x-values where the cubic function crosses the x-axis."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x³ + {b}*x² + {c}*x + {d}")
     zeros = sympy.solve(f, x)
-    return f"Zeros: {uniCLI.color_text(zeros, 'green' if all(z.is_real for z in zeros) else 'red')}"
-def cubic_evaluation(a: float, b: float, c: float, d: float, x: float) -> tuple[str, float]:
-    """Cubic Evaluation function"""
+    return zeros
+def cubic_evaluation(a: float, b: float, c: float, d: float, x: float) -> float:
+    """Evaluate a cubic polynomial."""
     result = a*x**3 + b*x**2 + c*x + d
-    return (f"f({x}) = {a}*{x}³ + {b}*{x}² + {c}*{x} + {d} = {result}", result)
-def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, LowerBound: int, UpperBound: int, plot: bool = False) -> str:
+    return result
+def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: int, upper: int, plot: bool = False) -> list[float]:
     """Brute Force evaluation of a third-degree polynomial. The function checks all evaluations from `LowerBound` to `UpperBound` and highlights roots as green, as well as plotting the given function if wanted."""
     x_vals, y_vals, roots = [], [], []
     
-    for x in range(int(LowerBound), int(UpperBound+1)):
-        string, result = cubic_evaluation(a, b, c, d, x)
+    for x in range(int(lower), int(upper+1)):
+        result = cubic_evaluation(a, b, c, d, x)
         x_vals.append(x)
         y_vals.append(result)
         roots.append(x) if result == 0 else None
-        print(uniCLI.color_text(string, 'green' if result == 0 else 'red'))
         
-    print(f"Roots: {roots}")
-    plot(x_vals, y_vals) if plot else None
-    return
-
-def exp_evaluation(Base: float, Exponent: float) -> str:
-    """Returns the result of an exponential evaluation in the form of `Base^Exponent = Result`."""
-    return f"{Base}^{Exponent} = {Base ** Exponent}"
-def log_evaluation(Base: float, Argument: float) -> str:
-    """Returns the result of a logarithmic evaluation in the form of `log_Base(Argument) = Result`."""
-    if Base <= 1 or Argument <= 0:
-        return uniCLI.color_text("Invalid input! Base must be greater than 1 and Argument must be greater than 0.", 'red')
-    return f"log_{Base}({Argument}) = {math.log(Argument, Base)}"
+    return roots
 
 ### UNSTABLE - ALPHA - DO NOT USE
 def tangent_formula(Function1: str, Function2: str) -> list[str]:
@@ -344,19 +365,19 @@ def tangent_formula(Function1: str, Function2: str) -> list[str]:
 
     return tangents
 
-def prime_factorize(Number: int) -> list[int]:
+def prime_factorize(num: int) -> list[int]:
     """Returns the prime factorization of a number as a list of its prime factors."""
-    Factors = []
-    Divisor = 2
+    factors = []
+    div = 2
     
-    while Number >= 2:
-        if Number % Divisor == 0:
-            Factors.append(Divisor)
-            Number //= Divisor
+    while num >= 2:
+        if num % div == 0:
+            factors.append(div)
+            num //= div
         else:
-            Divisor += 1
+            div += 1
             
-    return Factors
+    return factors
 
 def factorial(n: int) -> int:
     """Returns the factorial of a non-negative integer `n`."""
@@ -375,8 +396,12 @@ def subfactorial(n: int) -> int:
         raise ValueError("Subfactorial and Factorial are not defined for negative numbers.")
     return int(factorial(n) * sum((((-1)**k) / factorial(k)) for k in range(n)))
 
-### - TODO: Add more functions for various mathematical calculations, such as:
-### - More functions for geometry, such as area and volume calculations for various shapes, surface area calculations, and more.
-### - More functions for algebra, such as polynomial expansion, factorization, and more.
-### - More functions for calculus, such as integration, limits, and more.
-### - More functions for number theory, such as GCD, LCM, modular arithmetic, and more.
+def gcd(x: int, y: int) -> int:
+    pass
+def lcm(x: int, y: int) -> int:
+    pass
+
+def polygon_area(n: int) -> float:
+    pass
+def polygon_circumference(n: int) -> float:
+    pass

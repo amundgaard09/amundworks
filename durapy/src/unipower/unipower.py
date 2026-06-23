@@ -100,8 +100,8 @@ def power_dissipation(V: float | None = None, I: float | None = None, R: float |
     """Calculates power dissipation from voltage, current and resistance. If all three parameters are given, it checks for consistency between the three formulas P = I^2 * R, P = V^2 / R and P = V * I."""
     if (V, I, R).count(None) > 1:
         missing_params = []
-        for idx, value in enumerate((V, I, R)):
-            if value is None:
+        for idx, val in enumerate((V, I, R)):
+            if val is None:
                 missing_params.append(("V", "I", "R")[idx])
         
         raise MissingParameters(power_dissipation, missing_params)
@@ -144,17 +144,20 @@ def resistor_visual(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -
 def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
     """Takes in the colors of a resistor and returns its resistivity and tolerance range.
 
-    Args:
+    Args
+    ----
         C1 (str): Color band 1
         C2 (str): Color band 2
         C3 (str): Color band 3
         C4 (str): Color band 4
         C5 (str | None, optional): Color band 5. Defaults to None.
 
-    Raises:
+    Raises
+    ------
         InvalidColors: Raised if user gives a color that is invalid for that band.
 
-    Returns:
+    Returns
+    -------
         tuple[float, float, float, float]: Ohm value, tolerance precent (+-), lower and upper bound of the tolerance range.
     """
     

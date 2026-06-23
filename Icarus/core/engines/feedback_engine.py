@@ -33,7 +33,7 @@ def _play_audio(audio_bytes: bytes) -> None:
 
 @logger
 def speak(response: Response) -> None:
-    """Speak the given text through `ElevenLabs` TTS. Also logs the text to the terminal"""
+    """Speak the given text through `ElevenLabs` TTS. Also logs the text to the terminal. Part of the Feedback Engine."""
     speech = elevenlabs.text_to_speech.stream(
         voice_id="pNInz6obpgDQGcFmaJgB",
         output_format="mp3_22050_32",
@@ -56,10 +56,10 @@ def speak(response: Response) -> None:
     # Go to start of stream, play the stream and print the response.
     audio_stream.seek(0)
     _play_audio(audio_stream.read())
-    uniCLI.console_print("ICARUS", "blue", response.text)
+    print(response)
 
 @logger
-def initialize(debug: bool) -> None:
+def initialize_feedback(debug: bool) -> None:
     """Placeholder for future init logic for the Feedback Engine."""
     if debug: 
         uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")

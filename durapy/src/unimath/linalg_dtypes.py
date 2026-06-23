@@ -58,7 +58,7 @@ def is_close(a: float | list[float] | list[list[float]] | xp.ndarray,
             return False
         
         return all(is_close(x, y) for x, y in zip(a, b))
-        
+    
     return False
 
 class D3Vector:

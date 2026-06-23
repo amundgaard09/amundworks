@@ -27,6 +27,24 @@ class Quantity:
     def __init__(self, value: float, unit: Unit):
         self._value = value
         self._unit = unit
+
+    @property
+    def value(self) -> float:
+        """Return the numeric value of the quantity."""
+        return self._value
+
+    @value.setter
+    def value(self, value: float) -> None:
+        self._value = value
+
+    @property
+    def unit(self) -> Unit:
+        """Return the unit attached to the quantity."""
+        return self._unit
+
+    @unit.setter
+    def unit(self, unit: Unit) -> None:
+        self._unit = unit
         
     def __str__(self) -> str:
         return f"{self._value} - {self._unit}"    
@@ -104,6 +122,15 @@ class PhysicalConstant(Quantity):
     def __init__(self, value: float, unit: Unit, name: str):
         super().__init__(value, unit)
         self._name = name
+
+    @property
+    def name(self) -> str:
+        """Return the human-readable name of the constant."""
+        return self._name
+    
+    @property
+    def value(self) -> float:
+        return self._value
     
     def __str__(self):
         return f"{self._name}: {self._value} - {self._unit}"

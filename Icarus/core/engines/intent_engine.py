@@ -8,28 +8,13 @@ This file contains dependencies for ICARUS linked to figuring out what and how t
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
+import re as regex
+
 from durapy import uniCLI
 from typing import Callable
 from core.types.query import Query
+from core.types.intent_result import IntentResult
 from core.utilities.decorators import logger
-
-def get_highest_score(scored_func_list: list[tuple[int, Callable[[], str]]]) -> Callable[[], str] | None:
-    """Returns the highest scoring function in a scored function list."""
-    if not scored_func_list:
-        return None
-
-    return max(scored_func_list, key=lambda item: item[0])[1]
-        
-def most_probable_function(tokens: list[str], token_map: dict[str, Callable[[], str]]) -> Callable[[], str]:
-    pass
-
-def match_rev2(query: str, token_map: dict[str, Callable[[], str]]) -> None:
-    "Uses a score-based system for checking the prompt up against a token map, and the function whose tokens are most common in the prompt gets returned."
-    
-    tokens = [token for token in query.strip().split()]
-    
-    return most_probable_function(tokens, token_map)
-
 
 def normalize(query: Query) -> Query:
     query.text = query.text.lower().strip()
@@ -46,8 +31,64 @@ def match(query: Query, trigger_map: dict) -> Callable[[], str] | None:
 
     return None
 
+def extract_intent(query: Query) -> str:
+    text = query.text.lower()
+
+    if "time" in text or "clock" in text:
+        return "get_time"
+
+    if "calendar" in text:
+        return "calendar_lookup"
+
+    if "search" in text or "google" in text:
+        return "web_search"
+
+    return "unknown"
+
+def extract_args(query: Query, intent: str) -> dict:
+    text = query.text
+
+    if intent == "math_sum":
+        numbers = regex.findall(r"\d+", text)
+        return {"numbers": list(map(int, numbers))}
+
+    if intent == "web_search":
+        return {"query": text}
+
+    return {}
+    
 @logger
-def initialize(debug: bool) -> None:
+def process(query: Query) -> IntentResult:
+    """Process a `Query` and return an `IntentResult`. Part of the Intent Engine."""
+    intent = extract_intent(query)
+    args = extract_args(query, intent)
+    
+    return IntentResult(
+        intent=intent,
+        confidence=0.0,
+        arguments=args,
+        source_text=query.text
+    )
+
+@logger
+def initialize_intent(debug: bool) -> None:
+    """Placeholder for future init logic for the Intent Engine."""
     if debug: 
         uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
         uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        
+        
+# En enda bedre struktur (anbefalt)
+
+#Du kan gjøre dette:
+
+#class IntentSpec:
+#    name: str > skill name
+#    arg_parser: Callable -> Arg Extractor Func
+
+#Og registry:
+
+#INTENT_REGISTRY = {
+#    "math_sum": IntentSpec(...),
+#    "web_search": IntentSpec(...)
+#}

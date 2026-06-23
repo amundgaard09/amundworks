@@ -1,7 +1,7 @@
 
 import os, json
 from pathlib import Path
-from core.mcp.types.mcptool import MCPTool
+from Icarus.core.mcp.types.mcp_tool import MCPTool
 from core.mcp.types.input_schema import InputSchema
 from core.utilities.decorators import logger
 
