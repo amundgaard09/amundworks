@@ -1,12 +1,13 @@
 {
     "name": "get_time",
     "description": "Returns the current time.",
-    "triggers": [
+    "aliases": [
         "what time is it",
         "what's the time",
         "current time",
         "time"
     ],
+    "input_schema": null,
     "language": "python",
     "entrypoint": "execute.py"
 }

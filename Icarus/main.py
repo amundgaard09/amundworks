@@ -40,10 +40,13 @@ def check_windows_wifi() -> bool:
         output = subprocess.check_output("netsh wlan show interfaces", shell=True).decode(encoding="utf-8", errors="strict")
         if "State" in output and "connected" in output.lower():
             return True
+        
     except subprocess.CalledProcessError:
         pass
+    
     except UnicodeDecodeError:
         uniCLI.console_print("ICARUS INITIALIZER: WARNING", "yellow", "WiFi Check failed: UnicodeDecodeError", "yellow")
+    
     return False
 
 wifi_check_funcs = {
@@ -110,7 +113,8 @@ def main(is_debug: bool) -> None:
     
     while True:
         query = Icarus.listen()
-        response = Icarus.respond(query)
+        call = Icarus.process(query)
+        response = Icarus.respond(call)
         Icarus.speak(response) 
         if "Goodbye" in response.text:
             exit(1)

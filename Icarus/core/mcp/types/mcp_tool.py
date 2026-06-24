@@ -1,12 +1,16 @@
 
 from pathlib import Path
-from Icarus.core.mcp.types.input_schema import InputSchema
+from typing import Callable
+from core.mcp.types.input_schema import InputSchema
 from dataclasses import dataclass
 
 @dataclass
 class MCPTool:
     name: str
     desc: str
+    aliases: list[str]
     path: Path
-    config: dict
+    execute: Callable
     input_schema: InputSchema
+    
+    

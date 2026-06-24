@@ -18,55 +18,55 @@ ACTIVATIONS = {
     "softmax": (unicogni.softmax,           None) # Softmax derivative is handled differently in backpropagation, so we set it to None here.
 }
 
-class Denselayer:
-    def __init__(self, n_inputs: int, n_outputs: int, act: str):
+class DenseLayer:
+    def __init__(self, n_inputs: int, n_outputs: int, act: str) -> None:
         """Initializes a dense layer with given input and output sizes and activation function."""
-        self.weight_matrix: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs) # He Initialization for weights.
-        self.bias_vec:      xp.ndarray = xp.zeros(n_outputs)                                            # New bias array filled with zeros.
-        self.act, self.d_act = ACTIVATIONS.get(act, "relu")
+        self.weights: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs) # He Initialization for weights.
+        self.bias:      xp.ndarray = xp.zeros(n_outputs)                                            # New bias array filled with zeros.
+        self.act, self.d_act = ACTIVATIONS.get(act, "relu") # Default to ReLU
     
-    def Forward(self, input: xp.ndarray) -> xp.ndarray:
+    def Forward(self, input_arr: xp.ndarray) -> xp.ndarray:
         """Forward pass for the layer. Computes the output based on the input and current weights and biases."""
-        self.input = input
-        self.Z = input @ self.weight_matrix + self.bias_vec
+        self.input_arr = input_arr
+        self.Z = input_arr @ self.weights + self.bias
         self.output = self.act(self.Z)
         return self.output
     
     def backward(self, dA: xp.ndarray, learning_rate: float) -> xp.ndarray:
         """Backward pass for the layer. Calculates gradients and updates weights and biases."""
-        dZ: xp.ndarray = dA * self.d_act(self.Z)                                              # dA -> Output GOL. dZ -> Z GOL.
-        X:  xp.ndarray = self.input if self.input.ndim > 1 else self.input.reshape(1, -1)     # X  -> Reshaped input.
-        dZ: xp.ndarray = dZ         if dZ.ndim         > 1 else dZ.reshape(1, -1)             # dZ -> Reshaped dZ.
-        dW: xp.ndarray = X.T @ dZ / X.shape[0]                                                # dW -> Weight GOL. Batch averaged. X.T @ dZm computes the sum of gradients for each weight across the batch, and dividing by X.shape[0] gives the average.
-        dB: xp.ndarray = dZ.mean(axis=0)                                                      # dB -> Bias   GOL, Batch averaged.
-        dI: xp.ndarray = dZ @ self.weight_matrix.T                                            # dI -> Input  GOL. For backpropagation to previous layers. 
+        dZ = dA * self.d_act(self.Z)       # dA -> Output GOL. dZ -> Z GOL.
+        X  = xp.atleast_2d(self.input_arr) # X  -> Ensures 2D shape for batch or single sample.
+        dZ = xp.atleast_2d(dZ)             # dZ -> Ensures 2D shape for batch or single sample.
+        dW = X.T @ dZ / X.shape[0]         # dW -> Weight GOL. Batch averaged. X.T @ dZm computes the sum of gradients for each weight across the batch, and dividing by X.shape[0] gives the average.
+        dB = dZ.mean(axis=0)               # dB -> Bias   GOL, Batch averaged.
+        dI = dZ @ self.weights.T           # dI -> Input  GOL. For backpropagation to previous layers. 
 
-        self.weight_matrix -= learning_rate * dW
-        self.bias_vec -= learning_rate * dB
+        self.weights -= learning_rate * dW
+        self.bias -= learning_rate * dB
         
-        return dI.reshape(self.input.shape)
+        return dI.reshape(self.input_arr.shape)
     
 class Sequential:
     def __init__(
         self, 
-        input_neuron_count: int, 
+        input_neurons: int, 
         layer_count: int, 
         layer_neuron_count: int, 
-        output_neuron_count: int,
+        output_neurons: int,
         act_per_layer: list[str], 
         learning_rate: float
-    ):
+    ) -> None:
         
-        self.input_neuron_count = input_neuron_count
+        self.input_neurons = input_neurons
         self.layer_count = layer_count
-        self.output_neuron_count = output_neuron_count
+        self.output_neurons = output_neurons
         self.learning_rate = learning_rate
-        self.layers: list[Denselayer] = []
+        self.layers: list[DenseLayer] = []
  
-        prev_neuron_count = input_neuron_count
+        prev_neuron_count = input_neurons
         
         for idx in range(layer_count):
-            layer = Denselayer(
+            layer = DenseLayer(
                 prev_neuron_count, 
                 layer_neuron_count, 
                 act_per_layer[idx]
@@ -75,12 +75,12 @@ class Sequential:
             prev_neuron_count = layer_neuron_count
 
         # Output layer
-        self.layers.append(Denselayer(prev_neuron_count, output_neuron_count, act_per_layer[-1]))
+        self.layers.append(DenseLayer(prev_neuron_count, output_neurons, act_per_layer[-1]))
     
-    def forward(self, input: xp.ndarray) -> xp.ndarray:
+    def forward(self, input_arr: xp.ndarray) -> xp.ndarray:
         """Forward pass for the entire network."""
         
-        x = input
+        x = input_arr
         for layer in self.layers:
             x = layer.Forward(x)
         return x  
@@ -103,7 +103,7 @@ class Sequential:
         for layer in reversed(self.layers):
             loss_gradient = layer.backward(loss_gradient, self.learning_rate)
     
-    def train(self, x: xp.ndarray, y: xp.ndarray, epochs: int, batch_size: int):
+    def train(self, x: xp.ndarray, y: xp.ndarray, epochs: int, batch_size: int) -> None:
         """Training loop for the network.
         
         Args:
@@ -136,7 +136,7 @@ class Sequential:
             print(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss:.6f} {"\033[92m ### \033[0m" if epoch_loss < last_loss else "\033[91m ### \033[0m"}")
             last_loss = epoch_loss     
     
-    def predict(self, X: xp.ndarray) -> xp.ndarray:
+    def predict(self, x: xp.ndarray) -> xp.ndarray:
         """Make predictions on new data.
         
         Args:
@@ -145,11 +145,11 @@ class Sequential:
         Returns:
             np.ndarray: Predictions.
         """
-        return self.forward(X) 
+        return self.forward(x) 
     
     @staticmethod
-    def normalize_data(X: xp.ndarray) -> xp.ndarray:
-        mean = xp.mean(X, axis=0)
-        std  = xp.std(X, axis=0)
+    def normalize_data(x: xp.ndarray) -> xp.ndarray:
+        mean = xp.mean(x, axis=0)
+        std  = xp.std(x, axis=0)
         std  = xp.where(std == 0, 1, std)
-        return (X - mean) / std
+        return (x - mean) / std

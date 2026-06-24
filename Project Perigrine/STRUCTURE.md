@@ -11,7 +11,7 @@ Floats: `float`, sizes 32, 64, 128
 Complex: `complex`, sizes 128, 256  
 Text: `char`  
 Logical: `bool`  
-Empty: `null`, `none`
+Empty: `null` / `none`
 
 ### Data Structures
 

@@ -10,12 +10,11 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 
 import json, queue, sounddevice
 
-from core.types.query import Query
-from core.types.emotion_matrix import EmotionMatrix
-from core.utilities.decorators import logger
-from vosk import Model, KaldiRecognizer
-from durapy import uniCLI
 from pathlib import Path
+from durapy import uniCLI
+from vosk import Model, KaldiRecognizer
+from core.types import Query, EmotionMatrix
+from core.utilities.decorators import logger
 
 # Path to Icarus folder
 ROOT = Path(__file__).resolve().parents[2]

@@ -1,0 +1,9 @@
+{
+    "name": "fallback",
+    "description": "Handles unknown or ambiguous queries",
+    "aliases": [
+        "unknown", 
+        "fallback"
+    ],
+    "input_schema": null
+}

@@ -2,18 +2,18 @@
 from dataclasses import dataclass
 
 @dataclass
-class IntentResult:
+class ToolCall:
     """
-    IntentResult Dataclass for Intent representation from `IntentEngine`
+    ToolCall Dataclass representing a tool call from `IntentEngine` to `ExecutionEngine`.
     
     Args
     ----
-        intent (str): The derived intent (e.g.)
+        tool_name (str): The tool name
         confidence (float): The confidence on a scale from 0 - 100%.
         arguments (dict): Extracted arguments, sorted by type.
         source_text (str): The source text from the Query.
     """
-    intent: str
+    tool_name: str
     confidence: float
     arguments: dict
     source_text: str

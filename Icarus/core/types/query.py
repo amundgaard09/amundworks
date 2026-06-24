@@ -16,7 +16,7 @@ class Query:
         self.emotions = emotions
     
     def __str__(self) -> str:
-        return uniCLI.console_msg("USER", "green", f"{self.text}\n{self.emotions.__str__()}\n")
+        return uniCLI.console_msg("USER", "green", f"{self.text}\n") #{self.emotions.__str__()}\n")
     
     def __repr__(self) -> str:
         return f"Query({self.text}, {self.emotions})"

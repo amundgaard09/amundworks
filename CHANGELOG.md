@@ -109,10 +109,28 @@
 
 ### Tuesday - 23.06.2026
 
-- Rewrote a large part of DuraPy as per the snake_case naming convention.
+- Rewrote DuraPy functions as per the snake_case naming convention.
 - Made ICARUS a class: `IcarusInstance`, and added speak(), respond() and listen() as staticmethods.
 - Cleaned up toplevel init upimports.
 - Updated docs (README, DuraPy.md).
 - Added dunders to `Response`, `Query` and `EmotionMatrix`.
 - Added `IntentResult`.
 - Added `__init__` files and filled pre-existing init files with `__all__` variables.
+
+### Wednesday - 24.06.2026
+
+- Huge changes for `mcp_server_kernel.py`. Added functional skill loaders and registry builders.
+- Removed depecrated functions and boilerplate/bloat.
+- Added `ARCHITECTURE.md`, a file explaining the data flow through ICARUS with a visualization.
+- Added `PRINCIPLES.md`, a description of design principles and rules regarding ICARUS.
+- Removed `skill_loaders.py`, moved functions to `mcp_server_kernel.py`
+- Added `intent_spec` and `IntentSpec`, for the Intent Engine.
+
+- Added functional MCP Server and went back to the old MCP types:
+  - `MCPProperty`, represents a single argument.
+  - `InputSchema`, represents all arguments to a tool call
+  - `MCPTool`, represents a complete skill/tool
+  - `ToolCall`, represents a tool call from IntentEngine to ExecutionEngine
+
+- Added OpenAI API for conversations with ChatGPT via ICARUS.
+- Added init files and fixed preexisting ones.

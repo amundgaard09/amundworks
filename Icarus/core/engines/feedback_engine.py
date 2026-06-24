@@ -11,13 +11,12 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 import io, os, dotenv
 import pydub, pydub.playback as pd_playback
 
-from core.types.response import Response
-from core.types.query import Query
-from core.utilities.decorators import logger
+from pathlib import Path
+from durapy import uniCLI
+from core.types import Response
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
-from durapy import uniCLI
-from pathlib import Path
+from core.utilities.decorators import logger
 
 # Load API keys and models
 dotenv.load_dotenv(Path(__file__).resolve().parents[3] / ".env", verbose=True, encoding="utf-8")

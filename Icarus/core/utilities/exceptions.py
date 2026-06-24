@@ -11,6 +11,11 @@ class UnknownEmotionError(Exception):
     def __init__(self, *args):
         super().__init__("Unknown Emotion Error.", (arg + "\n" for arg in args)) 
 
-
+class MissingFileError(Exception):
+    def __init__(self, *args):
+        super().__init__("Missing file:", (arg + "\n" for arg in args))
     
+class SkillLoadError(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)
     

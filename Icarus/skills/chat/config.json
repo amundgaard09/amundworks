@@ -1,0 +1,8 @@
+{
+    "name": "chat",
+    "description": "General conversational fallback using LLM",
+    "aliases": ["chat", "talk", "ask", "hello", "hi"],
+    "input_schema": {},
+    "language": "python",
+    "entrypoint": "execute.py"
+}

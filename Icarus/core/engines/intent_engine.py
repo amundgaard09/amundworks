@@ -8,87 +8,100 @@ This file contains dependencies for ICARUS linked to figuring out what and how t
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-import re as regex
+import re as regex, os, dotenv
 
+from openai import OpenAI
 from durapy import uniCLI
-from typing import Callable
-from core.types.query import Query
-from core.types.intent_result import IntentResult
+from core.mcp.types import MCPTool
+from difflib import SequenceMatcher
+from core.types import Query, ToolCall
+from core.mcp.mcp_server import build_registry
 from core.utilities.decorators import logger
-
-def normalize(query: Query) -> Query:
-    query.text = query.text.lower().strip()
-    return query
-
-@logger
-def match(query: Query, trigger_map: dict) -> Callable[[], str] | None:
-    """Extracts triggers from query and returns the most probable function."""
-    query = normalize(query)
-
-    for trigger in trigger_map: # Loop over all triggers (sentences) in the trigger map
-        if trigger in query.text:
-            return trigger_map[trigger] # Return function for given trigger
-
-    return None
-
-def extract_intent(query: Query) -> str:
-    text = query.text.lower()
-
-    if "time" in text or "clock" in text:
-        return "get_time"
-
-    if "calendar" in text:
-        return "calendar_lookup"
-
-    if "search" in text or "google" in text:
-        return "web_search"
-
-    return "unknown"
-
-def extract_args(query: Query, intent: str) -> dict:
-    text = query.text
-
-    if intent == "math_sum":
-        numbers = regex.findall(r"\d+", text)
-        return {"numbers": list(map(int, numbers))}
-
-    if intent == "web_search":
-        return {"query": text}
-
-    return {}
-    
-@logger
-def process(query: Query) -> IntentResult:
-    """Process a `Query` and return an `IntentResult`. Part of the Intent Engine."""
-    intent = extract_intent(query)
-    args = extract_args(query, intent)
-    
-    return IntentResult(
-        intent=intent,
-        confidence=0.0,
-        arguments=args,
-        source_text=query.text
-    )
 
 @logger
 def initialize_intent(debug: bool) -> None:
     """Placeholder for future init logic for the Intent Engine."""
-    if debug: 
-        uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
-        uniCLI.console_print("ICARUS", "blue", "Success!", "green")
-        
-        
-# En enda bedre struktur (anbefalt)
+    global TOOL_REGISTRY
+    
+    if debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
+    
+    TOOL_REGISTRY = build_registry()
+    
+    if debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
 
-#Du kan gjøre dette:
+def normalize(query: Query) -> Query:
+    return Query(
+        text=query.text.strip().lower(),
+        emotions=query.emotions
+    )
 
-#class IntentSpec:
-#    name: str > skill name
-#    arg_parser: Callable -> Arg Extractor Func
+CHAT_SEEDS = ["hello", "hi", "hey", "what's up", "how are you"]
 
-#Og registry:
+def is_chat_like(text: str) -> bool:
+    return any(seed in text.lower() for seed in CHAT_SEEDS)
 
-#INTENT_REGISTRY = {
-#    "math_sum": IntentSpec(...),
-#    "web_search": IntentSpec(...)
-#}
+def select_tool(query: Query) -> tuple[MCPTool, float]:
+    best_tool: MCPTool = None
+    best_score: float = 0.0
+    
+    tools = TOOL_REGISTRY
+
+    for tool in tools.values():
+        score = 0
+
+        for alias in tool.aliases:
+            if alias in query.text:
+                score += 1
+            else:
+                score += SequenceMatcher(None, alias, query.text).ratio() * 0.3
+
+        score = score / max(len(tool.aliases), 1)
+
+        if score > best_score:
+            best_score = score
+            best_tool = tool
+            
+    if best_tool is None:
+        return TOOL_REGISTRY["fallback"], 0.0
+    
+    if best_score < 0.25:
+        if is_chat_like(query.text):
+            return TOOL_REGISTRY["chat"], 1.0
+        return TOOL_REGISTRY["fallback"], 0.0
+    return best_tool, best_score
+
+def extract_args(query: Query, tool: MCPTool) -> dict:
+    args = {}
+    
+    if tool.input_schema is None:
+        return None
+
+    for prop in tool.input_schema.properties:
+        name = prop.name
+
+        # Simple number extraction
+        if prop.dtype == list[int] or prop.dtype == list:
+            nums = regex.findall(r"\d+", query.text)
+            if nums:
+                args[name] = list(map(int, nums))
+
+        # Fallback: raw text
+        elif prop.dtype == str:
+            args[name] = query.text
+
+    return args
+
+@logger
+def process(query: Query) -> ToolCall:
+    """Processes a Query and returns a `ToolCall`"""
+    
+    query = normalize(query)
+    best_tool, best_score = select_tool(query)
+    args = extract_args(query, best_tool)
+
+    return ToolCall(
+        tool_name=best_tool.name,
+        arguments=args,
+        confidence=best_score,
+        source_text=query.text
+    )

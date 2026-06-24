@@ -1,11 +1,12 @@
 {
     "name": "greet",
     "description": "Greets the user.",
-    "triggers": [
+    "aliases": [
         "hello",
         "morning",
         "what's up"
     ],
+    "input_schema": null,
     "language": "python",
     "entrypoint": "execute.py"
 }

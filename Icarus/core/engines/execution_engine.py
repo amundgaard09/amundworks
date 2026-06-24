@@ -9,19 +9,21 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 """
 
 from durapy import uniCLI
-from core.types.response import Response
-from core.types.intent_result import IntentResult
-from core.types.emotion_matrix import EmotionMatrix
+from core.types import Response, ToolCall, EmotionMatrix
+from core.mcp.mcp_server import load_tool, TOOL_DIR
 
 def handle_unknown() -> str: # Add closest function system
     return "I didn't understand that." # Did you mean: etc...
 
-def respond(IR: IntentResult) -> Response:
+def respond(call: ToolCall) -> Response:
     """Return a `Response`-instance to the `Query`. Part of the Execution Engine."""
-    func = None
+    
+    mcp_tool = load_tool(TOOL_DIR / call.tool_name)
+    func, kwargs = mcp_tool.execute, call.arguments
+    text = func(**kwargs) if kwargs else func()
     
     return Response(
-        text=func() if func else handle_unknown(),
+        text=text,
         emotions=EmotionMatrix()
     )
     

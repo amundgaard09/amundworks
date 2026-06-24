@@ -1,10 +1,11 @@
 {
     "name": "exit",
     "description": "Exits ICARUS.",
-    "triggers": [
+    "aliases": [
         "goodbye",
         "goodnight"
     ],
+    "input_schema": null,
     "language": "python",
     "entrypoint": "execute.py"
 }

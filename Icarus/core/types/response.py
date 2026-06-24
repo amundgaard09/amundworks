@@ -8,7 +8,7 @@ class Response:
         self.emotions = emotions
     
     def __str__(self):
-        return uniCLI.console_msg("ICARUS", "blue", f"{self.text}\n{self.emotions.__str__()}\n")
+        return uniCLI.console_msg("ICARUS", "blue", f"{self.text}\n") #{self.emotions.__str__()}\n")
 
     def __repr__(self):
         return f"Response({self.text}, {self.emotions})"

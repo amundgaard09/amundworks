@@ -1,0 +1,160 @@
+<19:37:19> - Starting main with args=(), kwargs={'is_debug': False} 
+<19:37:19> - Starting main_init with args=(), kwargs={'is_debug': False} 
+<19:37:19> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:37:19> - Finished initialize_perception in 0.0000s. Result: None 
+<19:37:19> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:37:19> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:37:19> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:37:19> - Starting build_registry with args=(), kwargs={} 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0304s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0008s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0007s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0007s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0133s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:37:19> - Finished build_registry in 0.0636s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001A52DE679A0>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001A52DE67B50>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001A52DE676D0>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001A52DE67A30>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001A52DE67E20>, input_schema=None)} 
+<19:37:19> - Finished initialize_intent in 0.0640s. Result: None 
+<19:37:19> - Finished main_init in 0.2348s. Result: None 
+<19:37:19> - Starting main_init with args=(False,), kwargs={} 
+<19:37:19> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:37:19> - Finished initialize_perception in 0.0000s. Result: None 
+<19:37:19> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:37:19> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:37:19> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:37:19> - Starting build_registry with args=(), kwargs={} 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0079s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:37:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:37:19> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:37:19> - Finished build_registry in 0.0128s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001A52DE67D00>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001A52DE74280>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001A52DE67BE0>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001A52DE74160>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001A52DE74550>, input_schema=None)} 
+<19:37:19> - Finished initialize_intent in 0.0133s. Result: None 
+<19:37:19> - Finished main_init in 0.1141s. Result: None 
+<19:37:19> - Starting listen with args=(), kwargs={} 
+<19:37:22> - Finished listen in 3.1785s. Result: Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<19:37:22> - Starting process with args=(Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:37:22> - Finished process in 0.0003s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='Hello') 
+<19:37:22> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:37:22> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:37:22> - Starting speak with args=(Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:37:29> - Finished speak in 6.1915s. Result: None 
+<19:37:29> - Starting listen with args=(), kwargs={} 
+<19:37:34> - Finished listen in 5.5628s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<19:37:34> - Starting process with args=(Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:37:34> - Failed process after 0.0002s. Error: No matching tool found 
+<19:37:34> - Failed main after 15.2874s. Error: No matching tool found 
+<19:39:11> - Starting main with args=(), kwargs={'is_debug': False} 
+<19:39:11> - Starting main_init with args=(), kwargs={'is_debug': False} 
+<19:39:11> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:39:11> - Finished initialize_perception in 0.0000s. Result: None 
+<19:39:11> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:39:11> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:39:11> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:39:11> - Starting build_registry with args=(), kwargs={} 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0089s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0006s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:39:11> - Finished build_registry in 0.0149s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001BA73AC77F0>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001BA73AC7BE0>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001BA73AC7760>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001BA73AC7AC0>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001BA73AC7EB0>, input_schema=None)} 
+<19:39:11> - Finished initialize_intent in 0.0153s. Result: None 
+<19:39:11> - Finished main_init in 0.1563s. Result: None 
+<19:39:11> - Starting main_init with args=(False,), kwargs={} 
+<19:39:11> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:39:11> - Finished initialize_perception in 0.0000s. Result: None 
+<19:39:11> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:39:11> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:39:11> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:39:11> - Starting build_registry with args=(), kwargs={} 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0087s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:39:11> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:39:11> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:39:11> - Finished build_registry in 0.0137s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001BA73AD8160>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001BA73AD83A0>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001BA73AC7C70>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001BA73AD8280>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001BA73AD8670>, input_schema=None)} 
+<19:39:11> - Finished initialize_intent in 0.0142s. Result: None 
+<19:39:11> - Finished main_init in 0.1166s. Result: None 
+<19:39:11> - Starting listen with args=(), kwargs={} 
+<19:39:18> - Finished listen in 7.0913s. Result: Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<19:39:18> - Starting process with args=(Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:39:18> - Finished process in 0.0002s. Result: ToolCall(tool_name='chat', confidence=1.0, arguments={}, source_text='Hello') 
+<19:39:18> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:39:18> - Finished load_executable in 0.0075s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:39:18> - Failed main after 7.3748s. Error: execute() missing 1 required positional argument: 'prompt' 
+<19:41:15> - Starting main with args=(), kwargs={'is_debug': False} 
+<19:41:15> - Starting main_init with args=(), kwargs={'is_debug': False} 
+<19:41:15> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:41:15> - Finished initialize_perception in 0.0000s. Result: None 
+<19:41:15> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:41:15> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:41:15> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:41:15> - Starting build_registry with args=(), kwargs={} 
+<19:41:15> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:41:15> - Finished load_executable in 0.0254s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:41:15> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:41:15> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:41:15> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:41:15> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:41:15> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:41:15> - Finished load_executable in 0.0003s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:41:15> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:41:15> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:41:15> - Finished build_registry in 0.0301s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x0000022AAE4A3A30>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x0000022AAE4A3BE0>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000022AAE4A3760>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x0000022AAE4A3AC0>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x0000022AAE4A3EB0>, input_schema=None)} 
+<19:41:15> - Finished initialize_intent in 0.0306s. Result: None 
+<19:41:15> - Finished main_init in 0.1657s. Result: None 
+<19:41:15> - Starting main_init with args=(False,), kwargs={} 
+<19:41:16> - Starting initialize_perception with args=(), kwargs={'debug': False} 
+<19:41:16> - Finished initialize_perception in 0.0000s. Result: None 
+<19:41:16> - Starting initialize_feedback with args=(), kwargs={'debug': False} 
+<19:41:16> - Finished initialize_feedback in 0.0000s. Result: None 
+<19:41:16> - Starting initialize_intent with args=(), kwargs={'debug': False} 
+<19:41:16> - Starting build_registry with args=(), kwargs={} 
+<19:41:16> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:41:16> - Finished load_executable in 0.0079s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:41:16> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<19:41:16> - Finished load_executable in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<19:41:16> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:41:16> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:41:16> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<19:41:16> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<19:41:16> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<19:41:16> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<19:41:16> - Finished build_registry in 0.0128s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x0000022AAE4A3F40>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x0000022AAE4B8310>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000022AAE4A3C70>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x0000022AAE4B81F0>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x0000022AAE4B85E0>, input_schema=None)} 
+<19:41:16> - Finished initialize_intent in 0.0133s. Result: None 
+<19:41:16> - Finished main_init in 0.1018s. Result: None 
+<19:41:16> - Starting listen with args=(), kwargs={} 
+<19:41:19> - Finished listen in 3.5812s. Result: Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<19:41:19> - Starting process with args=(Query(Hello, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:41:19> - Finished process in 0.0003s. Result: ToolCall(tool_name='chat', confidence=1.0, arguments={}, source_text='Hello') 
+<19:41:19> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<19:41:19> - Finished load_executable in 0.0080s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<19:41:40> - Starting speak with args=(Response(An error occurred: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:42:15> - Finished speak in 35.1812s. Result: None 
+<19:42:15> - Starting listen with args=(), kwargs={} 
+<19:42:21> - Finished listen in 5.5712s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<19:42:21> - Starting process with args=(Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:42:21> - Finished process in 0.0002s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='') 
+<19:42:21> - Starting load_executable with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<19:42:21> - Finished load_executable in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<19:42:21> - Starting speak with args=(Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]),), kwargs={} 
+<19:42:25> - Finished speak in 3.4697s. Result: None 
+<19:42:25> - Starting listen with args=(), kwargs={} 

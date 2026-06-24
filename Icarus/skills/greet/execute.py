@@ -1,7 +1,3 @@
-"""
-Get Time Skill
---------------
-"""
 
 import time, random
 

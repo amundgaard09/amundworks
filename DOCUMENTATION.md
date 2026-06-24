@@ -11,8 +11,8 @@ Whether you're using the tools, contributing to development, or exploring the sy
   - [Durendal Overview & Status](#durendal-overview--status)
   - [Quick Start Guide](#quick-start-guide)
   - [Project Documentation](#project-documentation)
+    - [Icarus - Agentic AI Platform](#icarus---agentic-ai-platform)
     - [DuraPy - Durendal Python](#durapy---durendal-python-collection)
-    - [UniForge CLI](#uniforge-cli)
     - [XO Neural Net Series](#xo-neural-net-series)
     - [Vulcan Personal Productivity Platform](#vulcan-personal-productivity-platform)
   - [Contributing to Durendal](#contributing-to-durendal)
@@ -37,8 +37,8 @@ Durendal is a independent multi-displine engineering initiative focused on creat
 
 Durendal is organized around several core pillars:
 
-- **DuraPy**: Main Python collective, including the UniPy core libraries
-- **UniPy**: Core utility modules (e.g., `unimath`, `unipower`, `univiz`, etc.)
+- **DuraPy**: Main Python collective
+- **ICARUS**: Agentic AI Platform for engineering
 - **UniForge CLI**: Command-line interface for STEM workflows
 - **XO Neural Net Series**: Machine learning and AI models
 - **Vulcan Personal Productivity Platform**: Personal digital life management platform
@@ -96,9 +96,11 @@ If you're interested in using the UniForge CLI, which is a command-line interfac
 
 The following sections provide detailed documentation for each of the major projects built by Durendal. Each project is described in terms of its purpose, features, and how to get started with using it.
 
+### ICARUS - Agentic AI Platform
+
 ### DuraPy - Durendal Python Collection
 
-The Durendal Python Collection (**DuraPy**) unites all the Python projects, modules and packages built by Durendal. The UniPy library is a core component of **DuraPy**, providing a set of utilities and functions that are used in Python-based projects within Durendal. All modules under UniPy follow a consistent naming convention, starting with the prefix "uni" to indicate their association with the UniPy library. For example, you might find modules like `unimath`, `unipower`, and `univiz` within the DuraPy, each offering specific functionalities related to mathematics, electrical systems, and visualizations, respectively, as well as many other modules, with some still in development.
+The Durendal Python Collection (**DuraPy**) unites all the Python projects, modules and packages built by Durendal. The UniPy library is a core component of **DuraPy**, providing a set of utilities and functions that are used in Python-based projects within Durendal. All modules under UniPy follow a consistent naming convention, starting with the prefix "uni" to indicate their association with the UniPy library. For example, you might find modules like `unimath`, `unipower`, and `unicogni` within the DuraPy, each offering specific functionalities related to mathematics, electrical systems, and machine learning, respectively, as well as many other modules, with some still in development.
 
 To install DuraPy, use pip:
 
