@@ -7,7 +7,7 @@ USE_GPU = False
 if USE_GPU:
     import cupy as xp # type: ignore
 else:
-    import numpy as xp
+    import numpy as xp # cross platform
 
 from durapy import unicogni
 
@@ -22,10 +22,10 @@ class DenseLayer:
     def __init__(self, n_inputs: int, n_outputs: int, act: str) -> None:
         """Initializes a dense layer with given input and output sizes and activation function."""
         self.weights: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs) # He Initialization for weights.
-        self.bias:      xp.ndarray = xp.zeros(n_outputs)                                            # New bias array filled with zeros.
+        self.bias = xp.zeros(n_outputs) # New bias array filled with zeros.
         self.act, self.d_act = ACTIVATIONS.get(act, "relu") # Default to ReLU
     
-    def Forward(self, input_arr: xp.ndarray) -> xp.ndarray:
+    def forward(self, input_arr: xp.ndarray) -> xp.ndarray:
         """Forward pass for the layer. Computes the output based on the input and current weights and biases."""
         self.input_arr = input_arr
         self.Z = input_arr @ self.weights + self.bias
@@ -39,7 +39,7 @@ class DenseLayer:
         dZ = xp.atleast_2d(dZ)             # dZ -> Ensures 2D shape for batch or single sample.
         dW = X.T @ dZ / X.shape[0]         # dW -> Weight GOL. Batch averaged. X.T @ dZm computes the sum of gradients for each weight across the batch, and dividing by X.shape[0] gives the average.
         dB = dZ.mean(axis=0)               # dB -> Bias   GOL, Batch averaged.
-        dI = dZ @ self.weights.T           # dI -> Input  GOL. For backpropagation to previous layers. 
+        dI: xp.ndarray = dZ @ self.weights.T # dI -> Input  GOL. For backpropagation to previous layers. 
 
         self.weights -= learning_rate * dW
         self.bias -= learning_rate * dB
@@ -82,7 +82,7 @@ class Sequential:
         
         x = input_arr
         for layer in self.layers:
-            x = layer.Forward(x)
+            x = layer.forward(x)
         return x  
     
     def backward(self, out_target: xp.ndarray):

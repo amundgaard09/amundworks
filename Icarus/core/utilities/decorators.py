@@ -8,7 +8,7 @@ def logger(func):
     
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        dec_log(f"Starting {func.__name__} with args={args}, kwargs={kwargs} \n")
+        dec_log(f"Starting {func.__name__}() with args={args}, kwargs={kwargs} \n")
         
         start_time = time.perf_counter()
         
@@ -16,13 +16,13 @@ def logger(func):
             result = func(*args, **kwargs)
             duration = time.perf_counter() - start_time
             
-            dec_log(f"Finished {func.__name__} in {duration:.4f}s. Result: {repr(result)} \n")
+            dec_log(f"Finished {func.__name__}() in {duration:.4f}s. Result: {repr(result)} \n")
             return result
             
         except Exception as e:
             duration = time.perf_counter() - start_time
             
-            dec_log(f"Failed {func.__name__} after {duration:.4f}s. Error: {e} \n")
+            dec_log(f"Failed {func.__name__}() after {duration:.4f}s. Error: {e} \n")
             raise
             
     return wrapper

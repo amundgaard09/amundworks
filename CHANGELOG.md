@@ -134,3 +134,8 @@
 
 - Added OpenAI API for conversations with ChatGPT via ICARUS.
 - Added init files and fixed preexisting ones.
+
+### Thursday - 25.06.2026
+
+- Started work on the Textual Text User Interface (TUI)
+- Made the intent engine a class, `IntentEngine`, and got rid of the `global` `TOOL_REGISTRY`

@@ -123,7 +123,6 @@ class AudioVisualizer(QtWidgets.QMainWindow):
             self.stream.close()
         event.accept()
 
-
 if __name__ == "__main__":
     visualizer = AudioVisualizer()
     visualizer.show()

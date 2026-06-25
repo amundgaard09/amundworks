@@ -8,10 +8,7 @@ This file contains the entrypoint for ICARUS.
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-from core.engines.intent_engine import (
-    initialize_intent as intent_init,
-    process as IE_process
-)
+from core.engines.intent_engine import IntentEngine
 
 from core.engines.execution_engine import (
     initialize_execution as execution_init, 
@@ -71,33 +68,30 @@ def check_wifi(debug: bool) -> None:
     if not checkfunc():
         raise NotConnectedError
 
-@logger
-def main_init(is_debug: bool) -> None:
-    """The main initializer function for ICARUS. This serves as a way to secure error-safe use of ICARUS."""
-    if is_debug:
-        uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus...", "blue")
-    
-    check_wifi(debug=is_debug)
-    
-    perception_init(debug=is_debug)
-    execution_init(debug=is_debug)
-    feedback_init(debug=is_debug)
-    intent_init(debug=is_debug)
-
 class IcarusInstance:
-    def __init__(self, is_debug: bool = False) -> None:
-        main_init(is_debug)
-        
+    @logger
+    def __init__(self, debug: bool = False) -> None:
+        """The main initializer function for ICARUS. This serves as a way to secure error-safe use of ICARUS."""
+        if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus...", "blue")
+    
+        check_wifi(debug=debug)
+    
+        perception_init(debug=debug)
+        execution_init(debug=debug)
+        feedback_init(debug=debug)
+
+        if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Icarus Initialization Complete!", "green")
+
     listen = staticmethod(PE_listen)
-    process = staticmethod(IE_process)
     respond = staticmethod(EE_respond)
     speak = staticmethod(FE_speak)
     
 @logger
-def main(is_debug: bool) -> None:
+def main(debug: bool) -> None:
     """The main dialouge kernel for the Icarus Complex"""
     try:
-        main_init(is_debug=is_debug)
+        Icarus = IcarusInstance(debug=debug)
+        intent_engine = IntentEngine(debug=debug)
         
     except NotConnectedError:
         uniCLI.console_print("ICARUS", "red", "Icarus is not connected to the Internet. \n Exiting...", "red")
@@ -106,18 +100,16 @@ def main(is_debug: bool) -> None:
     except Exception as e:
         uniCLI.console_print("ICARUS", "blue", f"An error occured: {e}", "red")
         exit(-1)
-        
-    Icarus = IcarusInstance()
     
     uniCLI.console_print("ICARUS", "blue", "Icarus Initialized\n", "green")
     
     while True:
         query = Icarus.listen()
-        call = Icarus.process(query)
+        call = intent_engine.process(query)
         response = Icarus.respond(call)
         Icarus.speak(response) 
         if "Goodbye" in response.text:
             exit(1)
 
 if __name__ == "__main__":
-    main(is_debug=False)
+    main(debug=False)

@@ -12,7 +12,7 @@ dependencies = [
 [tool.setuptools]
 packages = [
     "durapy",
-    "icarus",
+    #"icarus",
     #"uniforge",
     #"vulcan",
     #"vanguard",

@@ -1,27 +1,25 @@
 
-import os
+import os, openai, dotenv
 
-from dotenv import load_dotenv
-from openai import OpenAI
-
-load_dotenv()
-
-api_key = os.getenv("ICARUS_OPENAI_API_KEY")
-system_instruction = """
+SYS_INSTRCTN = """
 You are ICARUS, an AI agent inspired by Tony Stark's JARVIS.
+Your task is to help with STEM projects, like robots, advanced math, etc.
 You will respond in a short, concise and natural way.
 Your responses are to be streamed to a voice synthesiser, so avoid non-alphanumeric characters.
 """
 
-client = OpenAI(api_key=api_key)
+dotenv.load_dotenv()
+api_key = os.getenv("ICARUS_OPENAI_API_KEY")
+client = openai.OpenAI(api_key=api_key)
 
 def execute(**kwargs):
     prompt = kwargs.get("prompt", "")
+    
     try:
         response = client.responses.create(
             model="gpt-4o",
             input=[
-                {"role": "system", "content": system_instruction},
+                {"role": "system", "content": SYS_INSTRCTN},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.5
@@ -40,5 +38,7 @@ def execute(**kwargs):
 
         return str(response)
 
+    except openai.RateLimitError:
+        return f"ChatGPT Unavailable: Rate limit exceeded."
     except Exception as e:
         return f"An error occurred: {e}"
