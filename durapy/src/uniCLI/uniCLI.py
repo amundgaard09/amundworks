@@ -10,7 +10,7 @@ from prompt_toolkit.completion import NestedCompleter
 from ..frameworks.color_sys import color_text
 from ..commons import exceptions
  
-import os, shlex, inspect
+import os, shlex, inspect, subprocess
 
 class ExitEnvironmentSignal(Exception):
     """Raise when the user wants to return to MAINEnv."""
@@ -52,6 +52,7 @@ def tokenize(raw_cmd_str: str) -> list[str]:
         else:
             proc_tokens.append(token)
     return proc_tokens
+
 def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_map: dict[str, dict[str, set]]) -> Callable:
     """The main dispatcher function that takes in a raw command string, tokenizes it, verifies the tokens, validates the arguments and dispatches the command to the correct function."""
     tokens = tokenize(raw_cmd_str) 
@@ -68,6 +69,7 @@ def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_ma
                 args.append(arg)
             
     return cmd_map[module][cmd](*args)
+
 def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
     if not tokens:
         raise exceptions.EmptyTokenList
@@ -88,16 +90,20 @@ def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
         raise exceptions.IncorrectArgumentCount(cmd_map[module][command], len(args), arg_map[module][command])
 
 def clear_terminal() -> None:
-    os.system('cls' if os.name == 'nt' else 'clear')
+    try: subprocess.check_output('cls' if os.name == 'nt' else 'clear')
+    except subprocess.CalledProcessError: pass
 
 def console_msg(sender: str, sender_color: str, info: str, info_color: str = "white") -> str:
     return f"[{color_text(sender, sender_color)}] >>> {color_text(info, info_color)}"
+
 def console_print(sender: str, sender_color: str, info: str, info_color: str = "white") -> None:
     print(console_msg(sender, sender_color, info, info_color))
-def console_input(sender: str, sender_color: str, prompt_info: str, prompt_color: str = "white") -> str | float:
-    user_input = input(console_msg(sender, sender_color, prompt_info, prompt_color) + " ")
+
+def console_input(sender: str, sender_color: str, prompt: str = "", prompt_color: str = "white") -> str | float:
+    user_input = input(console_msg(sender, sender_color, prompt, prompt_color) + " ")
     try:               return float(user_input)
     except ValueError: return user_input
+
 def console_confirm(sender: str, sender_color: str, prompt_info: str, prompt_color: str = "white") -> bool:
     while True:
         user_input = input(console_msg(sender, sender_color, prompt_info + ":", prompt_color) + " ").lower().strip()
