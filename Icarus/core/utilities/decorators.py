@@ -3,7 +3,7 @@ from core.utilities.txtfiletools import log as dec_log
 import functools
 import time
 
-def logger(func):
+def runtime_log(func):
     """A decorator that logs function arguments, execution time, and errors."""
     
     @functools.wraps(func)

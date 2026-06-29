@@ -1,0 +1,204 @@
+<08:52:43> - Starting main() with args=(), kwargs={'debug': False} 
+<08:52:43> - Starting __init__() with args=(<__main__.IcarusInstance object at 0x000001F15C4803D0>,), kwargs={'debug': False} 
+<08:52:44> - Starting __init__() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001F15D3503D0>,), kwargs={'debug': False} 
+<08:52:44> - Starting build_registry() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>,), kwargs={} 
+<08:52:44> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, 'chat'), kwargs={} 
+<08:52:44> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, {}), kwargs={} 
+<08:52:44> - Finished build_input_schema() in 0.0000s. Result: InputSchema(properties=[]) 
+<08:52:44> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<08:52:44> - Finished load_executable() in 0.8105s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<08:52:44> - Finished load_tool() in 0.8117s. Result: MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001F15D679750>, input_schema=InputSchema(properties=[])) 
+<08:52:44> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, 'exit'), kwargs={} 
+<08:52:44> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, None), kwargs={} 
+<08:52:44> - Finished build_input_schema() in 0.0000s. Result: None 
+<08:52:44> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<08:52:44> - Finished load_executable() in 0.0006s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<08:52:44> - Finished load_tool() in 0.0019s. Result: MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001F15F003C70>, input_schema=None) 
+<08:52:44> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, 'fallback'), kwargs={} 
+<08:52:44> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, None), kwargs={} 
+<08:52:44> - Finished build_input_schema() in 0.0000s. Result: None 
+<08:52:44> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<08:52:44> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<08:52:44> - Finished load_tool() in 0.0014s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001F15D679510>, input_schema=None) 
+<08:52:44> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, 'get_time'), kwargs={} 
+<08:52:44> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, None), kwargs={} 
+<08:52:44> - Finished build_input_schema() in 0.0000s. Result: None 
+<08:52:44> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<08:52:44> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<08:52:44> - Finished load_tool() in 0.0014s. Result: MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001F15F003B50>, input_schema=None) 
+<08:52:44> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, 'greet'), kwargs={} 
+<08:52:44> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15D350490>, None), kwargs={} 
+<08:52:44> - Finished build_input_schema() in 0.0000s. Result: None 
+<08:52:44> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<08:52:44> - Finished load_executable() in 0.0009s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<08:52:44> - Finished load_tool() in 0.0018s. Result: MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001F15F003F40>, input_schema=None) 
+<08:52:44> - Finished build_registry() in 0.8212s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001F15D679750>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001F15F003C70>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001F15D679510>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001F15F003B50>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001F15F003F40>, input_schema=None)} 
+<08:52:44> - Finished __init__() in 0.8222s. Result: None 
+<08:52:44> - Starting __init__() with args=(<core.engines.feedback_engine.FeedbackEngine object at 0x000001F15D5C6170>,), kwargs={'debug': False} 
+<08:52:44> - Finished __init__() in 0.0000s. Result: None 
+<08:52:44> - Starting __init__() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001F15DEDDEA0>,), kwargs={'debug': False} 
+<08:52:44> - Finished __init__() in 0.0000s. Result: None 
+<08:52:45> - Finished __init__() in 1.5454s. Result: None 
+<08:52:45> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x000001F15DEDCF40>,), kwargs={} 
+<08:52:51> - Finished listen() in 6.1361s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<08:52:51> - Starting process() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001F15D3503D0>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<08:52:51> - Starting select_tool() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001F15D3503D0>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<08:52:51> - Finished select_tool() in 0.0003s. Result: (MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001F15D679510>, input_schema=None), 0.0) 
+<08:52:51> - Finished process() in 0.0009s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='') 
+<08:52:51> - Starting respond() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001F15DEDDEA0>, ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='')), kwargs={} 
+<08:52:51> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15F00EBF0>, 'fallback'), kwargs={} 
+<08:52:51> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x000001F15F00EBF0>, None), kwargs={} 
+<08:52:51> - Finished build_input_schema() in 0.0000s. Result: None 
+<08:52:51> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<08:52:51> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<08:52:51> - Finished load_tool() in 0.0016s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001F15F010280>, input_schema=None) 
+<08:52:51> - Finished respond() in 0.0024s. Result: Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<08:52:51> - Starting speak() with args=(<core.engines.feedback_engine.FeedbackEngine object at 0x000001F15D5C6170>, Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<08:52:51> - Failed speak() after 0.0119s. Error: [Errno 11001] getaddrinfo failed 
+<08:52:51> - Failed main() after 7.7004s. Error: [Errno 11001] getaddrinfo failed 
+<09:09:45> - Starting main() with args=(), kwargs={'debug': False} 
+<09:09:45> - Starting __init__() with args=(<__main__.IcarusInstance object at 0x00000232360C0460>,), kwargs={'debug': False} 
+<09:09:45> - Starting check_wifi() with args=(), kwargs={'debug': False} 
+<09:09:45> - Finished check_wifi() in 0.1031s. Result: None 
+<09:09:45> - Starting __init__() with args=(<core.engines.intent_engine.IntentEngine object at 0x00000232360C0520>,), kwargs={'debug': False} 
+<09:09:45> - Starting build_registry() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>,), kwargs={} 
+<09:09:45> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, 'chat'), kwargs={} 
+<09:09:45> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, {}), kwargs={} 
+<09:09:45> - Finished build_input_schema() in 0.0000s. Result: InputSchema(properties=[]) 
+<09:09:45> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<09:09:46> - Finished load_executable() in 0.5935s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<09:09:46> - Finished load_tool() in 0.5948s. Result: MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x0000023236525750>, input_schema=InputSchema(properties=[])) 
+<09:09:46> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, 'exit'), kwargs={} 
+<09:09:46> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, None), kwargs={} 
+<09:09:46> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:09:46> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<09:09:46> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<09:09:46> - Finished load_tool() in 0.0016s. Result: MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x0000023237DE3C70>, input_schema=None) 
+<09:09:46> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, 'fallback'), kwargs={} 
+<09:09:46> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, None), kwargs={} 
+<09:09:46> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:09:46> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:09:46> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:09:46> - Finished load_tool() in 0.0014s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000023236525510>, input_schema=None) 
+<09:09:46> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, 'get_time'), kwargs={} 
+<09:09:46> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, None), kwargs={} 
+<09:09:46> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:09:46> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<09:09:46> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<09:09:46> - Finished load_tool() in 0.0014s. Result: MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x0000023237DE3B50>, input_schema=None) 
+<09:09:46> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, 'greet'), kwargs={} 
+<09:09:46> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023236390FD0>, None), kwargs={} 
+<09:09:46> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:09:46> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<09:09:46> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<09:09:46> - Finished load_tool() in 0.0013s. Result: MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x0000023237DE3F40>, input_schema=None) 
+<09:09:46> - Finished build_registry() in 0.6030s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x0000023236525750>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x0000023237DE3C70>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000023236525510>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x0000023237DE3B50>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x0000023237DE3F40>, input_schema=None)} 
+<09:09:46> - Finished __init__() in 0.6041s. Result: None 
+<09:09:46> - Starting __init__() with args=(<core.engines.feedback_engine.FeedbackEngine object at 0x0000023237DB9DB0>,), kwargs={'debug': False} 
+<09:09:46> - Finished __init__() in 0.0000s. Result: None 
+<09:09:46> - Starting __init__() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x0000023237C8D090>,), kwargs={'debug': False} 
+<09:09:46> - Finished __init__() in 0.0000s. Result: None 
+<09:09:46> - Finished __init__() in 1.2070s. Result: None 
+<09:09:46> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x0000023237C8DFF0>,), kwargs={} 
+<09:09:52> - Finished listen() in 6.1261s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:09:52> - Starting process() with args=(<core.engines.intent_engine.IntentEngine object at 0x00000232360C0520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:09:52> - Starting select_tool() with args=(<core.engines.intent_engine.IntentEngine object at 0x00000232360C0520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:09:52> - Finished select_tool() in 0.0002s. Result: (MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000023236525510>, input_schema=None), 0.0) 
+<09:09:52> - Finished process() in 0.0009s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='') 
+<09:09:52> - Starting respond() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x0000023237C8D090>, ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='')), kwargs={} 
+<09:09:52> - Starting load_tool() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023237DEED40>, 'fallback'), kwargs={} 
+<09:09:52> - Starting build_input_schema() with args=(<core.mcp.mcp_server.MCPServer object at 0x0000023237DEED40>, None), kwargs={} 
+<09:09:52> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:09:52> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:09:52> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:09:52> - Finished load_tool() in 0.0015s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x0000023237DF0280>, input_schema=None) 
+<09:09:52> - Finished respond() in 0.0024s. Result: Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:09:52> - Starting speak() with args=(<core.engines.feedback_engine.FeedbackEngine object at 0x0000023237DB9DB0>, Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:09:52> - Failed speak() after 0.0045s. Error: [Errno 11001] getaddrinfo failed 
+<09:09:52> - Failed main() after 7.3454s. Error: [Errno 11001] getaddrinfo failed 
+<09:15:30> - Starting main() with args=(), kwargs={'debug': False} 
+<09:15:30> - Starting __init__() with args=(<__main__.IcarusInstance object at 0x000001C029C70460>,), kwargs={'debug': False} 
+<09:15:30> - Starting check_wifi() with args=(), kwargs={'debug': False} 
+<09:15:30> - Finished check_wifi() in 0.1011s. Result: None 
+<09:15:30> - Starting __init__() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>,), kwargs={'debug': False} 
+<09:15:30> - Starting build_registry() with args=(MCPServer(False),), kwargs={} 
+<09:15:30> - Starting load_tool() with args=(MCPServer(False), 'chat'), kwargs={} 
+<09:15:30> - Starting build_input_schema() with args=(MCPServer(False), {}), kwargs={} 
+<09:15:30> - Finished build_input_schema() in 0.0000s. Result: InputSchema(properties=[]) 
+<09:15:30> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'),), kwargs={} 
+<09:15:31> - Finished load_executable() in 0.6456s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\chat\\execute.py'> 
+<09:15:31> - Finished load_tool() in 0.6469s. Result: MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001C02A049870>, input_schema=InputSchema(properties=[])) 
+<09:15:31> - Starting load_tool() with args=(MCPServer(False), 'exit'), kwargs={} 
+<09:15:31> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:31> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:31> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'),), kwargs={} 
+<09:15:31> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\exit\\execute.py'> 
+<09:15:31> - Finished load_tool() in 0.0018s. Result: MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001C02B907D90>, input_schema=None) 
+<09:15:31> - Starting load_tool() with args=(MCPServer(False), 'fallback'), kwargs={} 
+<09:15:31> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:31> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:31> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:15:31> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:15:31> - Finished load_tool() in 0.0014s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02A049630>, input_schema=None) 
+<09:15:31> - Starting load_tool() with args=(MCPServer(False), 'get_time'), kwargs={} 
+<09:15:31> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:31> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:31> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'),), kwargs={} 
+<09:15:31> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\get_time\\execute.py'> 
+<09:15:31> - Finished load_tool() in 0.0014s. Result: MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001C02B906EF0>, input_schema=None) 
+<09:15:31> - Starting load_tool() with args=(MCPServer(False), 'greet'), kwargs={} 
+<09:15:31> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:31> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:31> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'),), kwargs={} 
+<09:15:31> - Finished load_executable() in 0.0004s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\greet\\execute.py'> 
+<09:15:31> - Finished load_tool() in 0.0014s. Result: MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001C02B907E20>, input_schema=None) 
+<09:15:31> - Finished build_registry() in 0.6555s. Result: {'chat': MCPTool(name='chat', desc='General conversational fallback using LLM', aliases=['chat', 'talk', 'ask', 'hello', 'hi'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/chat'), execute=<function execute at 0x000001C02A049870>, input_schema=InputSchema(properties=[])), 'exit': MCPTool(name='exit', desc='Exits ICARUS.', aliases=['goodbye', 'goodnight'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/exit'), execute=<function execute at 0x000001C02B907D90>, input_schema=None), 'fallback': MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02A049630>, input_schema=None), 'get_time': MCPTool(name='get_time', desc='Returns the current time.', aliases=['what time is it', "what's the time", 'current time', 'time'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/get_time'), execute=<function execute at 0x000001C02B906EF0>, input_schema=None), 'greet': MCPTool(name='greet', desc='Greets the user.', aliases=['hello', 'morning', "what's up"], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/greet'), execute=<function execute at 0x000001C02B907E20>, input_schema=None)} 
+<09:15:31> - Finished __init__() in 0.6563s. Result: None 
+<09:15:31> - Starting __init__() with args=(<core.engines.feedback_engine.FeedbackEngine object at 0x000001C02B8DDDB0>,), kwargs={'debug': False} 
+<09:15:31> - Finished __init__() in 0.0000s. Result: None 
+<09:15:31> - Starting __init__() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001C02A7E1090>,), kwargs={'debug': False} 
+<09:15:31> - Finished __init__() in 0.0000s. Result: None 
+<09:15:32> - Finished __init__() in 1.2964s. Result: None 
+<09:15:32> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x000001C02A7E1FF0>,), kwargs={} 
+<09:15:38> - Finished listen() in 6.0844s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:38> - Starting process() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:38> - Starting select_tool() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:38> - Finished select_tool() in 0.0002s. Result: (MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02A049630>, input_schema=None), 0.0) 
+<09:15:38> - Finished process() in 0.0007s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='') 
+<09:15:38> - Starting respond() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001C02A7E1090>, ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='')), kwargs={} 
+<09:15:38> - Starting load_tool() with args=(MCPServer(False), 'fallback'), kwargs={} 
+<09:15:38> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:38> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:38> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:15:38> - Finished load_executable() in 0.0006s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:15:38> - Finished load_tool() in 0.0018s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02B9103A0>, input_schema=None) 
+<09:15:38> - Finished respond() in 0.0027s. Result: Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:38> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x000001C02A7E1FF0>,), kwargs={} 
+<09:15:43> - Finished listen() in 5.5729s. Result: Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:43> - Starting process() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:43> - Starting select_tool() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:43> - Finished select_tool() in 0.0002s. Result: (MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02A049630>, input_schema=None), 0.0) 
+<09:15:43> - Finished process() in 0.0006s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='') 
+<09:15:43> - Starting respond() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001C02A7E1090>, ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text='')), kwargs={} 
+<09:15:43> - Starting load_tool() with args=(MCPServer(False), 'fallback'), kwargs={} 
+<09:15:43> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:43> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:43> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:15:43> - Finished load_executable() in 0.0005s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:15:43> - Finished load_tool() in 0.0016s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02B910A60>, input_schema=None) 
+<09:15:43> - Finished respond() in 0.0024s. Result: Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:43> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x000001C02A7E1FF0>,), kwargs={} 
+<09:15:49> - Finished listen() in 6.0831s. Result: Query(So don't, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:49> - Starting process() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(So don't, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:49> - Starting select_tool() with args=(<core.engines.intent_engine.IntentEngine object at 0x000001C029C70520>, Query(So don't, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m])), kwargs={} 
+<09:15:49> - Finished select_tool() in 0.0004s. Result: (MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02A049630>, input_schema=None), 0.0) 
+<09:15:49> - Finished process() in 0.0011s. Result: ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text="So don't") 
+<09:15:49> - Starting respond() with args=(<core.engines.execution_engine.ExecutionEngine object at 0x000001C02A7E1090>, ToolCall(tool_name='fallback', confidence=0.0, arguments=None, source_text="So don't")), kwargs={} 
+<09:15:49> - Starting load_tool() with args=(MCPServer(False), 'fallback'), kwargs={} 
+<09:15:49> - Starting build_input_schema() with args=(MCPServer(False), None), kwargs={} 
+<09:15:49> - Finished build_input_schema() in 0.0000s. Result: None 
+<09:15:49> - Starting load_executable() with args=(WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'),), kwargs={} 
+<09:15:49> - Finished load_executable() in 0.0006s. Result: <module 'skill_module' from 'C:\\Users\\Administrator\\.vscode\\durendal\\Icarus\\skills\\fallback\\execute.py'> 
+<09:15:49> - Finished load_tool() in 0.0019s. Result: MCPTool(name='fallback', desc='Handles unknown or ambiguous queries', aliases=['unknown', 'fallback'], path=WindowsPath('C:/Users/Administrator/.vscode/durendal/Icarus/skills/fallback'), execute=<function execute at 0x000001C02B910B80>, input_schema=None) 
+<09:15:49> - Finished respond() in 0.0030s. Result: Response(I didn't understand that. Can you rephrase?, [[36m0.5[0m][[38;5;153m1.0[0m][[38;5;93m1.0[0m] - [[38;5;178m0.7[0m][[38;5;154m0.3[0m][[90m0.0[0m] - [[31m0.5[0m][[34m1.0[0m]) 
+<09:15:49> - Starting listen() with args=(<core.engines.perception_engine.PerceptionEngine object at 0x000001C02A7E1FF0>,), kwargs={} 

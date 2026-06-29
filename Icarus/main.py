@@ -9,27 +9,16 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 """
 
 from core.engines.intent_engine import IntentEngine
-
-from core.engines.execution_engine import (
-    initialize_execution as execution_init, 
-    respond as EE_respond
-)
-
-from core.engines.feedback_engine import (
-    initialize_feedback as feedback_init, 
-    speak as FE_speak
-)
-
-from core.engines.perception_engine import (
-    initialize_perception as perception_init, 
-    listen as PE_listen
-)
+from core.engines.execution_engine import ExecutionEngine
+from core.engines.feedback_engine import FeedbackEngine
+from core.engines.perception_engine import PerceptionEngine
 
 import subprocess, platform
 
 from durapy import uniCLI
+from typing import Callable
 from core.utilities.exceptions import NotConnectedError, UnknownOSError
-from core.utilities.decorators import logger
+from core.utilities.decorators import runtime_log
 
 def check_windows_wifi() -> bool:
     """Checks WiFi connectivity on Windows machines."""
@@ -42,72 +31,71 @@ def check_windows_wifi() -> bool:
         pass
     
     except UnicodeDecodeError:
-        uniCLI.console_print("ICARUS INITIALIZER: WARNING", "yellow", "WiFi Check failed: UnicodeDecodeError", "yellow")
+        uniCLI.console_print("ICARUS INITIALIZER: WARNING", "yellow", "Wi-Fi check failed: UnicodeDecodeError", "yellow")
     
     return False
 
-wifi_check_funcs = {
+wifi_check_funcs: dict[str, Callable[[], bool]] = {
     "windows": check_windows_wifi,
     "linux": None,
     "darwin": None, #MacOS
 }
 
-def get_os() -> str:
-    """Returns the current operating system."""
-    return platform.system().lower()
-    
+@runtime_log
 def check_wifi(debug: bool) -> None:
     """Check WiFi connectivity."""
     if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Checking Wi-Fi connection...")
     
-    os = get_os()
+    # Get OS and wifi check function for that OS
+    os = platform.system().lower()
     checkfunc = wifi_check_funcs.get(os, None)
     
     if checkfunc is None:
-        raise UnknownOSError
+        raise UnknownOSError # Missing check function for given OS
     if not checkfunc():
-        raise NotConnectedError
+        raise NotConnectedError # No wifi connection
+    
+    if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Wi-Fi connection established.", "green")
 
 class IcarusInstance:
-    @logger
+    @runtime_log
     def __init__(self, debug: bool = False) -> None:
-        """The main initializer function for ICARUS. This serves as a way to secure error-safe use of ICARUS."""
+        """The main initializer function for ICARUS"""
+        
         if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus...", "blue")
-    
-        check_wifi(debug=debug)
-    
-        perception_init(debug=debug)
-        execution_init(debug=debug)
-        feedback_init(debug=debug)
+
+        try:
+            check_wifi(debug=debug)
+            
+        except NotConnectedError:
+            uniCLI.console_print("ICARUS", "red", "Icarus is not connected to the Internet. \n Exiting...", "red")
+            exit(-1)
+        
+        except Exception as e:
+            uniCLI.console_print("ICARUS", "blue", f"An error occured: {e}", "red")
+            exit(-1)
+
+        self.intent = IntentEngine(debug=debug)
+        self.feedback = FeedbackEngine(debug=debug)
+        self.execution = ExecutionEngine(debug=debug)
+        self.perception = PerceptionEngine(debug=debug)
 
         if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Icarus Initialization Complete!", "green")
-
-    listen = staticmethod(PE_listen)
-    respond = staticmethod(EE_respond)
-    speak = staticmethod(FE_speak)
-    
-@logger
+   
+@runtime_log
 def main(debug: bool) -> None:
     """The main dialouge kernel for the Icarus Complex"""
-    try:
-        Icarus = IcarusInstance(debug=debug)
-        intent_engine = IntentEngine(debug=debug)
+  
+    Icarus = IcarusInstance(debug=debug)
         
-    except NotConnectedError:
-        uniCLI.console_print("ICARUS", "red", "Icarus is not connected to the Internet. \n Exiting...", "red")
-        exit(-1)
-        
-    except Exception as e:
-        uniCLI.console_print("ICARUS", "blue", f"An error occured: {e}", "red")
-        exit(-1)
-    
     uniCLI.console_print("ICARUS", "blue", "Icarus Initialized\n", "green")
     
     while True:
-        query = Icarus.listen()
-        call = intent_engine.process(query)
-        response = Icarus.respond(call)
-        Icarus.speak(response) 
+        query    = Icarus.perception.listen()
+        call     = Icarus.intent.process(query)
+        response = Icarus.execution.respond(call)
+        #Icarus.feedback.speak(response) 
+        print(response)
         if "Goodbye" in response.text:
             exit(1)
 

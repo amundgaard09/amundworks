@@ -1,120 +1,168 @@
 
-import os, json, importlib.util
+import json, importlib.util
 
 from pathlib import Path
+from durapy import uniCLI
 from types import ModuleType
 from core.mcp.types import MCPTool, InputSchema, MCPProperty
-from core.utilities.decorators import logger
 from core.utilities.exceptions import MissingFileError, SkillLoadError
-
-TOOL_DIR = Path(__file__).parents[2].resolve() / "skills"
+from core.utilities.decorators import runtime_log
 
 def is_dunder(string: str) -> bool:
     return string.strip().startswith("__") and string.strip().endswith("__")
 
-@logger
-def load_executable(skill_path: Path) -> ModuleType:
-    """
-    Loads a Python file from the tool path and returns its module (python source file).
-    
-    Args
-    ----
-        skill_path (Path): The path to the skill folder
+class MCPServer:
+    def __init__(self, debug: bool = False) -> None:
+        """Initialize the MCP Server"""
+        if debug: uniCLI.console_print("MCP SERVER", "green", "Initializing MCP Server...", "white")
         
-    Returns
-    -------
-        module (ModuleType): The python file represented as an object.
-    """
-    py_path = skill_path / "execute.py"
+        self.debug = debug
+        self.TOOL_DIR_PATH = Path(__file__).parents[2].resolve() / "skills"
+        
+        if not self.TOOL_DIR_PATH.exists():
+            raise MissingFileError(self.TOOL_DIR_PATH)
+        
+        if debug: uniCLI.console_print("MCP SERVER", "green", "MCP Server Initialized", "green")
     
-    if not py_path.exists():
-        raise MissingFileError(py_path)
-
-    modspec = importlib.util.spec_from_file_location(
-        "skill_module",
-        py_path
-    )
-
-    module = importlib.util.module_from_spec(modspec)
-    modspec.loader.exec_module(module)
+    def __repr__(self):
+        return f"MCPServer({self.debug})"
     
-    # Check module executability
-    if not hasattr(module, "execute"):
-        raise SkillLoadError(f"Module {module} is missing attribute 'execute'")
-       
-    return module
-
-def build_input_schema(schema_dict: dict[str, dict]) -> InputSchema:
-    if schema_dict is None:
-        return None
+    @staticmethod
+    @runtime_log
+    def load_executable(skill_path: Path) -> ModuleType:
+        """
+        Loads a Python file from the tool path and returns its module (python source file).
     
-    props = []
+        Args
+        ----
+            skill_path (Path): The path to the skill folder
+        
+        Returns
+        -------
+            module (ModuleType): The python file represented as an object.
+        """
+        py_path = skill_path / "execute.py"
+    
+        if not py_path.exists():
+            raise MissingFileError(py_path)
 
-    for name, meta in schema_dict.items():
-        props.append(
-            MCPProperty(
-                name=name,
-                type=meta["type"],
-                required=meta.get("required", True)
-            )
+        modspec = importlib.util.spec_from_file_location(
+            "skill_module",
+            py_path
         )
 
-    return InputSchema(properties=props)
-
-def load_tool(tool_path: Path) -> MCPTool:
-    with open(tool_path / "config.json") as f:
-        config = dict(json.load(f))
-
-    module = load_executable(tool_path)
-    input_schema = config["input_schema"]
-
-    return MCPTool(
-        name=config["name"],
-        desc=config["description"],
-        aliases=config["aliases"],
-        input_schema=build_input_schema(input_schema),
-        execute=module.execute,
-        path=tool_path
-    )
-
-@logger
-def build_registry(tool_directory: Path = TOOL_DIR) -> dict[str, MCPTool]:
-    """
-    Build the MCP tool registry for Intent + Execution engines
-
-    Args
-    ----
-        **tool_directory**: `Path`
-        The path to the tool directory. Defaults to `TOOL_DIR`
-
-    Raises
-    ------
-        `MissingFileError`: Raises of the skill directory path is missing
-
-    Returns
-    -------
-        dict[str, MCPTool]: The tool registry
-    """
-    if not tool_directory.exists():
-        raise MissingFileError(tool_directory)
+        module = importlib.util.module_from_spec(modspec)
+        modspec.loader.exec_module(module)
     
-    # Initialize registry
-    tool_registry: dict[str, MCPTool] = {}
+        # Check module executability
+        if not hasattr(module, "execute"):
+            raise SkillLoadError(f"Module {module} is missing attribute 'execute'")
+       
+        return module
+
+    @runtime_log
+    def build_input_schema(self, schema_dict: dict[str, dict]) -> InputSchema:
+        """
+        Build input schema, consisting of a list of `MCPProperty` objects.
+
+        Args:
+            schema_dict (dict[str, dict]): Dict representation of the InputSchema from JSON.
+
+        Returns:
+            InputSchema: InputSchema object.
+        """
+        if schema_dict is None:
+            return None
     
-    # Iterate over all entities in the skill directory
-    for tool_path in tool_directory.iterdir():
+        properties: list[MCPProperty] = []
+
+        for name, meta in schema_dict.items():
+            properties.append(
+                MCPProperty(
+                    name=name,
+                    type=meta["type"],
+                    required=meta.get("required", True)
+                )
+            )
+
+        return InputSchema(properties=properties)
+
+    @runtime_log
+    def load_tool(self, tool_name: str) -> MCPTool:
+        """
+        Load a tool from the tool directory.
+
+        Args:
+            tool_path (Path): The `Path` to the tool folder
+
+        Raises:
+            MissingFileError: If files related to the tool are missing, raise MisingFileError
+
+        Returns:
+            MCPTool: MCPTool object describing the tool
+        """
         
-        # Check if the given skill path actually points to a skill
-        if not tool_path.is_dir() or is_dunder(tool_path.name):
-            continue
+        tool_path = self.TOOL_DIR_PATH / tool_name
         
-        # Load tool
-        tool = load_tool(tool_path)
+        if not tool_path.exists():
+            raise MissingFileError(f"Unknown tool: {tool_name}")
         
-        # Add to registry
-        tool_registry[tool.name] = tool
+        try:
+            with open(tool_path / "config.json") as f:
+                config = dict(json.load(f))
+        except FileNotFoundError:
+            uniCLI.console_print("MCP SERVER", "green", f"ERROR: {tool_path.name} config file not found.")
+            raise MissingFileError(tool_path.name)
+
+        schema_dict = config["input_schema"]
+        input_schema = self.build_input_schema(schema_dict)
+        module = self.load_executable(tool_path)
+
+        return MCPTool(
+            name=config["name"],
+            desc=config["description"],
+            aliases=config["aliases"],
+            input_schema=input_schema,
+            execute=module.execute,
+            path=tool_path
+        )
+
+    @runtime_log
+    def build_registry(self) -> dict[str, MCPTool]:
+        """
+        Build the MCP tool registry for Intent + Execution engines
+
+        Args
+        ----
+            **tool_directory**: `Path`
+            The path to the tool directory. Defaults to `TOOL_DIR`
+
+        Raises
+        ------
+            `MissingFileError`: Raises of the skill directory path is missing
+
+        Returns
+        -------
+            dict[str, MCPTool]: The tool registry
+        """
         
-    return tool_registry
+        # Initialize registry
+        tool_registry: dict[str, MCPTool] = {}
+    
+        # Iterate over all entities in the tool directory
+        for tool_path in self.TOOL_DIR_PATH.iterdir():
+        
+            # Check if the given skill path actually points to a skill
+            if not tool_path.is_dir() or is_dunder(tool_path.name):
+                continue
+        
+            # Load tool
+            tool = self.load_tool(tool_path.name)
+        
+            # Add to registry
+            tool_registry[tool.name] = tool
+        
+        return tool_registry
 
 
 

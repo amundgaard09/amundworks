@@ -14,19 +14,22 @@ from durapy import uniCLI
 from core.mcp.types import MCPTool
 from difflib import SequenceMatcher
 from core.types import Query, ToolCall
-from core.mcp.mcp_server import build_registry
-from core.utilities.decorators import logger
+from core.mcp.mcp_server import MCPServer
+from core.utilities.decorators import runtime_log
 
 class IntentEngine:
-    """IntentEngine class for the ICARUS Complex. 
+    """
+    IntentEngine class for the ICARUS Complex. 
     
-    This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more."""
-    @logger
+    This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more.
+    """
+    @runtime_log
     def __init__(self, debug: bool) -> None:
         """Initialization logic for the Intent Engine."""
         if debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
- 
-        self.tools = build_registry()
+
+        self.server = MCPServer()
+        self.tools = self.server.build_registry()
     
         if debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
     
@@ -42,7 +45,7 @@ class IntentEngine:
         CHAT_SEEDS = ["hello", "hi", "hey", "what's up", "how are you"]
         return any(seed in text.lower() for seed in CHAT_SEEDS)
 
-    @logger
+    @runtime_log
     def select_tool(self, query: Query) -> tuple[MCPTool, float]:
         """Select a tool from the `TOOL_REGISTRY` that matches the query best."""
     
@@ -69,10 +72,11 @@ class IntentEngine:
                 best_score = score
                 best_tool = tool
     
-        # Fallbacks to either local fallback skill or ChatGPT API
+        # No tool fallback
         if best_tool is None:
             return self.tools["fallback"], 0.0
-    
+
+        # ChatGPT and Poor confidence fallbacks
         if best_score < 0.25:
             if self.is_chat_like(query.text):
                 return self.tools["chat"], 1.0
@@ -80,6 +84,7 @@ class IntentEngine:
         return best_tool, best_score
 
     def extract_args(self, query: Query, tool: MCPTool) -> dict:
+        """Extract arguments for a tool based on its `InputSchema`"""
         args = {}
     
         if tool.input_schema is None:
@@ -100,9 +105,9 @@ class IntentEngine:
 
         return args
 
-    @logger
+    @runtime_log
     def process(self, query: Query) -> ToolCall:
-        """Processes a Query and returns a `ToolCall`"""
+        """Process a Query and return a `ToolCall`"""
     
         query = self.normalize(query)
         best_tool, best_score = self.select_tool(query)
