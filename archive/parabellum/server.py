@@ -8,7 +8,7 @@ PORT = int(5000)
 
 clients = []
 
-def _handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
+def handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
     """
     Handle a client.
     
@@ -36,9 +36,8 @@ def _handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
     clients.remove(connection)
 
 def server_kernel() -> None:
-    """
-    The kernel for the server.
-    """
+    """The kernel for the server."""
+    
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind((HOST, PORT))
     server.listen()
@@ -48,7 +47,7 @@ def server_kernel() -> None:
     while True:
         connection, address = server.accept()
         clients.append(connection)
-        thread = threading.Thread(target=_handle_client, args=(connection, address))
+        thread = threading.Thread(target=handle_client, args=(connection, address))
         thread.start()
     
 if __name__ == "__main__":
