@@ -60,7 +60,7 @@ def check_wifi(debug: bool) -> None:
 class IcarusInstance:
     @runtime_log
     def __init__(self, debug: bool = False) -> None:
-        """The main initializer function for ICARUS"""
+        """Initialize ICARUS"""
         
         if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Initializing Icarus...", "blue")
 
@@ -75,10 +75,10 @@ class IcarusInstance:
             uniCLI.console_print("ICARUS", "blue", f"An error occured: {e}", "red")
             exit(-1)
 
-        self.intent = IntentEngine(debug=debug)
-        self.feedback = FeedbackEngine(debug=debug)
-        self.execution = ExecutionEngine(debug=debug)
-        self.perception = PerceptionEngine(debug=debug)
+        self.intent = IntentEngine(debug = debug)
+        self.feedback = FeedbackEngine(debug = debug)
+        self.execution = ExecutionEngine(debug = debug)
+        self.perception = PerceptionEngine(debug = debug)
 
         if debug: uniCLI.console_print("ICARUS INITIALIZER", "blue", "Icarus Initialization Complete!", "green")
    
@@ -94,7 +94,7 @@ def main(debug: bool) -> None:
         query    = Icarus.perception.listen()
         call     = Icarus.intent.process(query)
         response = Icarus.execution.respond(call)
-        #Icarus.feedback.speak(response) 
+        Icarus.feedback.speak(response) 
         print(response)
         if "Goodbye" in response.text:
             exit(1)

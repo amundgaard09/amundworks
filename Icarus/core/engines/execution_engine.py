@@ -9,7 +9,6 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 """
 
 from durapy import uniCLI
-from core.mcp.types import MCPTool
 from core.mcp.mcp_server import MCPServer
 from core.types import ToolCall, Response, EmotionMatrix
 from core.utilities.decorators import runtime_log
@@ -17,12 +16,17 @@ from core.utilities.decorators import runtime_log
 class ExecutionEngine:
     """The Icarus Execution Engine"""
     @runtime_log
-    def __init__(self, debug: bool = False):
-        if debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Execution Engine...", "white")
+    def __init__(self, debug: bool = False) -> None:
+        self.debug = debug
+
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Execution Engine...", "white")
         
+        # INIT LOGIC
         
-        
-        if debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+    
+    def __repr__(self):
+        return f"ExecutionEngine()"
 
     @staticmethod
     def handle_unknown() -> str: # Add closest function system

@@ -24,15 +24,20 @@ _SPEECH_MODEL_PATH = ROOT / "core" / "models" / "vosk-model-small-en-us-0.15"
 
 class PerceptionEngine:
     """The ICARUS Perception Engine"""
-    def __init__(self, debug: bool = False):
+    def __init__(self, debug: bool = False) -> None:
         """Initialization logic for the ICARUS Perception Engine"""
-        if debug: uniCLI.console_print("ICARUS", "blue", "Initializing Perception Engine...", "white")
+        self.debug = debug
+
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Perception Engine...", "white")
         
         self.queue = queue.Queue()
         self.model = Model(str(_SPEECH_MODEL_PATH))
         self.recognizer = KaldiRecognizer(self.model, 16000)
         
-        if debug: uniCLI.console_print("ICARUS", "blue", "Initialization complete!", "green")
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initialization complete!", "green")
+
+    def __repr__(self):
+        return f"PerceptionEngine()"
         
     def callback(self, indata, frames: int, time, status) -> None:
         self.queue.put(bytes(indata))

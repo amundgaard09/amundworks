@@ -1,5 +1,6 @@
 
-import os, openai, dotenv
+import os, dotenv
+from openai import OpenAI, RateLimitError
 
 SYS_INSTRCTN = """
 You are ICARUS, an AI agent inspired by Tony Stark's JARVIS.
@@ -10,7 +11,7 @@ Your responses are to be streamed to a voice synthesiser, so avoid non-alphanume
 
 dotenv.load_dotenv()
 api_key = os.getenv("ICARUS_OPENAI_API_KEY")
-client = openai.OpenAI(api_key=api_key)
+client = OpenAI(api_key=api_key)
 
 def execute(**kwargs):
     prompt = kwargs.get("prompt", "")
@@ -38,7 +39,7 @@ def execute(**kwargs):
 
         return str(response)
 
-    except openai.RateLimitError:
+    except RateLimitError:
         return f"ChatGPT Unavailable: Rate limit exceeded."
     except Exception as e:
         return f"An error occurred: {e}"

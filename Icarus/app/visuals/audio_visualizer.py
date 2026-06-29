@@ -5,8 +5,9 @@ This module provides tools for visualizing ICARUS' speech.
 """
 
 import sys, numpy, sounddevice
-from PyQt5 import QtCore, QtWidgets
+
 from durapy import uniCLI
+from PyQt5 import QtCore, QtWidgets
 
 app = QtWidgets.QApplication(sys.argv)
 

@@ -29,9 +29,16 @@ class FeedbackEngine:
     @runtime_log
     def __init__(self, debug: bool = False) -> None:
         """Placeholder for future init logic for the Feedback Engine."""
-        if debug: 
-            uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
-            uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        self.debug = debug
+
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
+        
+        # INIT LOGIC
+        
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+
+    def __repr__(self):
+        return f"FeedbackEngine()"
 
     @staticmethod
     def play_audio(audio_bytes: bytes) -> None:

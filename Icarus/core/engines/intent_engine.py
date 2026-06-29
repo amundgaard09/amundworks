@@ -24,15 +24,20 @@ class IntentEngine:
     This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more.
     """
     @runtime_log
-    def __init__(self, debug: bool) -> None:
+    def __init__(self, debug: bool = False) -> None:
         """Initialization logic for the Intent Engine."""
-        if debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
+        self.debug = debug
+
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
 
         self.server = MCPServer()
         self.tools = self.server.build_registry()
     
-        if debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
     
+    def __repr__(self) -> str:
+        return f"IntentEngine()"
+
     @staticmethod
     def normalize(query: Query) -> Query:
         return Query(
