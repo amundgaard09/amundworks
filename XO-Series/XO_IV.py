@@ -1,5 +1,22 @@
 """
 XO Neural Net Series Revision IV
+ 
+ Optimization ideas for MLPs (brief):
+ - Weight initialization (He/Xavier) to improve convergence.
+ - Activation functions: use ReLU/LeakyReLU, avoid saturating activations where possible.
+ - Batch normalization to stabilize and accelerate training.
+ - Dropout to reduce overfitting.
+ - Learning rate schedules (step, exponential, cosine) or adaptive optimizers (Adam, RMSprop, Adagrad).
+ - Gradient clipping to avoid exploding gradients.
+ - Mini-batch training and shuffling for stable gradients.
+ - Early stopping based on validation loss to prevent overfitting.
+ - L1/L2 regularization on weights to reduce overfitting.
+ - Use vectorized (batch) operations and avoid Python loops for speed.
+ - Use mixed precision and GPU acceleration when available.
+ - Use momentum or Nesterov accelerated gradient for faster convergence.
+ - Hyperparameter search (grid/random/Bayesian) to find optimal architecture and training hyperparams.
+ - Use softmax with cross-entropy combined derivative for numerical stability.
+ - Reduce model size (pruning, quantization) for deployment efficiency.
 """
 
 USE_GPU = False
@@ -23,7 +40,7 @@ class DenseLayer:
         """Initializes a dense layer with given input and output sizes and activation function."""
         self.weights: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs) # He Initialization for weights.
         self.bias = xp.zeros(n_outputs) # New bias array filled with zeros.
-        self.act, self.d_act = ACTIVATIONS.get(act, "relu") # Default to ReLU
+        self.act, self.dact = ACTIVATIONS.get(act, "relu") # Default to ReLU
     
     def forward(self, input_arr: xp.ndarray) -> xp.ndarray:
         """Forward pass for the layer. Computes the output based on the input and current weights and biases."""
@@ -34,7 +51,7 @@ class DenseLayer:
     
     def backward(self, dA: xp.ndarray, learning_rate: float) -> xp.ndarray:
         """Backward pass for the layer. Calculates gradients and updates weights and biases."""
-        dZ = dA * self.d_act(self.Z)       # dA -> Output GOL. dZ -> Z GOL.
+        dZ = dA * self.dact(self.Z)        # dA -> Output GOL. dZ -> Z GOL.
         X  = xp.atleast_2d(self.input_arr) # X  -> Ensures 2D shape for batch or single sample.
         dZ = xp.atleast_2d(dZ)             # dZ -> Ensures 2D shape for batch or single sample.
         dW = X.T @ dZ / X.shape[0]         # dW -> Weight GOL. Batch averaged. X.T @ dZm computes the sum of gradients for each weight across the batch, and dividing by X.shape[0] gives the average.
@@ -49,33 +66,33 @@ class DenseLayer:
 class Sequential:
     def __init__(
         self, 
-        input_neurons: int, 
+        neurons_in: int, 
+        neurons_out: int,
         layer_count: int, 
-        layer_neuron_count: int, 
-        output_neurons: int,
-        act_per_layer: list[str], 
+        layer_neurons: int, 
+        layer_acts: list[str], 
         learning_rate: float
     ) -> None:
         
-        self.input_neurons = input_neurons
+        self.input_neurons = neurons_in
         self.layer_count = layer_count
-        self.output_neurons = output_neurons
+        self.output_neurons = neurons_out
         self.learning_rate = learning_rate
         self.layers: list[DenseLayer] = []
  
-        prev_neuron_count = input_neurons
+        prev_neuron_count = neurons_in
         
         for idx in range(layer_count):
             layer = DenseLayer(
                 prev_neuron_count, 
-                layer_neuron_count, 
-                act_per_layer[idx]
+                layer_neurons, 
+                layer_acts[idx]
             )
             self.layers.append(layer)
-            prev_neuron_count = layer_neuron_count
+            prev_neuron_count = layer_neurons
 
         # Output layer
-        self.layers.append(DenseLayer(prev_neuron_count, output_neurons, act_per_layer[-1]))
+        self.layers.append(DenseLayer(prev_neuron_count, neurons_out, layer_acts[-1]))
     
     def forward(self, input_arr: xp.ndarray) -> xp.ndarray:
         """Forward pass for the entire network."""

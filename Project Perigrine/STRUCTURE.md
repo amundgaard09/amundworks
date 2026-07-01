@@ -16,7 +16,7 @@ Empty: `null` / `none`
 ### Data Structures
 
 Text: `string` `(str)`  
-Collections: `dict`, `hashset`, `array`, `vector`  
+Collections: `dict`, `hashset`, `array`, `vector`, `tree`, `list`, `graph`, `queue`, `stack`
 Math/Physics: `matrix`, `tensor`
 
 ## Keywords
@@ -37,6 +37,7 @@ Evaluation: `all()`, `any()`, `none()`
 ### Preprocessing
 
 Modules: `import`, `from`  
+Macros: `macro`, `endmacro`
 Optimizations: `@nogc` (Garbage Collection disabled)
 
 ### Class Scope & Attributes
@@ -46,12 +47,12 @@ Context/prefixes:
 
 - `static` (static method)
 - `dynamic` (class method)
-- `asset` (the same as property)
-- `this` / `self` (instance reference)
+- `asset` (property)
+- `this` / `self` -> optional name for instance reference
 
 ### Function Modifiers & Scopes
 
-Declaration: `function`  
+Declaration: `function` / `func` / `fn`
 Visibility: `private`, `public`, `protected`  
 Concurrence: `async`
 
@@ -61,6 +62,7 @@ Functions are declared using the `function` keyword.
 
 ### Syntax Rules
 
+Group parameters by types and split using the `|` symbol. Each parameter in each group is separated by a comma.
 With Return Type: Use the `>` symbol followed by the type before the opening curly brace.  
 Without Return Type (void): Prepend the definition with the `void` keyword and omit the `>` arrow and the type entirely.
 
@@ -69,7 +71,7 @@ Without Return Type (void): Prepend the definition with the `void` keyword and o
 With explicit return type:
 
 ```perigrine
-function functionExample(num1, num2, num3: i32 | multiple: float64) > int32 {
+function functionExample(num1, num2, num3: int32 | multiple: float64) > int32 {
     return (num1 + num2 + num3) * multiple;
 }
 ```

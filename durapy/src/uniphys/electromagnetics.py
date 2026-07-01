@@ -4,23 +4,23 @@ The `AWPC` Electromagnetics module for `UniPhys`
 This module provides resources for calculations related to charged particles, electric and magnetic fields, optics and other related branches.
 """
 
-from durapy.src.frameworks.color_sys import color_text as _ct
+from durapy.src.frameworks.color_sys import color_text as color_text
 from durapy.src.commons.constants import PLANCK, INF, C
 
 __WAVLN_UV_SPEC: dict[tuple[float, float], str] = {
-    (10, 13.5): f"{_ct('EUV', 'Violet')}", 
-    (13.5,100): f"{_ct('DUV', 'Violet')}", 
-    (100, 280): f"{_ct('UVC', 'Violet')}", 
-    (280, 315): f"{_ct('UVB', 'Violet')}", 
-    (315, 390): f"{_ct('UVA', 'Violet')}", 
+    (10, 13.5): f"{color_text('EUV', 'Violet')}", 
+    (13.5,100): f"{color_text('DUV', 'Violet')}", 
+    (100, 280): f"{color_text('UVC', 'Violet')}", 
+    (280, 315): f"{color_text('UVB', 'Violet')}", 
+    (315, 390): f"{color_text('UVA', 'Violet')}", 
 }
 __WAVLN_VSBL_SPEC: dict[tuple[float, float], str] = {
-    (390, 450): f"{_ct('Violet', 'violet')}", 
-    (450, 495): f"{_ct('Blue',   'blue')}", 
-    (495, 570): f"{_ct('Green',  'green')}", 
-    (570, 590): f"{_ct('Yellow', 'yellow')}", 
-    (590, 620): f"{_ct('Orange', 'orange')}", 
-    (620, 750): f"{_ct('Red',    'red')}", 
+    (390, 450): f"{color_text('Violet', 'violet')}", 
+    (450, 495): f"{color_text('Blue',   'blue')}", 
+    (495, 570): f"{color_text('Green',  'green')}", 
+    (570, 590): f"{color_text('Yellow', 'yellow')}", 
+    (590, 620): f"{color_text('Orange', 'orange')}", 
+    (620, 750): f"{color_text('Red',    'red')}", 
 }
 
 _WAVLN_EM_SPEC: dict[tuple[float, float], str | dict] = {

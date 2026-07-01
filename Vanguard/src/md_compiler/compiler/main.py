@@ -1,7 +1,7 @@
 
 import re as regex
 
-from modules.page_ir import PageIR
+from types.page_ir import PageIR
 from pathlib import Path
 from wikipediaapi import WikipediaPage, WikipediaPageSection
 from durapy import uniCLI

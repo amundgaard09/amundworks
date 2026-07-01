@@ -46,8 +46,10 @@ def is_close(a: list[float], b: list[float]) -> bool: ...
 def is_close(a: list[list[float]], b: list[list[float]]) -> bool: ...
 @typing.overload
 def is_close(a: xp.ndarray, b: xp.ndarray) -> bool: ...
-def is_close(a: float | list[float] | list[list[float]] | xp.ndarray, 
-             b: float | list[float] | list[list[float]] | xp.ndarray) -> bool:
+def is_close(
+    a: float | list[float] | list[list[float]] | xp.ndarray, 
+    b: float | list[float] | list[list[float]] | xp.ndarray
+) -> bool:
     
     """Overloaded function for checking if two floats / lists of floats are close"""
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):

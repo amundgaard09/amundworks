@@ -32,19 +32,19 @@ ANSI_COLORS = {
     "lime":       "\033[38;5;154m",
 }
 
-def color_text(Text: str, Color: str, Bold: bool = False, Underline: bool = False, Italic: bool = False) -> str:
+def color_text(text: str, color: str, bold: bool = False, underline: bool = False, italic: bool = False) -> str:
     """Returns the given text in the given color using `ANSI` escape codes. If the color is not found, it returns the text without coloring."""
     
-    if Color is None or Color.lower() not in ANSI_COLORS:
-        return str(Text)
+    if color is None or color.lower() not in ANSI_COLORS:
+        return str(text)
     
-    Text = str(Text)
-    ANSI = ANSI_COLORS.get(Color.lower(), '\033[0m')
+    text = str(text)
+    ANSI = ANSI_COLORS.get(color.lower(), '\033[0m')
     
-    if Bold:      ANSI += '\033[1m'
-    if Underline: ANSI += '\033[4m'
-    if Italic:    ANSI += '\033[3m'
-    return        ANSI + Text + '\033[0m'
+    if bold:      ANSI += '\033[1m'
+    if underline: ANSI += '\033[4m'
+    if italic:    ANSI += '\033[3m'
+    return        ANSI + text + '\033[0m'
 
 def _intclip(val: int, lower: int, upper: int) -> int:
     if val <= lower:
@@ -89,8 +89,16 @@ class RGB(_BaseColor):
         self._g = g
         self._b = b
         
-    # add dunder methods
-    
+    def __eq__(self, other):
+        if isinstance(other, RGB):
+            return (self.r, self.g, self.b) == (other.r, other.g, other.b)
+        elif isinstance(other, HEX):
+            return self.toHex().hexcode == other.hexcode
+        elif isinstance(other, CMYK):
+            return self.toCMYK().values == other.values
+        else:
+            return False
+
     @property
     def r(self) -> int:
         """Getter: Returns the red value."""
@@ -140,6 +148,16 @@ class HEX(_BaseColor):
     def __init__(self, colorname: str, hexcode: str):
         super().__init__(colorname)
         self.hexcode = _validatehex(hexcode)
+
+    def __eq__(self, other):
+        if isinstance(other, HEX):
+            return self.hexcode == other.hexcode
+        elif isinstance(other, RGB):
+            return self.toRGB() == other
+        elif isinstance(other, CMYK):
+            return self.toCMYK().values == other.values
+        else:
+            return False
 
     @property
     def r(self) -> int:
@@ -198,6 +216,16 @@ class CMYK(_BaseColor):
         self.m = _intclip(m, 0, 100)
         self.y = _intclip(y, 0, 100)
         self.k = _intclip(k, 0, 100)
+
+    def __eq__(self, other):
+        if isinstance(other, CMYK):
+            return (self.c, self.m, self.y, self.k) == (other.c, other.m, other.y, other.k)
+        elif isinstance(other, RGB):
+            return self.toRGB() == other
+        elif isinstance(other, HEX):
+            return self.toHex() == other
+        else:
+            return False
 
     @property
     def values(self) -> tuple[int, int, int, int]:

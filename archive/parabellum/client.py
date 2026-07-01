@@ -33,7 +33,7 @@ def connection_loop() -> None:
         uniCLI.console_print(f"SERVER: {SERVER_IP}", "green", data)
 
 client = connect_to_server(SERVER_IP, PORT)
-    
+
 if client:  
     connection_loop()  
     

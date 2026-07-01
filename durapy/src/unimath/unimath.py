@@ -4,7 +4,7 @@ The UniMath function library for the `DuraPy` library.
 
 import math, sympy
 
-from ..frameworks.color_sys import color_text as _ct
+from ..frameworks.color_sys import color_text
 from ..commons import exceptions, constants
 from typing import Literal
 
@@ -168,8 +168,12 @@ def sine_rule(
 
     # Loop through the sides and angles to calculate the missing values using the Sine Rule
     for idx in range(3):
+        
+        # Calculate the missing side based on the angle and the reference ratio
         if Sides[idx] is None and angles_rad[idx] is not None:
             Sides[idx] = ReferenceRatio * math.sin(angles_rad[idx])
+            
+        # Calculate the missing angle and side
         elif angles_rad[idx] is None and Sides[idx] is not None:
             value = Sides[idx] / ReferenceRatio
             if not -1 <= value <= 1:
@@ -296,7 +300,7 @@ def quadratic_factorized(a: float, b: float, c: float) -> str:
         x1 = -b / (2 * a)
         return f"{a}(x {sign(x1)} {x1})^2"
     else: 
-        return _ct('No real solutions', 'red')
+        return None
 def quadratic_evaluation(a: float, b: float, c: float, x: float) -> float:
     return a*x**2 + b*x + c
 
@@ -321,18 +325,15 @@ def cubic_solutions(a: float, b: float, c: float, d: float) -> list:
     """Returns the roots of a cubic function in a tuple."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x**3 + {b}*x**2 + {c}*x + {d}")
-    solutions = sympy.solve(f, x)
-    return solutions
+    return sympy.solve(f, x)
 def cubic_zeros(a: float, b: float, c: float, d: float) -> list:
     """Returns the x-values where the cubic function crosses the x-axis."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x³ + {b}*x² + {c}*x + {d}")
-    zeros = sympy.solve(f, x)
-    return zeros
+    return sympy.solve(f, x)
 def cubic_evaluation(a: float, b: float, c: float, d: float, x: float) -> float:
     """Evaluate a cubic polynomial."""
-    result = a*x**3 + b*x**2 + c*x + d
-    return result
+    return a*x**3 + b*x**2 + c*x + d
 def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: int, upper: int, plot: bool = False) -> list[float]:
     """Brute Force evaluation of a third-degree polynomial. The function checks all evaluations from `LowerBound` to `UpperBound` and highlights roots as green, as well as plotting the given function if wanted."""
     x_vals, y_vals, roots = [], [], []
@@ -346,34 +347,34 @@ def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: i
     return roots
 
 ### UNSTABLE - ALPHA - DO NOT USE
-def tangent_formula(Function1: str, Function2: str) -> list[str]:
+def tangent_formula(func_1: str, func_2: str) -> list[str]:
     """Returns the tangent(s) between two functions by finding the points where the derivatives are equal and then calculating the slope of the tangent line at those points."""
+    
     x = sympy.symbols('x')
-    f1 = sympy.sympify(Function1)
-    f2 = sympy.sympify(Function2)
-
+    f1 = sympy.sympify(func_1)
+    f2 = sympy.sympify(func_2)
     df1 = sympy.diff(f1, x)
     df2 = sympy.diff(f2, x)
 
     slope_eq = sympy.Eq(df1, df2)
     tangent_points = sympy.solve(slope_eq, x)
-
     tangents = []
+    
     for idx, point in enumerate(tangent_points, 1):
         string = f"Tangent {idx} - point: {point} - y: {f1.subs(x, point)} - slope: {df1.subs(x, point)}"
         tangents.append(string) 
 
     return tangents
 
-def prime_factorize(num: int) -> list[int]:
+def prime_factorize(n: int) -> list[int]:
     """Returns the prime factorization of a number as a list of its prime factors."""
     factors = []
     div = 2
     
-    while num >= 2:
-        if num % div == 0:
+    while n >= 2:
+        if n % div == 0:
             factors.append(div)
-            num //= div
+            n //= div
         else:
             div += 1
             
@@ -383,25 +384,55 @@ def factorial(n: int) -> int:
     """Returns the factorial of a non-negative integer `n`."""
     if n < 0:
         raise ValueError("Factorial is not defined for negative numbers.")
+    
     elif n == 0 or n == 1:
         return 1
+    
     else:
         result = 1
         for i in range(2, n + 1):
             result *= i
         return result
+    
 def subfactorial(n: int) -> int:
     """Returns the subfactorial of a non-negative integer `n`."""
     if n < 0: 
         raise ValueError("Subfactorial and Factorial are not defined for negative numbers.")
-    return int(factorial(n) * sum((((-1)**k) / factorial(k)) for k in range(n)))
+    return int(factorial(n) * sum((-1)**k / factorial(k) for k in range(n)))
 
 def gcd(x: int, y: int) -> int:
-    pass
+    return math.gcd(x, y)
 def lcm(x: int, y: int) -> int:
-    pass
+    return abs(x * y) // math.gcd(x, y)
 
 def polygon_area(n: int) -> float:
-    pass
+    return (n * (1 / 4) * math.tan(PI / n)) ** 2
 def polygon_circumference(n: int) -> float:
-    pass
+    return n * (1 / math.tan(PI / n))
+def polygon_interior_angle(n: int) -> float:
+    return (n - 2) * 180 / n
+def polygon_exterior_angle(n: int) -> float:
+    return 360 / n
+
+def is_prime(n: int) -> bool:
+    """Returns True if the number is prime, else returns False."""
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def is_perfect_square(n: int) -> bool:
+    """Returns True if the number is a perfect square, else returns False."""
+    if n < 0:
+        return False
+    return int(math.sqrt(n)) ** 2 == n
+
+def is_perfect_cube(n: int) -> bool:
+    """Returns True if the number is a perfect cube, else returns False."""
+    if n < 0:
+        return False
+    return int(round(n ** (1/3))) ** 3 == n
