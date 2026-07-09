@@ -12,20 +12,19 @@ def is_dunder(string: str) -> bool:
     return string.strip().startswith("__") and string.strip().endswith("__")
 
 class MCPServer:
-    def __init__(self, debug: bool = False) -> None:
+    def __init__(self, console: uniCLI.Console) -> None:
         """Initialize the MCP Server"""
-        if debug: uniCLI.console_print("MCP SERVER", "green", "Initializing MCP Server...", "white")
+        console.start_task("Starting MCP Server")
         
-        self.debug = debug
         self.TOOL_DIR_PATH = Path(__file__).parents[2].resolve() / "skills"
         
         if not self.TOOL_DIR_PATH.exists():
             raise MissingFileError(self.TOOL_DIR_PATH)
         
-        if debug: uniCLI.console_print("MCP SERVER", "green", "MCP Server Initialized", "green")
-    
+        console.end_task("Starting MCP Server", success=True)
+        
     def __repr__(self):
-        return f"MCPServer({self.debug})"
+        return f"MCPServer()"
     
     @staticmethod
     @runtime_log

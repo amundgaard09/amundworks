@@ -8,32 +8,29 @@ This file contains dependencies for ICARUS linked to figuring out what and how t
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-import re as regex
-
-from durapy import uniCLI
 from core.mcp.types import MCPTool
 from difflib import SequenceMatcher
 from core.types import Query, ToolCall
 from core.mcp.mcp_server import MCPServer
+from durapy.src.uniCLI.uniCLI import Console
 from core.utilities.decorators import runtime_log
+from re import findall
 
 class IntentEngine:
-    """
-    IntentEngine class for the ICARUS Complex. 
-    
-    This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more.
-    """
     @runtime_log
-    def __init__(self, debug: bool = False) -> None:
-        """Initialization logic for the Intent Engine."""
-        self.debug = debug
+    def __init__(self, console: Console, server: MCPServer) -> None:
+        """
+        IntentEngine class for the ICARUS Complex. 
+    
+        This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more.
+        """
+        
+        console.start_task("Starting IntentEngine")
 
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Intent Engine...", "white")
-
-        self.server = MCPServer()
+        self.server = server
         self.tools = self.server.build_registry()
     
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        console.end_task("Starting IntentEngine", success=True)
     
     def __repr__(self) -> str:
         return f"IntentEngine()"
@@ -67,9 +64,11 @@ class IntentEngine:
                 if alias in query.text:
                     score += 1
                 
+                # Fuzzy matching for aliases
                 else:
                     score += SequenceMatcher(None, alias, query.text).ratio() * 0.3
 
+            # Normalize score by the number of aliases to avoid bias towards tools with more aliases
             score = score / max(len(tool.aliases), 1)
 
             # Replace the best tool with the current if it outperforms the previous best one
@@ -81,7 +80,7 @@ class IntentEngine:
         if best_tool is None:
             return self.tools["fallback"], 0.0
 
-        # ChatGPT and Poor confidence fallbacks
+        # ChatGPT and poor confidence fallbacks
         if best_score < 0.25:
             if self.is_chat_like(query.text):
                 return self.tools["chat"], 1.0
@@ -100,7 +99,7 @@ class IntentEngine:
 
             # Simple number extraction
             if prop.dtype == list[int] or prop.dtype == list:
-                nums = regex.findall(r"\d+", query.text)
+                nums = findall(r"\d+", query.text)
                 if nums:
                     args[name] = list(map(int, nums))
 

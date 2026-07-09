@@ -8,34 +8,34 @@ This file contains dependencies for ICARUS linked to responding to the user, eit
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-import io, os, dotenv
-import pydub, pydub.playback as pd_playback
-
+from io import BytesIO
 from pathlib import Path
-from durapy import uniCLI
+from pydub import AudioSegment
 from core.types import Response
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
+from durapy.src.uniCLI.uniCLI import Console
 from core.utilities.decorators import runtime_log
+from pydub.playback import play
+from dotenv import load_dotenv
+from os import environ
 
 # Load API keys and models
-dotenv.load_dotenv(Path(__file__).resolve().parents[3] / ".env", verbose=True, encoding="utf-8")
+load_dotenv(Path(__file__).resolve().parents[3] / ".env", verbose=True, encoding="utf-8")
 
 # Initializers
-elevenlabs = ElevenLabs(api_key=os.environ.get("ELEVENLABS_API_KEY"))
+elevenlabs = ElevenLabs(api_key=environ.get("ELEVENLABS_API_KEY"))
 
-class FeedbackEngine:
-    """The Feedback Engine for ICARUS. This Engine handles speech, visualizations, and more."""
+class FeedbackEngine:    
     @runtime_log
-    def __init__(self, debug: bool = False) -> None:
-        """Placeholder for future init logic for the Feedback Engine."""
-        self.debug = debug
-
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Feedback Engine...", "white")
+    def __init__(self, console: Console) -> None:
+        """The Feedback Engine for ICARUS. This Engine handles speech, visualizations, and more."""
+        
+        console.start_task("Starting FeedbackEngine")
         
         # INIT LOGIC
         
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        console.end_task("Starting FeedbackEngine", success=True)
 
     def __repr__(self):
         return f"FeedbackEngine()"
@@ -43,9 +43,9 @@ class FeedbackEngine:
     @staticmethod
     def play_audio(audio_bytes: bytes) -> None:
         """Play the given audio bytes."""
-        audio_buffer = io.BytesIO(audio_bytes)
-        audio_segment = pydub.AudioSegment.from_file(audio_buffer)
-        pd_playback.play(audio_segment)
+        audio_buffer = BytesIO(audio_bytes)
+        audio_segment = AudioSegment.from_file(audio_buffer)
+        play(audio_segment)
 
     @runtime_log
     def speak(self, response: Response) -> None:
@@ -64,7 +64,7 @@ class FeedbackEngine:
             )
         )
     
-        audio_stream = io.BytesIO()
+        audio_stream = BytesIO()
         for chunk in speech:
             if chunk:
                 audio_stream.write(chunk)
@@ -73,4 +73,6 @@ class FeedbackEngine:
         audio_stream.seek(0)
         self.play_audio(audio_stream.read())
         print(response)
+        if "Goodbye" in response.text:
+            exit(1)
   

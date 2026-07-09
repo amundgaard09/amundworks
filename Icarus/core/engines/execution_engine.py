@@ -8,22 +8,21 @@ This file contains dependencies for ICARUS linked to execution of commands and t
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-from durapy import uniCLI
 from core.mcp.mcp_server import MCPServer
+from durapy.src.uniCLI.uniCLI import Console
 from core.types import ToolCall, Response, EmotionMatrix
 from core.utilities.decorators import runtime_log
 
 class ExecutionEngine:
-    """The Icarus Execution Engine"""
     @runtime_log
-    def __init__(self, debug: bool = False) -> None:
-        self.debug = debug
-
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Initializing Icarus Execution Engine...", "white")
+    def __init__(self, console: Console, server: MCPServer) -> None:
+        """The Icarus Execution Engine"""
         
-        # INIT LOGIC
+        console.start_task("Starting ExecutionEngine")        
         
-        if self.debug: uniCLI.console_print("ICARUS", "blue", "Success!", "green")
+        self.server = server
+        
+        console.end_task("Starting ExecutionEngine", success=True)    
     
     def __repr__(self):
         return f"ExecutionEngine()"
@@ -36,7 +35,7 @@ class ExecutionEngine:
     def respond(self, call: ToolCall) -> Response:
         """Return a `Response`-instance to the `Query`. Part of the Execution Engine."""
     
-        mcp_tool = MCPServer().load_tool(call.tool_name)
+        mcp_tool = self.server.load_tool(call.tool_name)
         func, kwargs = mcp_tool.execute, call.arguments
         text = func(**kwargs) if kwargs else func()
     

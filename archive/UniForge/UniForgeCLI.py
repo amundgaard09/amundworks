@@ -14,7 +14,7 @@ from durapy.src.uniCLI.uniCLI import (
     ExitEnvironmentSignal,
     clear_terminal, 
     dispatcher, 
-    generate_completer,
+    gen_completer,
     exit_env
 )
 
@@ -122,9 +122,9 @@ HOHMANNCMDMAP: dict[str, dict[str, callable]] = {
     }
 }
 
-MAINCOMPLETER    = generate_completer(MAINCMDMAP)
-PIDCOMPLETER     = generate_completer(PIDCMDMAP)
-HOHMANNCOMPLETER = generate_completer(HOHMANNCMDMAP)
+MAINCOMPLETER    = gen_completer(MAINCMDMAP)
+PIDCOMPLETER     = gen_completer(PIDCMDMAP)
+HOHMANNCOMPLETER = gen_completer(HOHMANNCMDMAP)
 
 if __name__ == "__main__":
    main_env()

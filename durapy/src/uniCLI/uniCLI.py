@@ -5,22 +5,21 @@ It provides the necessary functions and classes to create a command-line interfa
 including command parsing, argument validation, and command dispatching.
 """
 
+import os, time, shlex, inspect, subprocess
+
 from typing import Callable
 from prompt_toolkit.completion import NestedCompleter
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from ..frameworks.color_sys import color_text
 from ..commons import exceptions
  
-import os, shlex, inspect, subprocess
-
 class ExitEnvironmentSignal(Exception):
     """Raise when the user wants to return to MAINEnv."""
     def __init__(self):
         super().__init__()
-        
 class CommandMap:
     def __init__(self):
         pass
-
 class ArgumentMap:
     def __init__(self):
         pass
@@ -28,8 +27,7 @@ class ArgumentMap:
 def exit_env() -> None:
     """Exit the current environment and return to MAINEnv."""
     raise ExitEnvironmentSignal
-
-def generate_completer(Map: dict[str, dict]) -> NestedCompleter:
+def gen_completer(Map: dict[str, dict]) -> NestedCompleter:
     """Generate a `NestedCompleter` dict with parameter names for each function."""
     
     completer_dict = {}
@@ -52,7 +50,6 @@ def tokenize(raw_cmd_str: str) -> list[str]:
         else:
             proc_tokens.append(token)
     return proc_tokens
-
 def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_map: dict[str, dict[str, set]]) -> Callable:
     """The main dispatcher function that takes in a raw command string, tokenizes it, verifies the tokens, validates the arguments and dispatches the command to the correct function."""
     tokens = tokenize(raw_cmd_str) 
@@ -69,7 +66,6 @@ def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_ma
                 args.append(arg)
             
     return cmd_map[module][cmd](*args)
-
 def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
     if not tokens:
         raise exceptions.EmptyTokenList
@@ -90,9 +86,9 @@ def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
         raise exceptions.IncorrectArgumentCount(cmd_map[module][command], len(args), arg_map[module][command])
 
 def clear_terminal() -> None:
-    try: subprocess.check_output('cls' if os.name == 'nt' else 'clear')
-    except subprocess.CalledProcessError: pass
-
+    """Clear the terminal screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
 def console_msg(sender: str, sender_color: str, info: str, info_color: str = "white") -> str:
     return f"[{color_text(sender, sender_color)}] >>> {color_text(info, info_color)}"
 
@@ -113,3 +109,46 @@ def console_confirm(sender: str, sender_color: str, prompt_info: str, prompt_col
             return False
         else:
             print(f"Please enter {color_text('y', 'green')} or {color_text('n', 'red')}")
+
+class Console:
+    def __init__(self):
+        self.progress = Progress(
+            SpinnerColumn(spinner_name="dots"),
+            TextColumn("{task.description}"),
+            transient=False  # Keeps completed tasks visible on screen
+        )
+        # Dictionary mapping: { "task_name": task_id }
+        self.active_tasks = {}
+
+    def __enter__(self):
+        self.progress.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.progress.stop()
+
+    def start_task(self, name: str):
+        """Kicks off a task. Names must be unique if running concurrently."""
+        if name in self.active_tasks:
+            raise ValueError(f"Task '{name}' is already running.")
+            
+        task_id = self.progress.add_task(description=f"Starting task: {name} ...", total=None)
+        self.active_tasks[name] = task_id
+
+    def end_task(self, name: str, success: bool = True, error_msg: str = None):
+        """Resolves any specific task by its unique name, regardless of order."""
+        task_id = self.active_tasks.pop(name, None)
+        
+        if task_id is None:
+            raise KeyError(f"No active task found with the name '{name}'.")
+        
+        if success:
+            status_text = f"Starting task: {name} ... [bold green]Finished![/bold green]"
+        else:
+            status_text = f"Starting task: {name} ... [bold red]Failed![/bold red]" + (f" Error: {error_msg}" if error_msg else "")
+            
+        self.progress.update(task_id, description=status_text, completed=True)
+
+    def print(self, text, style):
+        """Prints a message to the console with a specific style."""
+        self.progress.console.print(text, style=style)

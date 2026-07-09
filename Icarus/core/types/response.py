@@ -13,4 +13,12 @@ class Response:
     def __repr__(self):
         return f"Response({self.text}, {self.emotions})"
     
+    def __getitem__(self, key):
+        if key == "text" or key is None:
+            return self.text
+        elif key == "emotions":
+            return self.emotions
+        else:
+            raise KeyError(f"Invalid key: {key}. Valid keys are 'text' and 'emotions'.")
+    
     

@@ -25,9 +25,14 @@ The Intent Engine handles the parsing of user queries. It extracts arguments and
 ICARUS is a Durendal project. More information can be found at
 """
 
+from .perception_engine import PerceptionEngine
+from .execution_engine import ExecutionEngine
+from .feedback_engine import FeedbackEngine
+from .intent_engine import IntentEngine
+
 __all__ = [
-    "execution_engine.py",
-    "feedback_engine.py",
-    "intent_engine.py",
-    "perception_engine.py",
+    "ExecutionEngine",
+    "FeedbackEngine",
+    "IntentEngine",
+    "PerceptionEngine",
 ]
