@@ -30,7 +30,7 @@ def binding_energy(mass_defect: float) -> float:
 def mass_defect(proton_mass: float, neutron_mass: float, nucleus_mass: float) -> float:
     """Returns the mass defect of a nucleus based on the mass of its protons, neutrons, and the nucleus itself."""
     return (proton_mass + neutron_mass) - nucleus_mass
-def decay_rate(initial_quantity: float, devay_const: float) -> float:
+def decay_rate(initial_quantity: float, decay_const: float) -> float:
     """Returns the decay rate of a radioactive substance based on its initial quantity and decay constant."""
-    return devay_const * initial_quantity
+    return decay_const * initial_quantity
 

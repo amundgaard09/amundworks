@@ -62,7 +62,7 @@ Functions are declared using the `function` keyword.
 
 ### Syntax Rules
 
-Group parameters by types and split using the `|` symbol. Each parameter in each group is separated by a comma.
+Group parameters by types and split using the `|` symbol. Separate each parameter in each group by a comma.
 With Return Type: Use the `>` symbol followed by the type before the opening curly brace.  
 Without Return Type (void): Prepend the definition with the `void` keyword and omit the `>` arrow and the type entirely.
 
@@ -101,6 +101,7 @@ float64 newnumber = 100.01;
 int32 counter = 0;
 str message = "Hello Perigrine";
 bool isActive = true;
+char letter = 'A';
 ```
 
 #### Operators
@@ -128,6 +129,12 @@ Comparison Operators
 - `!=`: Not equal to
 - `>` , `<`: Greater than, Less than
 - `>=` , `<=`: Greater than or equal to, Less than or equal to
+
+Boolean Operators
+
+- `and` / `&&` : Logical AND
+- `or` / `??` : Logical OR
+- `not` / `!` : Logical NOT
 
 Membership & Identity Operators
 
