@@ -132,9 +132,10 @@ Comparison Operators
 
 Boolean Operators
 
-- `and` / `&&` : Logical AND
-- `or` / `??` : Logical OR
-- `not` / `!` : Logical NOT
+- `and` / `&&`: Logical AND
+- `or` / `||`: Logical OR
+- `not` / `!`: Logical NOT
+- `nor` / `!!`: Logical NOR
 
 Membership & Identity Operators
 

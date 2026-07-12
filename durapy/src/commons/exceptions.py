@@ -13,20 +13,20 @@ class ImpossibleTriangleError(Exception):
         super().__init__("The sum of the angles of a triangle can't be anything else than 180 degrees!")
 class IncorrectArgumentCount(Exception):
     """Raises when the count of arguments given to a function is incorrect."""
-    def __init__(self, func: Callable, given_arguments: int, wanted_arguments: set):
-        super().__init__(f"Incorrect count of arguments for {color_text(func.__name__, 'blue')}. {color_text(func.__name__, 'blue')} takes {color_text(wanted_arguments, 'green')} but was given {color_text(given_arguments, 'red')}")
+    def __init__(self, func: Callable, given_args: int, wanted_args: set):
+        super().__init__(f"Incorrect count of arguments for {color_text(func.__name__, 'blue')}. {color_text(func.__name__, 'blue')} takes {color_text(wanted_args, 'green')} but was given {color_text(given_args, 'red')}")
 class InconsistencyError(Exception):
     """Raises when the VIR-values passed into PowerDissipation() gives inconsistent values for the three formulas."""
     def __init__(self, func: Callable, fault: str):
         super().__init__(f"Inconsistency error at {color_text(func.__name__, 'blue')} with {color_text(fault, 'red')}")
 class DimensionMismatch(Exception):
     """Raise when the dimensions of two units don't match when trying to convert or perform operations on them."""
-    def __init__(self, string):
-        super().__init__(string)
+    def __init__(self, *args):
+        super().__init__(*args)
 class InvalidColorCount(Exception):
     """Raised when the color count passed into a function of the resistor group is invalid."""
-    def __init__(self, Function: Callable):
-        super().__init__(f"Invalid Color Count for {color_text(Function.__name__, 'blue')}")
+    def __init__(self, func: Callable):
+        super().__init__(f"Invalid Color Count for {color_text(func.__name__, 'blue')}")
 class UnknownSubCommand(Exception):
     """Raises when an unknown subcommand gets caught in ValidateCommand()."""
     def __init__(self, module: str, given_command: str):

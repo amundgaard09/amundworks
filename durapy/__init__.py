@@ -19,7 +19,7 @@ from .src.uniphys import (
     quantum,
     thermodynamics,
 )
-from .src.uniphys.phys_dtypes import PhysicalConstant, Quantity, UNITS, Unit
+from .src.frameworks.phys_dtypes import PhysicalConstant, Quantity, UNITS, Unit
 
 __all__ = [
     "uniCLI",

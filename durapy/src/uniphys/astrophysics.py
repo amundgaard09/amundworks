@@ -9,7 +9,8 @@ This module contains resources for calculations and simulations for Astrophysics
 # Pi - Π π,    Rho - P ρ,  Sigma - Σ σ ς, Tau - T τ,  Ypsilon - Y υ, Phi - Φ φ,  Chi - X χ, Psi - Ψ ψ, Omega - Ω ω
 
 import math
-from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
+
+from durapy.src.frameworks.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import G, C, PI, EARTH_M, EARTH_R, HUBBLE 
 
 def schwarzschild_radius(M: float) -> Quantity:

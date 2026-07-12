@@ -1,6 +1,5 @@
 
-import ssl
-import socket
+import ssl, socket
 
 HOST = '0.0.0.0'
 PORT = 65432
@@ -32,7 +31,7 @@ def secure_server_kernel(host: str, port: int, certfile: str, keyfile: str) -> N
 
     while True:
         try:
-            newsocket, fromaddr = bind_socket.accept()
+            newsocket, _ = bind_socket.accept()
             ssl_socket = ssl_context.wrap_socket(newsocket, server_side=True)
             handle_client(ssl_socket)
             

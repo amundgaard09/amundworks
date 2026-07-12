@@ -2,13 +2,9 @@
 The UniMath function library for the `DuraPy` library.
 """
 
-import math, sympy
+import math, sympy, typing
 
-from ..frameworks.color_sys import color_text
-from ..commons import exceptions, constants
-from typing import Literal
-
-PI = constants.PI
+from ..commons.constants import PI
 
 def D2R(deg: float) -> float:
     """Return radians from degrees."""
@@ -17,29 +13,8 @@ def R2D(rad: float) -> float:
     """Return degrees from radians."""
     return rad / PI * 180
 
-def avg(*args) -> float:
+def avg(*args: int | float) -> float:
     return sum(args) / len(args)
-
-def fibonacci_list(list_len: float) -> list[int]:
-    """Fibonacci sequence generator that returns a list of the sequence up to the given length."""
-    
-    try:
-        list_len = int(list_len)  
-    except ValueError:
-        raise ValueError("FibonacciInteger does not take floats or strings!")      
-    
-    fib0, fib1 = 0, 1
-    fib_list = [fib0, fib1]
-    
-    if list_len < 2:
-        raise ValueError("FibonacciList does not take integers less than 2!")
-    
-    for _ in range(0, (list_len - 2)):
-        fib2 = fib0 + fib1
-        fib0, fib1 = fib1, fib2
-        fib_list.append(fib2)
-        
-    return fib_list  
  
 def fibonacci_integer(fib_idx: float) -> int:
     """Fibonacci integer generator that returns the Fibonacci integer at the given index.""" 
@@ -63,6 +38,17 @@ def fibonacci_integer(fib_idx: float) -> int:
         
     return fib2
 
+def fibonacci_list(n: int) -> list[int]:
+    """Fibonacci sequence generator that returns a list of the sequence up to the given length."""
+    
+    if not isinstance(n, int):
+        return None  
+    
+    fib_list: list[int] = []
+    
+    for i in range(n):
+        fib_list.append(fibonacci_integer(i))
+        
 def lovelace(a: float, b: float, c: float, d: float, e: float, f: float) -> tuple:
     """Lovelace's algorithm for solving systems of linear equations."""
     if a*e == b*d: 
@@ -74,7 +60,7 @@ def lovelace(a: float, b: float, c: float, d: float, e: float, f: float) -> tupl
     y = Dy / (a*e - b*d)
     return (x, y)
 
-def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> tuple[float, tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]:
+def interpolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> tuple[float, tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]:
     """
     Extrapolate the sides of a triangle from the AAAS case (3x Angle + 1x Side)
     
@@ -84,7 +70,7 @@ def extrapolate_triangle(a: float, b: float, c: float, A: float | None = None, B
     """
 
     if sum((a, b, c)) != 180:
-        raise exceptions.ImpossibleTriangleError
+        raise ValueError("A triangles angles can't sum to anything other than 180 degrees!")
 
     sin_A = math.sin(D2R(a))
     sin_B = math.sin(D2R(b))
@@ -124,9 +110,9 @@ def pythagoras(A: float | None = None, B: float | None = None, C: float | None =
         return math.sqrt(A**2 + B**2)
     
 def sine_rule(
-    Sides: list[float | None],
-    Angles: list[float | None],
-    AngleMeasurementMode: Literal["Degrees", "Radians"]
+    sides: list[float | None],
+    angles: list[float | None],
+    measurement: typing.Literal["deg", "rad"] = "deg"
     ) -> list[list[float], list[float]] | None:
     """
     The Sine Rule calculation function. Takes in 
@@ -137,14 +123,12 @@ def sine_rule(
     Return Format: [Angles: [A, B, C], Sides: [A, B, C]]
     """
     
-    ### VERY UNSTABLE!
-    
     angles_rad = []
-    ReferenceRatio = None
+    ratio = None
     
     # Convert angles to radians if they are in degrees, and keep them as is if they are already in radians. If an angle is None, keep it as None.
-    for angle in Angles:
-        if angle is not None and AngleMeasurementMode == "Degrees":
+    for angle in angles:
+        if angle is not None and measurement == "deg":
             angles_rad.append(D2R(angle))
         else:
             angles_rad.append(angle)
@@ -158,24 +142,24 @@ def sine_rule(
     
     # Find the first known side and angle to establish the reference ratio for the Sine Rule
     for idx in range(3):
-        if Sides[idx] is not None and angles_rad[idx] is not None:
-            ReferenceRatio = Sides[idx] / math.sin(angles_rad[idx])
+        if sides[idx] is not None and angles_rad[idx] is not None:
+            ratio = sides[idx] / math.sin(angles_rad[idx])
             break
     
     # If the reference couldn't be established, return None
-    if ReferenceRatio is None:
+    if ratio is None:
         return None
 
     # Loop through the sides and angles to calculate the missing values using the Sine Rule
     for idx in range(3):
         
         # Calculate the missing side based on the angle and the reference ratio
-        if Sides[idx] is None and angles_rad[idx] is not None:
-            Sides[idx] = ReferenceRatio * math.sin(angles_rad[idx])
+        if sides[idx] is None and angles_rad[idx] is not None:
+            sides[idx] = ratio * math.sin(angles_rad[idx])
             
         # Calculate the missing angle and side
-        elif angles_rad[idx] is None and Sides[idx] is not None:
-            value = Sides[idx] / ReferenceRatio
+        elif angles_rad[idx] is None and sides[idx] is not None:
+            value = sides[idx] / ratio
             if not -1 <= value <= 1:
                 return None
             asin_val = math.asin(value)
@@ -188,12 +172,11 @@ def sine_rule(
                 angles_rad[idx] = asin_val
 
     # Return in specified unit
-    if AngleMeasurementMode == "Degrees":
-        Angles_out = [R2D(a) if a is not None else None for a in angles_rad]
+    if measurement == "deg":
+        return [[R2D(a) if a is not None else None for a in angles_rad], sides]
     else:
-        Angles_out = angles_rad
+        return [angles_rad, sides]
 
-    return [Angles_out, Sides]
 def cosine_rule(len_A: float, len_B: float, angle_A: float) -> float:
     return math.sqrt(len_A ** 2 + len_B ** 2 - ((2 * len_A * len_B) * math.cos(D2R(angle_A))))
 def reverse_cosine_rule(len_A: float, len_B: float, len_C: float) -> tuple[float, float, float]:
@@ -210,21 +193,30 @@ def reverse_cosine_rule(len_A: float, len_B: float, len_C: float) -> tuple[float
         R2D(math.acos((len_A ** 2 + len_B ** 2 - len_C ** 2) / (2 * len_A * len_B)))   # AngleC
     )
 
-def SAS_area(len_A: float, len_B: float, angle_C: float) -> float:
-    """
-    Returns the area of a triangle from two sides and the included angle.
-    Formula: `Area = 0.5 * LengthA * LengthB * sin(AngleC)` where AngleC is in degrees.
-    """
+def tangent_formula(func1: str, func2: str) -> list[str]:
+    """Returns the tangent(s) between two functions by finding the points where the derivatives are equal and then calculating the slope of the tangent line at those points."""
+    
+    x = sympy.symbols('x')
+    f1 = sympy.sympify(func1)
+    f2 = sympy.sympify(func2)
+    df1 = sympy.diff(f1, x)
+    df2 = sympy.diff(f2, x)
+
+    slope_eq = sympy.Eq(df1, df2)
+    tan_points = sympy.solve(slope_eq, x)
+    tangents = []
+    
+    for idx, point in enumerate(tan_points, 1):
+        string = f"Tangent {idx} - point: {point} - y: {f1.subs(x, point)} - slope: {df1.subs(x, point)}"
+        tangents.append(string) 
+
+    return tangents
+
+def sas_area(len_A: float, len_B: float, angle_C: float) -> float:
+    """Returns the area of a triangle from two sides and the included angle."""
     return (0.5 * len_A * len_B * math.sin(D2R(angle_C)))
 def herons_formula(len_A: float, len_B: float, len_c: float) -> float:
-    """
-    Returns the area of a triangle from the side lengths.
-    Formula::
-
-        S: float = (LengthA + LengthB + LengthC) / 2
-        Area: float = math.sqrt(S * (S - LengthA) * (S - LengthB) * (S - LengthC))
-
-    """
+    """Returns the area of a triangle from the side lengths."""
     S = (len_A + len_B + len_c) / 2
     return math.sqrt(S * (S - len_A) * (S - len_B) * (S - len_c))
 
@@ -271,9 +263,12 @@ def quadratic_num_roots(a: float, b: float, c: float) -> int:
     return 2 if D > 0 else 1 if D == 0 else 0
 def quadratic_solutions(A: float, B: float, C: float) -> tuple[float, float] | tuple[float] | None:
     """Solves quadratic equations and returns x-values in a tuple."""
+    
     if A == 0:
-        return ValueError("Invalid quadratic equation! A cannot be 0.")
+        raise ValueError("Invalid quadratic equation! A cannot be 0.")
+    
     D = B**2 - 4*A*C
+    
     if D > 0:
         x1 = (-B - math.hypot(0, D)) / (2 * A)
         x2 = (-B + math.hypot(0, D)) / (2 * A)
@@ -282,10 +277,12 @@ def quadratic_solutions(A: float, B: float, C: float) -> tuple[float, float] | t
     elif D == 0:
         x1 = -B / (2 * A)
         return (x1)
+    
     else: 
         return None
 def quadratic_factorized(a: float, b: float, c: float) -> str:
     """Returns the factorized form of a quadratic function in the form of `a(x - x1)(x - x2)` where `x1` and `x2` are the roots of the function."""
+    
     D = b**2 - 4*a*c
     
     def sign(val: float) -> str:
@@ -302,6 +299,7 @@ def quadratic_factorized(a: float, b: float, c: float) -> str:
     else: 
         return None
 def quadratic_evaluation(a: float, b: float, c: float, x: float) -> float:
+    """Evaluate a quadratic polynomial."""
     return a*x**2 + b*x + c
 
 def cubic_vertex(a: float, b: float, c: float, d: float) -> list:
@@ -309,10 +307,10 @@ def cubic_vertex(a: float, b: float, c: float, d: float) -> list:
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x**3 + {b}*x**2 + {c}*x + {d}")
     dif = sympy.diff(f, x)
-    critical_points = sympy.solve(dif, x)
-    
+    crit_points = sympy.solve(dif, x)
     vertices = []
-    for point in critical_points:
+    
+    for point in crit_points:
         y = f.subs(x, point)
         vertices.append((point, y))
     
@@ -346,40 +344,6 @@ def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: i
         
     return roots
 
-### UNSTABLE - ALPHA - DO NOT USE
-def tangent_formula(func_1: str, func_2: str) -> list[str]:
-    """Returns the tangent(s) between two functions by finding the points where the derivatives are equal and then calculating the slope of the tangent line at those points."""
-    
-    x = sympy.symbols('x')
-    f1 = sympy.sympify(func_1)
-    f2 = sympy.sympify(func_2)
-    df1 = sympy.diff(f1, x)
-    df2 = sympy.diff(f2, x)
-
-    slope_eq = sympy.Eq(df1, df2)
-    tangent_points = sympy.solve(slope_eq, x)
-    tangents = []
-    
-    for idx, point in enumerate(tangent_points, 1):
-        string = f"Tangent {idx} - point: {point} - y: {f1.subs(x, point)} - slope: {df1.subs(x, point)}"
-        tangents.append(string) 
-
-    return tangents
-
-def prime_factorize(n: int) -> list[int]:
-    """Returns the prime factorization of a number as a list of its prime factors."""
-    factors = []
-    div = 2
-    
-    while n >= 2:
-        if n % div == 0:
-            factors.append(div)
-            n //= div
-        else:
-            div += 1
-            
-    return factors
-
 def factorial(n: int) -> int:
     """Returns the factorial of a non-negative integer `n`."""
     if n < 0:
@@ -400,19 +364,39 @@ def subfactorial(n: int) -> int:
         raise ValueError("Subfactorial and Factorial are not defined for negative numbers.")
     return int(factorial(n) * sum((-1)**k / factorial(k) for k in range(n)))
 
-def gcd(x: int, y: int) -> int:
-    return math.gcd(x, y)
-def lcm(x: int, y: int) -> int:
-    return abs(x * y) // math.gcd(x, y)
+def gcd(*ints: int) -> int:
+    """Returns the greatest common divisor of the given integers."""
+    return math.gcd(*ints)
+def lcm(*ints: int) -> int:
+    """Returns the least common multiple of the given integers."""
+    return abs(math.prod(ints)) // gcd(*ints)
 
-def polygon_area(n: int) -> float:
-    return (n * (1 / 4) * math.tan(PI / n)) ** 2
-def polygon_circumference(n: int) -> float:
-    return n * (1 / math.tan(PI / n))
+def polygon_area(n: int, side_length: float) -> float:
+    """Returns the area of a regular polygon with `n` sides and a side length of `side_length`."""
+    return (n * side_length**2) / (4 * math.tan(math.pi / n))
+def polygon_circumference(n: int, side_length: float) -> float:
+    """Returns the circumference of a regular polygon with `n` sides and a side length of `side_length`."""
+    return n * side_length
 def polygon_interior_angle(n: int) -> float:
+    """Returns the interior angle of a regular polygon with `n` sides."""
     return (n - 2) * 180 / n
 def polygon_exterior_angle(n: int) -> float:
+    """Returns the exterior angle of a regular polygon with `n` sides."""
     return 360 / n
+
+def prime_factorize(n: int) -> list[int]:
+    """Returns the prime factorization of a number as a list of its prime factors."""
+    factors = []
+    div = 2
+    
+    while n >= 2:
+        if n % div == 0:
+            factors.append(div)
+            n //= div
+        else:
+            div += 1
+            
+    return factors
 
 def is_prime(n: int) -> bool:
     """Returns True if the number is prime, else returns False."""
@@ -424,15 +408,47 @@ def is_prime(n: int) -> bool:
         if n % i == 0:
             return False
     return True
-
 def is_perfect_square(n: int) -> bool:
     """Returns True if the number is a perfect square, else returns False."""
     if n < 0:
         return False
     return int(math.sqrt(n)) ** 2 == n
-
 def is_perfect_cube(n: int) -> bool:
     """Returns True if the number is a perfect cube, else returns False."""
     if n < 0:
         return False
     return int(round(n ** (1/3))) ** 3 == n
+def is_perfect_power(n: int) -> bool:
+    """Returns True if the number is a perfect power - a number that can be expressed as an integer raised to an integer power - else returns False."""
+    if n < 1:
+        return False
+    for b in range(2, int(math.log2(n)) + 1):
+        a = round(n ** (1 / b))
+        if a ** b == n:
+            return True
+    return False
+def is_perfect_number(n: int) -> bool:
+    """Returns True if the number is a perfect number - a number equal to the sum of its proper divisors - else returns False."""
+    if n < 1:
+        return False
+    return sum(i for i in range(1, n) if n % i == 0) == n
+def is_abundant_number(n: int) -> bool:
+    """Returns True if the number is an abundant number - a number for which the sum of its proper divisors is greater than the number itself - else returns False."""
+    if n < 1:
+        return False
+    return sum(i for i in range(1, n) if n % i == 0) > n
+def is_deficient_number(n: int) -> bool:
+    """Returns True if the number is a deficient number - a number for which the sum of its proper divisors is less than the number itself - else returns False."""
+    if n < 1:
+        return False
+    return sum(i for i in range(1, n) if n % i == 0) < n
+def is_amicable_pair(a: int, b: int) -> bool:
+    """Returns True if the numbers are an amicable pair - two numbers for which the sum of the proper divisors of each is equal to the other number - else returns False."""
+    if a < 1 or b < 1:
+        return False
+    return sum(i for i in range(1, a) if a % i == 0) == b and sum(i for i in range(1, b) if b % i == 0) == a
+def is_sociable_chain(chain: list[int]) -> bool:
+    """Returns True if the numbers form a sociable chain - a sequence of numbers for which the sum of the proper divisors of each number is equal to the next number in the sequence, and the last number in the sequence is equal to the first number - else returns False."""
+    if any(n < 1 for n in chain):
+        return False
+    return all(sum(i for i in range(1, n) if n % i == 0) == chain[(idx + 1) % len(chain)] for idx, n in enumerate(chain))

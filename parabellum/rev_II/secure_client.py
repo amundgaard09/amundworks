@@ -1,7 +1,5 @@
 
-import ssl
-import socket
-from typing import Optional
+import ssl, socket
 
 def create_context(cafile: str = "server.crt") -> ssl.SSLContext:
 	"""Create and return an SSL context for a client."""
@@ -21,7 +19,7 @@ def send_message(ssl_sock: ssl.SSLSocket, message: str) -> None:
 	"""Send a UTF-8 encoded message over the SSL socket."""
 	ssl_sock.sendall(message.encode("utf-8"))
 
-def close(ssl_socket: Optional[ssl.SSLSocket]) -> None:
+def close(ssl_socket: ssl.SSLSocket | None) -> None:
 	"""Close the SSL socket if open."""
 	if ssl_socket:
 		try:

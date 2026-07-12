@@ -5,7 +5,7 @@ These include methods such as binary, ceasar, vigenere, railfence and OTP with e
 """
 
 def binary_encrypt(plaintext: str) -> str:
-    binary = ''.join(format(ord(i), '08b') for i in plaintext)
+    binary = ''.join(format(ord(char), '08b') for char in plaintext)
     return ' '.join(binary[i:i+8] for i in range(0, len(binary), 8))
 def binary_decrypt(binary: str) -> str:
     return ''.join(chr(int(b, 2)) for b in binary.split())
@@ -73,12 +73,11 @@ def railfence_encrypt(plaintext: str, key: int) -> str:
         if pos == 0 or pos == key - 1:
             direction *= -1
     
-    return ''.join([''.join(Row) for Row in rows])
+    return ''.join([''.join(row) for row in rows])
 def railfence_decrypt(cipher: str, key: int) -> str:
     key = int(key)
     pattern, rows = [], []
-    pos, idx =  0, 0
-    direction = 1
+    pos, idx, direction =  0, 0, 1
     plaintext = ''
     
     for _ in range(len(cipher)):
@@ -101,9 +100,9 @@ def railfence_decrypt(cipher: str, key: int) -> str:
 
     return plaintext
 def OTP_encrypt(plaintext: str, key: str) -> str:
-    bintext = ''.join(format(ord(i), '08b') for i in plaintext)
-    binkey = ''.join(format(ord(i), '08b') for i in key)
-    cipher = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(bintext, binkey))
+    binary_text = ''.join(format(ord(i), '08b') for i in plaintext)
+    binary_key = ''.join(format(ord(i), '08b') for i in key)
+    cipher = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(binary_text, binary_key))
     return ' '.join(cipher[i:i+8] for i in range(0, len(cipher), 8))
 def OTP_decrypt(cipher: str, key: str) -> str:
     bintext = ''.join(format(ord(i), '08b') for i in key)

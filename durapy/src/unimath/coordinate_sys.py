@@ -3,7 +3,7 @@ The `DuraPy` Coordinate Systems for the `UniMath` subpackage.
 """
 
 from __future__ import annotations
-from .unimath import pythagoras
+
 import math
 
 class _Coordinate:
@@ -26,12 +26,12 @@ class Cartesian2D(_Coordinate):
     
     def to_polar(self) -> Polar:
         return Polar(
-            r = pythagoras(self.x, self.y), 
+            r = math.hypot(self.x, self.y), 
             θ = math.atan(self.y / self.x)
         )
 
     def distance_to_origo(self) -> float:
-        return pythagoras(A = self.x, B = self.y)
+        return math.hypot(A = self.x, B = self.y)
 
 class Cartesian3D(_Coordinate):
     """The 3-dimensional Cartesian coordinate system."""
@@ -42,8 +42,8 @@ class Cartesian3D(_Coordinate):
         self.z = z
     
     def to_spherical(self) -> Spherical:
-        p = pythagoras(
-            A = pythagoras(self.x, self.y), 
+        p = math.hypot(
+            A = math.hypot(self.x, self.y), 
             B = self.z
         )
         
@@ -55,8 +55,8 @@ class Cartesian3D(_Coordinate):
         
     def to_cylindrical(self) -> Cylindrical:
         return Cylindrical(
-            r = pythagoras(
-                A = pythagoras(A = self.x, B = self.y), 
+            r = math.hypot(
+                A = math.hypot(A = self.x, B = self.y), 
                 B = self.z
             ),
             θ = math.atan(self.y / self.x),
@@ -64,8 +64,8 @@ class Cartesian3D(_Coordinate):
         )
         
     def distance_to_origo(self) -> float:
-        return pythagoras(
-            A = pythagoras(A = self.x, B = self.y), 
+        return math.hypot(
+            A = math.hypot(A = self.x, B = self.y), 
             B = self.z
         )
 
@@ -126,7 +126,7 @@ class Cylindrical(_Coordinate):
         )
         
     def to_spherical(self) -> Spherical:
-        distance = pythagoras(
+        distance = math.hypot(
             A = self.r, 
             B = self.z
         )
@@ -138,7 +138,7 @@ class Cylindrical(_Coordinate):
         )
     
     def distance_to_origo(self) -> float:
-        return pythagoras(
+        return math.hypot(
             A = self.r, 
             B = self.z
         )

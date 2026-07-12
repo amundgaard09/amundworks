@@ -1,9 +1,7 @@
-"""
-The `DuraPy` `UniFlight` module provides a collection of functions and classes for performing calculations and simulations related to flight dynamics, aerodynamics, and propulsion.
-"""
+"""The `DuraPy` `UniFlight` module provides a collection of functions and classes for performing calculations and simulations related to flight dynamics, aerodynamics, and propulsion."""
 
 from durapy.src.frameworks.color_sys import color_text
-from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
+from durapy.src.frameworks.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import MACH
 
 def T2W_ratio(thrust: float, weight: float) -> str:

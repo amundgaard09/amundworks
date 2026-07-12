@@ -83,8 +83,7 @@ class _BaseColor:
 
 class RGB(_BaseColor):
     "RGB color data type."
-    def __init__(self, colorname: str, r: int, g: int, b: int):
-        super().__init__(colorname)
+    def __init__(self, r: int, g: int, b: int):
         self._r = r
         self._g = g
         self._b = b
@@ -98,6 +97,12 @@ class RGB(_BaseColor):
             return self.toCMYK().values == other.values
         else:
             return False
+        
+    def __getitem__(self, key):
+        if key is None:
+            return (self.r, self.g, self.b)
+        if key in [0, 1, 2]: return (self.r, self.g, self.b)[key] 
+        
 
     @property
     def r(self) -> int:

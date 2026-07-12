@@ -5,7 +5,7 @@ This module contains resources for calculations and simulations for Classical Me
 """
 
 from ..frameworks.color_sys import color_text
-from .phys_dtypes import Quantity, UNITS
+from ..frameworks.phys_dtypes import Quantity, UNITS
 from ..commons.constants import EARTH_G, PI, C 
 
 import math

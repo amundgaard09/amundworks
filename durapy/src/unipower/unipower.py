@@ -4,13 +4,11 @@ This library contains functions for electrical calculations and simulations. The
 The library is still in development and may contain some unstable functions that are not yet fully tested.
 """
 
-import math
+import math, types, typing
 
-from typing import Literal
-from types import MappingProxyType
 from durapy.src.unimath.unimath import avg
 from durapy.src.frameworks.color_sys import ANSI_COLORS
-from durapy.src.uniphys.phys_dtypes import (
+from durapy.src.frameworks.phys_dtypes import (
     Quantity,
     UNITS
 )
@@ -21,7 +19,7 @@ from durapy.src.commons.exceptions import (
     InvalidColors
 )
 
-BANDS = MappingProxyType({
+BANDS = types.MappingProxyType({
     "black":  0,
     "brown":  1,
     "red":    2,
@@ -33,7 +31,7 @@ BANDS = MappingProxyType({
     "gray":   8,
     "white":  9,
 })
-MULTIPLIERS = MappingProxyType({
+MULTIPLIERS = types.MappingProxyType({
     "black":  1,
     "brown":  10,
     "red":    1e2,
@@ -47,7 +45,7 @@ MULTIPLIERS = MappingProxyType({
     "gold":   0.1,
     "silver": 0.01,
 })
-TOLERANCES = MappingProxyType({
+TOLERANCES = types.MappingProxyType({
     "brown":  1,
     "red":    2,
     "green":  0.5,
@@ -58,14 +56,8 @@ TOLERANCES = MappingProxyType({
     "silver": 10,
 })
 
-def ohms_law(V: float | None = None, I: float | None = None, R: float | None = None) -> str:
-    """
-    Ohms Law calculation for Voltage, Current, and Resistivity. \n
-    Formulas:
-    >>> V = I * R \n
-    >>> I = V / R \n 
-    >>> R = V / I \n 
-    """
+def ohms_law(V: float | None = None, I: float | None = None, R: float | None = None) -> tuple[float, float, float]:
+    """Ohms Law calculation for voltage, current, and resistivity. Returns: (V, I, R)"""
     
     if V is not None: V = float(V)
     if I is not None: I = float(I)
@@ -86,16 +78,19 @@ def ohms_law(V: float | None = None, I: float | None = None, R: float | None = N
     elif R is None:
         R = V / I
         
-    return f"V: {V}, I: {I}, R: {R}"
+    return (V, I, R)
 def volt_divider(VIn: float, R1: float, R2: float) -> Quantity:
     """Calculates the output voltage of a voltage divider from input voltage and the two resistances."""
     return Quantity((VIn * (R2 / (R1 + R2))), UNITS["V"])
+
 def rc_time_constant(capacitance: float, resistance: float) -> Quantity:
     """Calculates the time constant of an RC circuit from capacitance in farads and resistance in ohms."""
     return Quantity((capacitance * resistance), UNITS["S"])
+
 def inductor_impedance(hertz: float, inductance: float) -> Quantity:
     """Calculates the impedance of an inductor at a given frequency in hertz and inductance in henrys."""
     return Quantity((2 * math.pi * hertz * inductance), UNITS["Ω"])
+
 def power_dissipation(V: float | None = None, I: float | None = None, R: float | None = None) -> Quantity:
     """Calculates power dissipation from voltage, current and resistance. If all three parameters are given, it checks for consistency between the three formulas P = I^2 * R, P = V^2 / R and P = V * I."""
     if (V, I, R).count(None) > 1:
@@ -192,7 +187,7 @@ def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) ->
     return (ohms, tolerance, lower, upper)
 
 ### TODO finish wrapping these functions
-def total_esr(caps: list[tuple], connection: Literal["parallel", "series"]) -> float:
+def total_esr(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> float:
     """Calculates total ESR of a list of capacitors based on their connection type. Caps are in the format (capacitance, voltage, esr) for now."""
     if connection == "series":
         return sum(cap[2] for cap in caps)
@@ -205,7 +200,7 @@ def total_esr(caps: list[tuple], connection: Literal["parallel", "series"]) -> f
         
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
-def total_capacitance(caps: list[tuple], connection: Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
+def total_capacitance(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
     """Calculates total capacitance, voltage limit and ESR of a list of capacitors based on their connection type."""
         
     if connection == "parallel":

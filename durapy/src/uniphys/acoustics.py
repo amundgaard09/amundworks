@@ -6,7 +6,7 @@ This module contains resources for calculations and simulations for Acoustic Phy
 
 import math
 
-from durapy.src.uniphys.phys_dtypes import Quantity, UNITS
+from durapy.src.frameworks.phys_dtypes import Quantity, UNITS
 from durapy.src.commons.constants import MACH
 
 def sound_speed(temp: float, γ: float = 1.4, molar_mass: float = 0.02897) -> float:

@@ -25,33 +25,17 @@ if USE_GPU:
 else:
     import numpy as xp
 
-import math, copy, typing, random
-from ..commons.exceptions import MissingParameters, InvalidInput
+import math, copy, random
+from ..commons.exceptions import MissingParameters
 
 EPSILON = 1e-9
 
-def _checkfloat(floatlike: float) -> float:
-    try:
-        floated = float(floatlike)
-    except (ValueError, TypeError):
-        raise InvalidInput(float, type(floatlike))
-    else:
-        return floated
-
-@typing.overload
-def is_close(a: float, b: float) -> bool: ...
-@typing.overload
-def is_close(a: list[float], b: list[float]) -> bool: ...
-@typing.overload
-def is_close(a: list[list[float]], b: list[list[float]]) -> bool: ...
-@typing.overload
-def is_close(a: xp.ndarray, b: xp.ndarray) -> bool: ...
 def is_close(
     a: float | list[float] | list[list[float]] | xp.ndarray, 
     b: float | list[float] | list[list[float]] | xp.ndarray
 ) -> bool:
+    """Checks if two floats / list-like objects of floats are close"""
     
-    """Overloaded function for checking if two floats / lists of floats are close"""
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
         return math.isclose(a, b)
     
@@ -75,9 +59,9 @@ class D3Vector:
     `x`, `y` & `z`: float - X, Y, and Z values for the vector.
     """
     def __init__(self, x: float, y: float, z: float):
-        self._x = _checkfloat(x)
-        self._y = _checkfloat(y)
-        self._z = _checkfloat(z)
+        self._x = float(x)
+        self._y = float(y)
+        self._z = float(z)
 
     @property
     def x(self):
@@ -101,9 +85,9 @@ class D3Vector:
         """Rotates the vector V by angles x, y, and z around the x, y, and z axes respectively."""
         
         R = (Rz(z) @ (Ry(y) @ Rx(x)))
-        newVec = R @ self
+        new_vec = R @ self
     
-        return newVec
+        return new_vec
     
     def __str__(self):
         return f"<{self._x}, {self._y}, {self._z}>"
@@ -184,12 +168,12 @@ class NDVector:
     `components`: list[float] - The components of the vector, in order.
     """
     def __init__(self, components: list[float]):
-        self._components = [ _checkfloat(comp) for comp in components ]
+        self._components = [float(comp) for comp in components]
     
     def __getitem__(self, idx: int) -> float:
         return self._components[idx]
     def __setitem__(self, key, value: float) -> None:
-        self._components[key] = _checkfloat(value)
+        self._components[key] = float(value)
     def __iter__(self):
         return iter(self._components)
     def __str__(self) -> str:
@@ -323,11 +307,11 @@ class Matrix:
     def __repr__(self) -> str:
         return f"Matrix({self._data!r})"
     def __str__(self) -> str:
-        returnStr = ""
+        return_str = ""
         for row in self:
-            returnStr += str(row) + "\n"
+            return_str += str(row) + "\n"
             
-        return returnStr
+        return return_str
     def __neg__(self) -> Matrix:
         return Matrix([[(self[idx1][idx2] * -1) for idx2 in range(self._cols)] for idx1 in range(self._rows)])
     def __eq__(self, other) -> bool:
@@ -448,25 +432,6 @@ class Matrix:
     def column(self, idx: int) -> list:
         return [self[j][idx] for j in range(len(self[0]))]
 class SquareMatrix:
-    """
-    `DuraPy` `UniMath` Dataclass for Square Matrices.
-    
-    Args
-    ----
-    - `array`:     list[list[float]] - The data to create the matrix from, unless empty or random values are preferred.
-    
-    - `size`:      int - Create an empty matrix with dimensions `Size` x `Size`
-    
-    - `random`:    bool - Create a matrix filled with values from within the `randrange` parameter, defaulted to -1 to 1.
-    
-    - `validate`:  bool - Bypasses square-shape validation in the constructor.
-    
-    - `fill`:      float - Specifies what value to fill the matrix with, if not random.
-    
-    - `randtype`:  tuple - Specifies if the matrix should be filled with random integers or floats.
-    
-    - `randrange`: tuple - Specifies the range for the `random`.`uniform` function.
-    """
     def __init__(
         self, 
         array: list[list[float]]  | None = None, 
@@ -477,6 +442,26 @@ class SquareMatrix:
         randtype:   type          | None = float,
         randrange:  tuple         | None = (-1, 1),
     ):
+        """
+        `DuraPy` `UniMath` Dataclass for Square Matrices.
+    
+        Args
+        ----
+        - `array`:     list[list[float]] - The data to create the matrix from, unless empty or random values are preferred.
+    
+        - `size`:      int - Create an empty matrix with dimensions `size` x `size`
+    
+        - `random`:    bool - Create a matrix filled with values from within the `randrange` parameter, defaulted to -1 to 1.
+    
+        - `validate`:  bool - Bypasses square-shape validation in the constructor.
+    
+        - `fill`:      float - Specifies what value to fill the matrix with, if not random.
+    
+        - `randtype`:  tuple - Specifies if the matrix should be filled with random integers or floats.
+    
+        - `randrange`: tuple - Specifies the range for the `random`.`uniform` function.
+        """
+    
         if size == 0:
             raise ValueError("A matrix can't have a size of 0!")
         
@@ -505,9 +490,9 @@ class SquareMatrix:
         return self._data[idx]
     def __setitem__(self, key: int, value: list[float]) -> None:
         if isinstance(value, list):
-            self._data[key] = [_checkfloat(item) for item in value]
+            self._data[key] = [float(item) for item in value]
         else:
-            self._data[key] = _checkfloat(value)
+            self._data[key] = float(value)
     def __format__(self, format_spec: str) -> str:
         match format_spec:
             case '':
@@ -524,11 +509,11 @@ class SquareMatrix:
     def __abs__(self) -> float:
         return math.sqrt(sum(cell * cell for row in self._data for cell in row))
     def __str__(self) -> str:
-        returnStr = ""
+        return_str = ""
         for row in self:
-            returnStr += str(row) + "\n"
+            return_str += str(row) + "\n"
             
-        return returnStr
+        return return_str
     def __neg__(self) -> SquareMatrix:
         return SquareMatrix([[-(self[idx1][idx2]) for idx2 in range(self._dim)] for idx1 in range(self._dim)])
     def __eq__(self, other) -> bool:
@@ -705,6 +690,7 @@ class SquareMatrix:
         n = A.dim
         I = A.to_identity()
 
+        # TODO Change to regular matrix type and remove validate flag if safe
         aug = SquareMatrix([[0 for _ in range(2 * n)] for _ in range(n)], validate=False)
 
         for i in range(n):
@@ -824,9 +810,9 @@ class SquareMatrix:
         Ak = SquareMatrix([[A[r][c] for c in range(n)] for r in range(n)])
         I = SquareMatrix(size=n).to_identity()
         
-        max_iterations = 150
+        max_iters = 150
         
-        for _ in range(max_iterations):
+        for _ in range(max_iters):
             Q, R = SquareMatrix.__QR_decomp(Ak)
             
             Ak = R @ Q
@@ -841,8 +827,8 @@ class SquareMatrix:
             if off_diagonal_sum < EPSILON:
                 break
                 
-        eigenvalues = [Ak[i][i] for i in range(n)]
-        return eigenvalues, I
+        eigenvals = [Ak[i][i] for i in range(n)]
+        return eigenvals, I
     @property
     def eigen(self) -> tuple[list[float], SquareMatrix]:
         """
@@ -908,9 +894,8 @@ class SquareMatrix:
         return _nonzeros
     
     def to_identity(self) -> SquareMatrix:
-        """
-        Matrix constructor that returns the identity matrix of the given size.
-        """
+        """Matrix constructor that returns the identity matrix of the given size."""
+        
         matrix = SquareMatrix(size=self._dim)
         for idx in range(self._dim):    
             matrix[idx][idx] = 1
@@ -1011,7 +996,7 @@ class SquareMatrix:
 
 class D4Tensor:
     """
-    `DuraPy` `Tensor` Dataclass for Machine Learning.
+    `Tensor` Dataclass for Machine Learning.
     
     Args
     ----
@@ -1051,7 +1036,6 @@ class D4Tensor:
     def __abs__(self) -> float:
         return float(xp.linalg.norm(self.array))
 
-    
     def __add__(self, other) -> D4Tensor:
         if isinstance(other, D4Tensor):
             if self.dim != other.dim:
