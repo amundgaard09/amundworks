@@ -1,9 +1,9 @@
 """DuraPy package entrypoint."""
 
 from .src.uniCLI import uniCLI
-from .src.unicogni import unicogni 
-from .src.unicrypt import unicrypt 
-from .src.uniflight import uniflight 
+from .src.unicogni import unicogni
+from .src.unicrypt import unicrypt
+from .src.uniflight import uniflight
 from .src.unipower import unipower
 from .src.commons import constants, exceptions
 from .src.frameworks.color_sys import CMYK, HEX, RGB, color_text
@@ -19,15 +19,13 @@ from .src.uniphys import (
     quantum,
     thermodynamics,
 )
-from .src.frameworks.phys_dtypes import PhysicalConstant, Quantity, UNITS, Unit
-
+from .src.frameworks.phys_dtypes import PhysicalConstant, Quantity, UNITS, Unit # Change when quantity, constant, complexconstant, etc. systems are refactored
 __all__ = [
     "uniCLI",
     "unicogni",
     "unicrypt",
     "uniflight",
     "unipower",
-    "unispace",
     "constants",
     "exceptions",
     "RGB",
@@ -54,4 +52,4 @@ __all__ = [
     "Unit",
 ]
 
-__version__ = "0.0.1.7"
+__version__ = "0.0.1.8"

@@ -1,9 +1,9 @@
 """
 **The** `OLYMPUS` **Console** \n
 
-The **Olympus Interface** is a tool for elite athletes to log their training, recovery, and overall well-being in a structured way. 
-It provides a comprehensive overview of daily activities, training sessions, and upcoming events, 
-allowing athletes to track their progress and make informed decisions about their training and recovery strategies. 
+The **Olympus Interface** is a tool for elite athletes to log their training, recovery, and overall well-being in a structured way.
+It provides a comprehensive overview of daily activities, training sessions, and upcoming events,
+allowing athletes to track their progress and make informed decisions about their training and recovery strategies.
 
 ---
 
@@ -60,20 +60,23 @@ from src.modules.builders import (
     cli_create_training_block,
     cli_create_athlete_profile,
     cli_create_student_athlete_profile,
-    
+
     view_steps,
     view_exercises,
     view_sessions,
     view_day_plans,
-    view_week_plan,   
-    view_event, 
+    view_week_plan,
+    view_event,
     view_season_plan,
     view_training_block,
     view_athlete_profile,
     view_student_athlete_profile,
 )
 
-import json, time, datetime, questionary
+import json
+import time
+import datetime
+import questionary
 
 ### ------------------------------------------------------------------ ###
 
@@ -81,4 +84,4 @@ def console():
     pass
 
 if __name__ == "__main__":
-    cli_create_event() 
+    console()

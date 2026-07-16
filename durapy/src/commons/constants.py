@@ -1,27 +1,27 @@
 """
 The `DuraPy` Constants Library
 
-This module contains all the physical constants used in the `DuraPy` library, such as the gravitational constant, speed of light, and various planetary parameters. 
+This module contains all the physical constants used in the `DuraPy` library, such as the gravitational constant, speed of light, and various planetary parameters.
 The constants are stored as instances of the `PhysicalConstant` class, which includes the value, unit, and name of the constant.
 """
 
-# Alpha - A α, Beta - B β, Gamma - Γ γ, Delta - Δ δ,  Epsilon - E ε, Zeta - Z ζ, Eta - H η, 
-# Theta - Θ θ, Iota - I ι, Kappa - K κ, Lambda - Λ λ, Mu - M μ,      Nu - N ν,   Xi - Ξ ξ,  Omicron - O ο, 
+# Alpha - A α, Beta - B β, Gamma - Γ γ, Delta - Δ δ,  Epsilon - E ε, Zeta - Z ζ, Eta - H η,
+# Theta - Θ θ, Iota - I ι, Kappa - K κ, Lambda - Λ λ, Mu - M μ,      Nu - N ν,   Xi - Ξ ξ,  Omicron - O ο,
 # Pi - Π π,    Rho - P ρ,  Sigma - Σ σ ς, Tau - T τ,  Ypsilon - Y υ, Phi - Φ φ,  Chi - X χ, Psi - Ψ ψ, Omega - Ω ω
 
-from durapy.src.frameworks.phys_dtypes import PhysicalConstant, UNITS
+from ..frameworks.phys_dtypes import PhysicalConstant, UNITS
 
 # Mathematical Constants (Numerical/Unitless Constants - NCONST)
-I       = PhysicalConstant(1j,                 UNITS["NCONST"], "Imaginary Unit - sqrt(-1)")
 E       = PhysicalConstant(2.718281828459045,  UNITS["NCONST"], "Eulers Number")
 PI      = PhysicalConstant(3.141592653589793,  UNITS["NCONST"], "Pi - π")
 TAU     = PhysicalConstant(6.283185307179586,  UNITS["NCONST"], "Archimedes' Constant - τ - (AKA 2 * PI)")
 INF     = PhysicalConstant(float('inf'),       UNITS["NCONST"], "Positive Infinity")
 NINF    = PhysicalConstant(float('-inf'),      UNITS["NCONST"], "Negative Infinity")
+IMAG    = PhysicalConstant(1j,                 UNITS["NCONST"], "Imaginary Unit - sqrt(-1)")
 GOLDEN  = PhysicalConstant(1.618033988749895,  UNITS["NCONST"], "The Golden Ratio - φ,")
 EULMAS  = PhysicalConstant(0.5772156649015329, UNITS["NCONST"], "The Euler-Mascheroni Constant")
-FSTRUCT = PhysicalConstant(7.2973525693e-03,   UNITS["NCONST"], "Fine-Structure Constant") 
-   
+FSTRUCT = PhysicalConstant(7.2973525693e-03,   UNITS["NCONST"], "Fine-Structure Constant")
+
 # Gravitational Constants
 G       = PhysicalConstant(6.674e-11,       UNITS["GCONST"], "Gravitational Constant")
 
@@ -34,7 +34,7 @@ C       = PhysicalConstant(299792458,       UNITS["m/s"], "Speed of Light")
 MACH    = PhysicalConstant(343,             UNITS["m/s"], "Speed of Sound at sea level")
 
 # Length Constants
-PLANCKL = PhysicalConstant(1.616255e-35,    UNITS["m"], "Planck Length") 
+PLANCKL = PhysicalConstant(1.616255e-35,    UNITS["m"], "Planck Length")
 BOHR_R  = PhysicalConstant(5.291772109e-11, UNITS["m"], "The Bohr Radius")
 ASTUNIT = PhysicalConstant(1.496e+11,       UNITS["m"], "Astronomical Unit")
 LIGHTYR = PhysicalConstant(9.461e+15,       UNITS["m"], "Light year")
@@ -63,7 +63,7 @@ MOON_R  = PhysicalConstant(1.737e+6,  UNITS["m"],    "Radius of the Moon")
 MARS_R  = PhysicalConstant(3.390e+6,  UNITS["m"],    "Radius of Mars")
 SUN_R   = PhysicalConstant(6.957e+8,  UNITS["m"],    "Radius of the Sun")
 
-# TODO Sort and implement all units 
+# TODO Sort and implement all units
 HUBBLE           = PhysicalConstant(70.0,               UNITS["km/s/prsc"],  "Hubble Constant")
 #BOLTZMANN        = PhysicalConstant(1.380649e-23,      UNITS["J/K"],        "Boltzmann Constant")         # Relates the average relative kinetic energy of particles in a gas with the thermodynamic temperature of the gas.
 #GAS_CONSTANT     = PhysicalConstant(8.314462618,       UNITS["J/(mol*K)"],  "Universal Gas Constant")     # Work performed by one mole of a gas during a temperature change of 1 Kelvin at constant pressure.

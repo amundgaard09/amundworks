@@ -2,15 +2,15 @@
 The DuraPy UniCogni Package for Machine Learning.
 """
 
+from scipy import special
+from durapy.src.commons.constants import PI
+
 USE_GPU = False  # Set to True on CUDA-compatible machine
 
 if USE_GPU:
     import cupy as xp # type: ignore # 'xp' stands for cross-platform (numpy/cupy)
 else:
     import numpy as xp
-
-from scipy import special
-from ..commons.constants import PI
 
 ### ACTIVATION FUNCTIONS
 
@@ -97,7 +97,7 @@ def d_mish(x: xp.ndarray) -> xp.ndarray:
         ex = xp.exp(x)
     except OverflowError:
         return 1.0  # Becomes linear at large positive values
-    
+
     omega = 4.0 * (x + 1.0) + 4.0 * ex**2 + ex**3 + ex * (4.0 * x + 6.0)
     delta = 2.0 * ex + ex**2 + 2.0
     return (ex * omega) / (delta**2)
@@ -113,30 +113,27 @@ def mae(actual: xp.ndarray, pred: xp.ndarray) -> float:
     """Mean Absolute Error metric function"""
     if len(pred) != len(actual):
         raise ValueError("Loss functions must be given two equal-length arrays/lists!")
-    
+
     return sum(xp.abs(actual - pred)) / len(actual)
 def mse(actual: xp.ndarray, pred: xp.ndarray) -> float:
     """Mean Squared Error metric function"""
     if len(pred) != len(actual):
         raise ValueError("Loss functions must be given two equal-length arrays/lists!")
-    
-    return sum(xp.mean(actual - pred)**2) / len(actual)
+
+    return xp.mean((actual - pred) ** 2 ) / len(actual)
 def rmse(actual: xp.ndarray, pred: xp.ndarray) -> float:
     """Root Mean Squared Error metric function"""
     if len(pred) != len(actual):
         raise ValueError("Loss functions must be given two equal-length arrays/lists!")
-    
+
     return xp.sqrt(mse(actual, pred))
 
 def cross_entropy_loss(actual: xp.ndarray, pred: xp.ndarray) -> float:
     """Cross-entropy loss function for multi-class classification."""
     if len(pred) != len(actual):
         raise ValueError("Loss functions must be given two equal-length arrays/lists!")
-    
+
     array_len = actual.shape[0]
     clipped_pred = xp.clip(softmax(pred), 1e-15, 1 - 1e-15)
     log_likelihood = -(xp.log(clipped_pred[range(array_len), actual.argmax(axis=1)]))
     return xp.sum(log_likelihood) / array_len
-
-
-

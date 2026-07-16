@@ -32,7 +32,7 @@ int get_idx(DLList *l, int value) {
 
 int list_size(DLList *l) {
     return l->size;
-} 
+}
 
 void insert_at_front(DLList *l, int value) {
     Node* newNode = (Node*)malloc(sizeof(Node));
@@ -69,7 +69,7 @@ void insert_at_back(DLList *l, int value) {
     if (l->tail != NULL) {
         l->tail->next = newNode;
     } else {
-        l->head = newNode; 
+        l->head = newNode;
     }
 
     l->tail = newNode;
@@ -82,7 +82,7 @@ void print_list(DLList *l) {
     while (CurrentNode != NULL) {
         printf("%d", CurrentNode->data);
         if (CurrentNode->next != NULL) {
-            printf(", "); 
+            printf(", ");
         }
         CurrentNode = CurrentNode->next;
     }
@@ -123,7 +123,7 @@ void insert(DLList *l, int value, int Idx) {
         }
 
         CurrentNode = CurrentNode->next;
-        CurrentIdx++;   
+        CurrentIdx++;
     }
 }
 void list_remove(DLList *l, int Idx) {
@@ -162,12 +162,11 @@ void list_remove(DLList *l, int Idx) {
         }
 
         CurrentNode = CurrentNode->next;
-        CurrentIdx++;   
+        CurrentIdx++;
     }
 }
 void free_list(DLList *l) {
     Node* CurrentNode = l->head;
-    DLList *l;
 
     while (CurrentNode != NULL) {
         Node* NextToRemove = CurrentNode->next;

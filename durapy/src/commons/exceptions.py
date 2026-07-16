@@ -34,7 +34,7 @@ class UnknownSubCommand(Exception):
 class MissingSubCommand(Exception):
     """Raises when the subcommand is missing from a command string."""
     def __init__(self, module):
-        super().__init__(f"Missing subcommand for {module}")    
+        super().__init__(f"Missing subcommand for {module}")
 class MissingParameters(Exception):
     """Raises when a function is not given enough / too many parameters."""
     def __init__(self, *args):
@@ -42,7 +42,7 @@ class MissingParameters(Exception):
 class EmptyTokenList(Exception):
     """Raises when the TokenList passed into ValidateCommand() is empty."""
     def __init__(self):
-        super().__init__(f"Empty TokenList! Make sure of correct tokens before verification attempt.")
+        super().__init__("Empty TokenList! Make sure of correct tokens before verification attempt.")
 class InvalidColors(Exception):
     """Raises when the colors passed into ResistorInsight() are invalid for the given band."""
     def __init__(self, func: Callable, invalid_colors_indices: int):
@@ -50,13 +50,8 @@ class InvalidColors(Exception):
 class UnknownModule(Exception):
     """Raises when an unknown module gets caught in ValidateCommand()."""
     def __init__(self, given_module: str):
-        super().__init__(f"Unknown Module: {color_text(given_module, 'red')}") 
+        super().__init__(f"Unknown Module: {color_text(given_module, 'red')}")
 class InvalidInput(Exception):
     """Raises when an invalid input gets caught, e.g. a str for a wanted float."""
     def __init__(self, wanted_type: type, given_type: type):
-        super().__init__(f"Invalid Input: Wanted Type: {color_text(wanted_type, 'green')} Given Type: {color_text(given_type, 'red')}") 
-
-
-
-
-
+        super().__init__(f"Invalid Input: Wanted Type: {color_text(wanted_type, 'green')} Given Type: {color_text(given_type, 'red')}")

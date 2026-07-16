@@ -1,5 +1,6 @@
 
-import ssl, socket
+import ssl
+import socket
 
 def create_context(cafile: str = "server.crt") -> ssl.SSLContext:
 	"""Create and return an SSL context for a client."""

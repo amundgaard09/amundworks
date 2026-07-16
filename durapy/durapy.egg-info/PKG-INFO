@@ -1,3 +1,26 @@
+Metadata-Version: 2.4
+Name: durapy
+Version: 0.0.1.7
+Summary: DuraPy - Multi-disciplinary engineering software for STEMP workflows
+Author: Simon Stordal Amundgård
+License: MIT
+Project-URL: Homepage, https://github.com/amundgaard09/durendal
+Project-URL: Repository, https://github.com/amundgaard09/durendal
+Keywords: engineering,math,physics,science,python,cli,stemp
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: prompt_toolkit
+Requires-Dist: numpy
+Requires-Dist: sympy
+Dynamic: license-file
+
 # DuraPy - The Durendal Python Collection
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org)
@@ -37,8 +60,8 @@ Output:
 ```python
 from durapy import constants
 
-print(constants.PI)
-print(constants.C)
+print(constants.PI.value)
+print(constants.C.value)
 ```
 
 ## Suggested next improvements

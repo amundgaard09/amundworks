@@ -2,8 +2,8 @@
 This module contains the base classes for the custom data types used in the `DuraPy` library, such as the unit system, including `Unit`, `Quantity`, and `PhysicalConstant`.
 """
 
-# Alpha - A α, Beta - B β, Gamma - Γ γ, Delta - Δ δ,  Epsilon - E ε, Zeta - Z ζ, Eta - H η, 
-# Theta - Θ θ, Iota - I ι, Kappa - K κ, Lambda - Λ λ, Mu - M μ,      Nu - N ν,   Xi - Ξ ξ,  Omicron - O ο, 
+# Alpha - A α, Beta - B β, Gamma - Γ γ, Delta - Δ δ,  Epsilon - E ε, Zeta - Z ζ, Eta - H η,
+# Theta - Θ θ, Iota - I ι, Kappa - K κ, Lambda - Λ λ, Mu - M μ,      Nu - N ν,   Xi - Ξ ξ,  Omicron - O ο,
 # Pi - Π π,    Rho - P ρ,  Sigma - Σ σ ς, Tau - T τ,  Ypsilon - Y υ, Phi - Φ φ,  Chi - X χ, Psi - Ψ ψ, Omega - Ω ω
 
 from math import pi
@@ -19,11 +19,11 @@ class Unit:
         self.factor = factor
         self.offset = offset
 
-    def convert_to_base(self, value: float) -> float:
+    def convert_to_base(self, value: float | int | complex) -> float | int | complex:
         """Convert a value expressed in this unit to the canonical base value for the dimension."""
         return value * self.factor + self.offset
 
-    def convert_from_base(self, value: float) -> float:
+    def convert_from_base(self, value: float | int | complex) -> float | int | complex:
         """Convert a canonical base value back into this unit."""
         if self.factor == 0:
             raise ZeroDivisionError("Unit conversion factor cannot be zero.")
@@ -54,17 +54,17 @@ class Unit:
 class Quantity:
     """Base Class for storing values and their units."""
 
-    def __init__(self, value: float, unit: Unit):
+    def __init__(self, value: float | int | complex, unit: Unit):
         self._value = value
         self._unit = unit
 
     @property
-    def value(self) -> float:
+    def value(self) -> float | int | complex:
         """Return the numeric value of the quantity."""
         return self._value
 
     @value.setter
-    def value(self, value: float) -> None:
+    def value(self, value: float | int | complex) -> None:
         self._value = value
 
     @property
@@ -108,28 +108,28 @@ class Quantity:
     def __bool__(self) -> bool:
         return self._value != 0
 
-    def __neg__(self) -> float:
+    def __neg__(self) -> float | int | complex:
         return -self._value
 
-    def __abs__(self) -> float:
+    def __abs__(self) -> float | int | complex:
         return abs(self._value)
 
-    def __add__(self, other):
+    def __add__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return self._value + other._value
         return self._value + other
 
-    def __radd__(self, other):
+    def __radd__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return other._value + self._value
         return other + self._value
 
-    def __sub__(self, other):
+    def __sub__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return self._value - other._value
         return self._value - other
 
-    def __rsub__(self, other):
+    def __rsub__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return other._value - self._value
         return other - self._value
@@ -139,12 +139,12 @@ class Quantity:
             return self._value * other._value
         return self._value * other
 
-    def __rmul__(self, other):
+    def __rmul__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return other._value * self._value
         return other * self._value
 
-    def __truediv__(self, other):
+    def __truediv__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return self._value / other._value
         return self._value / other
@@ -154,7 +154,7 @@ class Quantity:
             return other._value / self._value
         return other / self._value
 
-    def __floordiv__(self, other):
+    def __floordiv__(self, other: float | int | complex) -> float | int | complex:
         if isinstance(other, self.__class__):
             return self._value // other._value
         return self._value // other
@@ -187,20 +187,20 @@ class Quantity:
 class PhysicalConstant(Quantity):
     """Physical Constant class for fixed constants that can't be changed nor converted."""
 
-    def __init__(self, value: float, unit: Unit, name: str):
+    def __init__(self, value: float | int | complex, unit: Unit, name: str) -> None:
         super().__init__(value, unit)
         self._name = name
 
     @property
     def name(self) -> str:
-        """Return the human-readable name of the constant."""
+        """Return the name of the constant."""
         return self._name
 
     @property
     def value(self) -> float:
         return self._value
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self._name}: {self._value} - {self._unit}"
 
     def __repr__(self) -> str:
@@ -321,4 +321,3 @@ UNITS: dict[str, Unit] = {
     "GCONST": Unit("Nm²/kg²", "The Gravitational Constant"),
     "NCONST": Unit("N/A", "Unit for Numerical / Unitless Constants"),
 }
-

@@ -20,7 +20,7 @@ KNOWN_UNITS = {
 
 # Helper dictionary for pretty printing exponents
 SUPERSCRIPTS = {
-    '-': '⁻', '0': '⁰', '1': '', '2': '²', '3': '³', 
+    '-': '⁻', '0': '⁰', '1': '', '2': '²', '3': '³',
     '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
 }
 
@@ -28,7 +28,7 @@ def format_exponent(exp: float) -> str:
     """Converts a number like -2 into a superscript string like ⁻²."""
     # Handle ints cleanly so 2.0 becomes ² instead of ².⁰
     val_str = str(int(exp)) if exp.is_integer() else str(exp)
-    if val_str == "1": 
+    if val_str == "1":
         return ""
     return "".join(SUPERSCRIPTS.get(char, char) for char in val_str)
 
@@ -36,11 +36,11 @@ def get_symbol(quantity: Quantity) -> str:
     # 1. Check if it's a known, named engineering unit
     if quantity.dimensions in KNOWN_UNITS:
         return KNOWN_UNITS[quantity.dimensions]
-    
+
     # 2. Dynamic fallback: Construct string from base elements (e.g., m·kg·s⁻²)
     positives = []
     negatives = []
-    
+
     for symbol, exp in zip(BASE_SYMBOLS, quantity.dimensions):
         if exp == 0:
             continue
@@ -48,7 +48,7 @@ def get_symbol(quantity: Quantity) -> str:
             positives.append(f"{symbol}{format_exponent(float(exp))}")
         else:
             negatives.append(f"{symbol}{format_exponent(float(exp))}")
-            
+
     # Combine them cleanly. Example output format: m·kg·s⁻²
     parts = positives + negatives
     return "·".join(parts) if parts else ""
@@ -71,7 +71,7 @@ class Quantity:
         elif isinstance(value, (int, float)):
             return self.value == value
         return NotImplemented
-    
+
     def __add__(self, other):
         if not isinstance(other, Quantity):
             raise TypeError("Cannot add a Quantity to a scalar.")
@@ -140,18 +140,18 @@ class Quantity:
         if self.dimensions != other.dimensions:
             raise ValueError(f"Cannot compare different dimensions: {self.dimensions} vs {other.dimensions}")
         return self.value < other.value
-            
+
 # Assuming you initialize base quantities using your dimensions:
 meter = Quantity(1.0, (1, 0, 0, 0, 0, 0, 0))
 kg = Quantity(1.0, (0, 1, 0, 0, 0, 0, 0))
 second = Quantity(1.0, (0, 0, 1, 0, 0, 0, 0))
 
 force = 10 * kg * (5 * meter / (second ** 2))
-print(force)  
+print(force)
 # Output: 50.0 N  (Recognized via KNOWN_UNITS)
 
 custom_rate = force / (meter ** 3)
-print(custom_rate)  
+print(custom_rate)
 # Output: 50.0 m⁻²·kg·s⁻² (Dynamically built fallback string)
 
 # Comparison enforcement

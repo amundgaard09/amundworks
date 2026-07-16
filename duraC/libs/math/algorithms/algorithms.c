@@ -1,11 +1,10 @@
 /* ALGORITHMS LIBRARY - DURENDAL ENGINEERING - V.1 */
 
-#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include "../../types/dl_list/dllist.h"
 
-// Check if `Number` is prime via trial division up to the square root of `Number` 
+// Check if `Number` is prime via trial division up to the square root of `Number`
 bool is_prime(int Number) {
     if (Number <= 1) {
         return false;
@@ -14,7 +13,7 @@ bool is_prime(int Number) {
     for (int i = 2; i * i < Number; ++i) {
         if (Number % i == 0) {
             return false;
-        } 
+        }
     }
     return true;
 }

@@ -1,10 +1,11 @@
 """
-The Vanguard Wikipedia API Pagefinder system. 
+The Vanguard Wikipedia API Pagefinder system.
 
 This file (or more precisesly a script) finds the wikipedia page for the query, and saves the entire page to a Markdown file.
 """
 
-import json, datetime
+import json
+import datetime
 
 from hashlib import sha256
 from pathlib import Path
@@ -22,9 +23,9 @@ _ARTICLE_JSON_DIR = __DATA_PATH / "articles"
 _MARKDOWN_DIR = __DATA_PATH / "markdown"
 _TEMPLATE_DIR = __DATA_PATH / "templates"
 
-def insert_json(path_to_json: str, content_dict: dict) -> bool:
+def insert_json(path_to_json: Path, content_dict: dict) -> bool:
     """Inserts a dictionary into a `JSON` file. If the file does not exist, it creates it."""
-    
+
     try:
         with open(path_to_json, "w", encoding="utf-8") as JSONFile:
             json.dump(content_dict, JSONFile, indent=4, sort_keys=True)
@@ -41,36 +42,38 @@ def get_page(query: str, _wiki: Wikipedia) -> WikipediaPage:
     return page
 def get_source(source: Any) -> str:
     if isinstance(source, WikipediaPage):
-        return "Wikipedia"  
+        return "Wikipedia"
+    else:
+        return "Unknown"
 def parse(query: str) -> str:
-    return query.strip().replace(" ", "_")
+    return query.strip().replace(" ", "_").lower()
 
 def main(page: WikipediaPage) -> None:
     """
     The Pagefinder Main Function
-    
-    The Pagefinder is responsible for finding the Wikipedia page for the given query, and saving the entire page to a Markdown file. 
+
+    The Pagefinder is responsible for finding the Wikipedia page for the given query, and saving the entire page to a Markdown file.
     It also creates an `Article` object for the page, and saves it as a JSON file for later retrieval and indexing.
-    """  
-    
+    """
+
     if page.exists():
         content, title = page.text, page.title
         uniCLI.console_print("PAGEFINDER", "white", f"Found Wikipedia page: {title}", "green")
-    
+
     else:
         uniCLI.console_print("PAGEFINDER", "white", "No Wikipedia page found.", "red")
         return
-    
+
     try:
-        jsonpath = (_ARTICLE_JSON_DIR + "\\" + parse(title) + ".json").lower()
-        mdpath = (_MARKDOWN_DIR + "\\" + parse(title) + ".md").lower()
-            
+        jsonpath = (_ARTICLE_JSON_DIR / "\\" / parse(title) / ".json")
+        mdpath = (_MARKDOWN_DIR / "\\" / parse(title) / ".md")
+
         article = Article(
-                name=title, 
-                idstr=sha256(title.encode()).hexdigest(), 
-                title=parse(title), 
-                contentpath=Path(mdpath), 
-                links=[], 
+                name=title,
+                idstr=sha256(title.encode()).hexdigest(),
+                title=parse(title),
+                contentpath=Path(mdpath),
+                links=[],
                 metadata = Metadata(
                     source     = get_source(page),
                     url        = page.fullurl,
@@ -83,7 +86,7 @@ def main(page: WikipediaPage) -> None:
 
         md_compile(title, page, Path(_MARKDOWN_DIR))
         insert_json(jsonpath, article.to_dict())
-            
+
     except FileExistsError:
         uniCLI.console_print("PAGEFINDER", "white", "File already exists! Use the search engine instead", "red")
     except Exception as e:

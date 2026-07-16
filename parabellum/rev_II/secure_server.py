@@ -1,5 +1,6 @@
 
-import ssl, socket
+import ssl
+import socket
 
 HOST = '0.0.0.0'
 PORT = 65432
@@ -34,7 +35,7 @@ def secure_server_kernel(host: str, port: int, certfile: str, keyfile: str) -> N
             newsocket, _ = bind_socket.accept()
             ssl_socket = ssl_context.wrap_socket(newsocket, server_side=True)
             handle_client(ssl_socket)
-            
+
         except Exception as e:
             print(f"Connection error: {e}")
 

@@ -1,18 +1,21 @@
 """
-The `DuraPy` `UniCLI` module. 
-This module contains the standard command-line interface framework from the `DuraPy` library. 
-It provides the necessary functions and classes to create a command-line interface for the `DuraPy` library, 
+The `DuraPy` `UniCLI` module.
+This module contains the standard command-line interface framework from the `DuraPy` library.
+It provides the necessary functions and classes to create a command-line interface for the `DuraPy` library,
 including command parsing, argument validation, and command dispatching.
 """
 
-import os, time, shlex, inspect, subprocess
+import os
+import shlex
+import inspect
 
 from typing import Callable
+
 from prompt_toolkit.completion import NestedCompleter
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from ..frameworks.color_sys import color_text
 from ..commons import exceptions
- 
+
 class ExitEnvironmentSignal(Exception):
     """Raise when the user wants to return to MAINEnv."""
     def __init__(self):
@@ -23,36 +26,38 @@ class CommandMap:
 class ArgumentMap:
     def __init__(self):
         pass
-        
+
 def exit_env() -> None:
     """Exit the current environment and return to MAINEnv."""
     raise ExitEnvironmentSignal
 def gen_completer(Map: dict[str, dict]) -> NestedCompleter:
     """Generate a `NestedCompleter` dict with parameter names for each function."""
-    
+
     completer_dict = {}
-    
+
     for module, subcmd in Map.items():
         completer_dict[module] = {}
         for subcmd_name, cmd_func in subcmd.items():
             sig = inspect.signature(cmd_func)
             completer_dict[module][subcmd_name] = {param: None for param in sig.parameters}
-    
+
     return NestedCompleter.from_nested_dict(completer_dict)
-def tokenize(raw_cmd_str: str) -> list[str]:
+
+def tokenize(raw_cmd_str: str) -> tuple[str, str | list[float]]:
     """Tokenize a raw command string and return token list."""
     tokens = shlex.split(raw_cmd_str)
-    proc_tokens = [] # Processed tokens
+    proc_tokens: list[str | tuple[float]] = [] # Processed tokens
     for token in tokens:
         if token.startswith("[") and token.endswith("]"):
-            proc_val = [float(x.strip()) for x in token.strip("[]").split(",") if x.strip()]
+            proc_val = tuple(float(x.strip()) for x in token.strip("[]").split(",") if x.strip())
             proc_tokens.append(proc_val)
         else:
             proc_tokens.append(token)
-    return proc_tokens
+    return tuple(proc_tokens)
+
 def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_map: dict[str, dict[str, set]]) -> Callable:
     """The main dispatcher function that takes in a raw command string, tokenizes it, verifies the tokens, validates the arguments and dispatches the command to the correct function."""
-    tokens = tokenize(raw_cmd_str) 
+    tokens = tokenize(raw_cmd_str)
     validate_command(tokens, cmd_map, arg_map)
     module, cmd, raw_args = tokens[0], tokens[1], tokens[2:]
     args = []
@@ -61,12 +66,13 @@ def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_ma
             args.append(None)
         else:
             try:
-                args.append(float(arg))
+                args.append(float(arg) if isinstance(arg, str) else (float(arg) for arg in raw_args))
             except ValueError:
                 args.append(arg)
-            
+
     return cmd_map[module][cmd](*args)
-def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
+
+def validate_command(tokens: list[str | list[float]], cmd_map: dict, arg_map: dict) -> None:
     if not tokens:
         raise exceptions.EmptyTokenList
 
@@ -88,7 +94,7 @@ def validate_command(tokens: list, cmd_map: dict, arg_map: dict) -> None:
 def clear_terminal() -> None:
     """Clear the terminal screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
-    
+
 def console_msg(sender: str, sender_color: str, info: str, info_color: str = "white") -> str:
     return f"[{color_text(sender, sender_color)}] >>> {color_text(info, info_color)}"
 
@@ -131,22 +137,22 @@ class Console:
         """Kicks off a task. Names must be unique if running concurrently."""
         if name in self.active_tasks:
             raise ValueError(f"Task '{name}' is already running.")
-            
+
         task_id = self.progress.add_task(description=f"Starting task: {name} ...", total=None)
         self.active_tasks[name] = task_id
 
     def end_task(self, name: str, success: bool = True, error_msg: str = None):
         """Resolves any specific task by its unique name, regardless of order."""
         task_id = self.active_tasks.pop(name, None)
-        
+
         if task_id is None:
             raise KeyError(f"No active task found with the name '{name}'.")
-        
+
         if success:
             status_text = f"Starting task: {name} ... [bold green]Finished![/bold green]"
         else:
             status_text = f"Starting task: {name} ... [bold red]Failed![/bold red]" + (f" Error: {error_msg}" if error_msg else "")
-            
+
         self.progress.update(task_id, description=status_text, completed=True)
 
     def print(self, text, style):

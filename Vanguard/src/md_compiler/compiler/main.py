@@ -13,9 +13,9 @@ def check_if_article_exists(name: str, path: Path) -> bool:
     """Checks if an article with the given name already exists in the specified path."""
     full_path = path / f"{name}.md"
     exists = full_path.exists()
-    
+
     uniCLI.console_print("ARTICLE CHECKER", "white", f"Article '{name}' exists: {exists}", "green" if exists else "red")
-    
+
     return exists
 
 def render_sections(sections: list[WikipediaPageSection], level: int = 2) -> str:
@@ -32,13 +32,13 @@ def render_sections(sections: list[WikipediaPageSection], level: int = 2) -> str
 
 def preprocess_to_page_ir(page: WikipediaPage) -> PageIR:
     """
-    Preprocesses the Wikipedia page into a `PageIR`, which is an intermediate representation of the page that contains the title, summary, text, links, headings, and sections. 
-    
+    Preprocesses the Wikipedia page into a `PageIR`, which is an intermediate representation of the page that contains the title, summary, text, links, headings, and sections.
+
     This will be used for further processing and formatting into Markdown.
     """
-    
+
     uniCLI.console_print("IR PREPROCESSOR", "white", "Preprocessing page to PageIR...", "green")
-    
+
     return PageIR(
         title=page.title,
         summary=page.summary,
@@ -48,7 +48,7 @@ def preprocess_to_page_ir(page: WikipediaPage) -> PageIR:
         headings=[],
         sections=page.sections
     )
-    
+
 def extract_links(ir: PageIR, page: WikipediaPage) -> PageIR:
     """Extracts links from the page and adds them to the PageIR."""
     uniCLI.console_print("LINK EXTRACTOR", "white", "Extracting links...", "green")
@@ -79,11 +79,11 @@ def format_page(ir: PageIR) -> str:
 
 def inject_wikilinks(IR: PageIR) -> str:
     """Injects wikilinks into the Markdown text by wrapping link terms in double square brackets. This is a simple heuristic that may not be perfect, but it attempts to identify linkable terms and mark them for later processing."""
-    
+
     uniCLI.console_print("LINK INJECTOR", "white", "Injecting wikilinks into Markdown document...", "green")
-    
+
     text = IR.markdown_text
-    
+
     link_set = set(IR.links)
     seen = set()
 
@@ -114,11 +114,11 @@ def split_into_sections(IR: PageIR) -> str:
     Restore Markdown section structure after link injection.
     If whitespace is preserved by inject_wikilinks, this will leave the text unchanged.
     """
-    
+
     text = IR.markdown_text
 
     uniCLI.console_print("SECTION SPLITTER", "white", "Splitting text into sections...", "green")
-    
+
     if "\n" in text:
         return text
 
@@ -133,7 +133,7 @@ def save_markdown(IR: PageIR, name: str, path: Path) -> None:
     uniCLI.console_print("MD SAVER", "white", f"Saving Markdown to {path}...", "green")
     """Saves the given Markdown content to the specified path."""
     full_path = path / f"{name}.md"
-    
+
     if full_path.exists():
         continue_ = uniCLI.console_confirm("MD SAVER", "white", f"Warning: File '{full_path}' already exists and will be overwritten. Overwrite? (y/n)", "yellow")
         if not continue_:
@@ -141,29 +141,26 @@ def save_markdown(IR: PageIR, name: str, path: Path) -> None:
             return
         else:
             uniCLI.console_print("MD SAVER", "white", "Proceeding...", "green")
-    
+
     full_path.write_text(IR.markdown_text, encoding="utf-8")
 
 def main(name: str, page: WikipediaPage, path: Path) -> None:
     """
-    The Markdown Compiler Pipeline (MDC) 
-    
-    MDC takes a Wikipedia page and compiles it into a structured Markdown document. 
+    The Markdown Compiler Pipeline (MDC)
+
+    MDC takes a Wikipedia page and compiles it into a structured Markdown document.
     It processes the page to extract the title, summary, links, and headings, formats this information into Markdown, and saves it to the specified path.
     """
-    
+
     uniCLI.console_print("MDC PIPELINE", "white", "MDC Pipeline initialized... ", "green")
-    
+
     IR = preprocess_to_page_ir(page)
     IR = extract_links(IR, page)
     IR = extract_headings(IR)
     IR.markdown_text = format_page(IR)
     IR.markdown_text = inject_wikilinks(IR)
     IR.markdown_text = split_into_sections(IR)
-    
-    save_markdown(IR, name, path)
-    
-    uniCLI.console_print("MDC PIPELINE", "white", "MDC Pipeline finished... ", "green")
-    
 
-    
+    save_markdown(IR, name, path)
+
+    uniCLI.console_print("MDC PIPELINE", "white", "MDC Pipeline finished... ", "green")
