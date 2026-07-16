@@ -17,15 +17,15 @@ class ExecutionEngine:
     @runtime_log
     def __init__(self, console: Console, server: MCPServer) -> None:
         """The Icarus Execution Engine"""
-        
-        console.start_task("Starting ExecutionEngine")        
-        
+
+        console.start_task("Starting ExecutionEngine")
+
         self.server = server
-        
-        console.end_task("Starting ExecutionEngine", success=True)    
-    
+
+        console.end_task("Starting ExecutionEngine", success=True)
+
     def __repr__(self):
-        return f"ExecutionEngine()"
+        return "ExecutionEngine()"
 
     @staticmethod
     def handle_unknown() -> str: # Add closest function system
@@ -34,14 +34,12 @@ class ExecutionEngine:
     @runtime_log
     def respond(self, call: ToolCall) -> Response:
         """Return a `Response`-instance to the `Query`. Part of the Execution Engine."""
-    
+
         mcp_tool = self.server.load_tool(call.tool_name)
         func, kwargs = mcp_tool.execute, call.arguments
         text = func(**kwargs) if kwargs else func()
-    
+
         return Response(
             text=text,
             emotions=EmotionMatrix()
         )
-
-    

@@ -26,19 +26,19 @@ load_dotenv(Path(__file__).resolve().parents[3] / ".env", verbose=True, encoding
 # Initializers
 elevenlabs = ElevenLabs(api_key=environ.get("ELEVENLABS_API_KEY"))
 
-class FeedbackEngine:    
+class FeedbackEngine:
     @runtime_log
     def __init__(self, console: Console) -> None:
         """The Feedback Engine for ICARUS. This Engine handles speech, visualizations, and more."""
-        
+
         console.start_task("Starting FeedbackEngine")
-        
+
         # INIT LOGIC
-        
+
         console.end_task("Starting FeedbackEngine", success=True)
 
     def __repr__(self):
-        return f"FeedbackEngine()"
+        return "FeedbackEngine()"
 
     @staticmethod
     def play_audio(audio_bytes: bytes) -> None:
@@ -63,7 +63,7 @@ class FeedbackEngine:
                 speed = 0.95,
             )
         )
-    
+
         audio_stream = BytesIO()
         for chunk in speech:
             if chunk:
@@ -75,4 +75,3 @@ class FeedbackEngine:
         print(response)
         if "Goodbye" in response.text:
             exit(1)
-  

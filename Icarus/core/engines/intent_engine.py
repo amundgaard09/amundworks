@@ -20,20 +20,20 @@ class IntentEngine:
     @runtime_log
     def __init__(self, console: Console, server: MCPServer) -> None:
         """
-        IntentEngine class for the ICARUS Complex. 
-    
+        IntentEngine class for the ICARUS Complex.
+
         This class unifies all resources that the Intent Engine provides, such as MCP services, query processing, and more.
         """
-        
+
         console.start_task("Starting IntentEngine")
 
         self.server = server
         self.tools = self.server.build_registry()
-    
+
         console.end_task("Starting IntentEngine", success=True)
-    
+
     def __repr__(self) -> str:
-        return f"IntentEngine()"
+        return "IntentEngine()"
 
     @staticmethod
     def normalize(query: Query) -> Query:
@@ -43,14 +43,14 @@ class IntentEngine:
         )
 
     @staticmethod
-    def is_chat_like(text: str) -> bool: 
+    def is_chat_like(text: str) -> bool:
         CHAT_SEEDS = ["hello", "hi", "hey", "what's up", "how are you"]
         return any(seed in text.lower() for seed in CHAT_SEEDS)
 
     @runtime_log
     def select_tool(self, query: Query) -> tuple[MCPTool, float]:
         """Select a tool from the `TOOL_REGISTRY` that matches the query best."""
-    
+
         # Initialization
         best_tool: MCPTool = None
         best_score: float = 0.0
@@ -63,7 +63,7 @@ class IntentEngine:
             for alias in tool.aliases:
                 if alias in query.text:
                     score += 1
-                
+
                 # Fuzzy matching for aliases
                 else:
                     score += SequenceMatcher(None, alias, query.text).ratio() * 0.3
@@ -75,7 +75,7 @@ class IntentEngine:
             if score > best_score:
                 best_score = score
                 best_tool = tool
-    
+
         # No tool fallback
         if best_tool is None:
             return self.tools["fallback"], 0.0
@@ -90,7 +90,7 @@ class IntentEngine:
     def extract_args(self, query: Query, tool: MCPTool) -> dict:
         """Extract arguments for a tool based on its `InputSchema`"""
         args = {}
-    
+
         if tool.input_schema is None:
             return None
 
@@ -112,7 +112,7 @@ class IntentEngine:
     @runtime_log
     def process(self, query: Query) -> ToolCall:
         """Process a Query and return a `ToolCall`"""
-    
+
         query = self.normalize(query)
         best_tool, best_score = self.select_tool(query)
         args = self.extract_args(query, best_tool)
