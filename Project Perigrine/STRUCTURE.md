@@ -16,8 +16,8 @@ Empty: `null` / `none`
 ### Data Structures
 
 Text: `string` `(str)`  
-Collections: `dict`, `hashset`, `array`, `vector`, `tree`, `list`, `graph`, `queue`, `stack`
-Math/Physics: `matrix`, `tensor`
+Collections: `dict`, `hashset`, `array`, `tree`, `list`, `graph`, `queue`, `stack`
+Math/Physics: `vector`, `matrix`, `tensor`
 
 ## Keywords
 

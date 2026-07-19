@@ -4,8 +4,8 @@ The Nuclear Physics module for `DuraPy` `UniPhys`
 This module contains resources for calculations and simulations for Nuclear Physics.
 """
 
-from ..frameworks.numval_types import Quantity
-from ..commons.constants import E
+from ..shared.numval_types import Quantity
+from ..shared.constants import E
 
 def radioactive_decay(initial_quantity: float, decay_const: float, time: float) -> Quantity:
     """Returns the remaining quantity of a radioactive substance after a given time, based on its initial quantity and decay constant."""

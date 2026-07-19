@@ -46,7 +46,7 @@ class MCPServer:
         if not py_path.exists():
             raise MissingFileError(py_path)
 
-        modspec: ModuleSpec = importlib.util.spec_from_file_location(
+        modspec = importlib.util.spec_from_file_location(
             "skill_module",
             py_path
         )
@@ -64,7 +64,7 @@ class MCPServer:
         return module
 
     @runtime_log
-    def build_input_schema(self, schema_dict: dict[str, dict]) -> InputSchema:
+    def build_input_schema(self, schema_dict: dict[str, dict] | None) -> InputSchema | None:
         """
         Build input schema, consisting of a list of `MCPProperty` objects.
 

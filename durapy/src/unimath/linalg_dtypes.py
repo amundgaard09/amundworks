@@ -21,7 +21,7 @@ import random
 from typing import overload
 
 from typing_extensions import Sequence # type: ignore
-from ..shared.exceptions import MissingParameters
+from ..shared.exceptions import ArgumentError
 from .decorators import requires_square#, requires_real
 
 USE_GPU = False
@@ -213,7 +213,7 @@ class Matrix:
                 raise ValueError("Matrix must be rectangular and non-empty")
 
         if not shape and not array:
-            raise MissingParameters("Missing array and size parameters! Matrix() needs atleast 1!")
+            raise ArgumentError("Missing array and size parameters! Matrix() needs atleast 1!")
 
         if array is not None:
             if len(array) == 0 or any(len(row) != len(array[0]) for row in array):

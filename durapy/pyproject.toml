@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "durapy"
-version = "0.0.1.7"
-description = "DuraPy - Multi-disciplinary engineering software for STEMP workflows"
+version = "0.0.1.9"
+description = "DuraPy - Multi-disciplinary engineering software for STEM workflows"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-keywords = ["engineering", "math", "physics", "science", "python", "cli", "stemp"]
+keywords = ["engineering", "math", "physics", "science", "python", "cli", "stem"]
 authors = [{name = "Simon Stordal Amundgård"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -22,8 +22,11 @@ classifiers = [
 ]
 dependencies = [
     "prompt_toolkit",
+    "questionary",
     "numpy",
+    "scipy",
     "sympy",
+    "rich",
 ]
 
 [project.urls]

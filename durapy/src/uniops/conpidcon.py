@@ -21,16 +21,15 @@ class ContinuousPIDController:
 
         error = self.setpoint - measured_value
 
-        P = self.kp * error
-        
+        p = self.kp * error
+
         self.integral += error * dt
-        I = self.ki * self.integral
+        i = self.ki * self.integral
 
         derivative = (error - self.prev_error) / dt if dt > 0 else 0
-        D = self.kd * derivative
+        d = self.kd * derivative
 
         self.prev_error = error
         self.prev_time = now
 
-        return P + I + D  
-
+        return p + i + d

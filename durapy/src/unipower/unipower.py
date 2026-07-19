@@ -8,18 +8,19 @@ import math
 import types
 import typing
 
-from ..frameworks.color_sys import ANSI_COLORS
-from ..frameworks.numval_types import Quantity
-from ..commons.constants import (
+from ..shared.color_sys import ANSI_COLORS
+from ..shared.numval_types import Quantity
+from ..shared.constants import (
     OHM,
-    SECOND,
     VOLT,
     WATT,
+    SECOND,
 )
-from ..commons.exceptions import (
-    InconsistencyError,
+from ..shared.exceptions import (
+    ArgumentError,
     InvalidColors,
-    MissingParameters
+    InconsistencyError,
+
 )
 
 BANDS: types.MappingProxyType[str, int] = types.MappingProxyType({
@@ -66,12 +67,12 @@ def ohms_law(v: float | None = None, i: float | None = None, r: float | None = N
 
     if v is None:
         if i is None or r is None:
-            raise MissingParameters(ohms_law, missing)
+            raise ArgumentError(ohms_law, missing)
         v = i * r
 
     elif i is None:
         if r is None:
-            raise MissingParameters(ohms_law, missing)
+            raise ArgumentError(ohms_law, missing)
         i = v / r
 
     elif r is None:
@@ -98,12 +99,12 @@ def power_dissipation(v: float | None = None, i: float | None = None, r: float |
 
     if v is None:
         if i is None or r is None:
-            raise MissingParameters(power_dissipation, missing)
+            raise ArgumentError(power_dissipation, missing)
         return Quantity(i ** 2 * r, WATT)
 
     elif i is None:
         if r is None:
-            raise MissingParameters(power_dissipation, missing)
+            raise ArgumentError(power_dissipation, missing)
         return Quantity(v ** 2 / r, WATT)
 
     elif r is None:

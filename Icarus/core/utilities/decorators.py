@@ -1,14 +1,14 @@
 
-import functools
 import time
 
 from core.utilities.txtfiletools import log as dec_log
+from functools import wraps
 from typing import Callable
 
 def runtime_log(func: Callable[..., object]):
     """A decorator that logs function arguments, execution time, and errors."""
 
-    @functools.wraps(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         dec_log(f"Starting {func.__name__}() with args={args}, kwargs={kwargs} \n")
 

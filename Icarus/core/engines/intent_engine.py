@@ -52,7 +52,7 @@ class IntentEngine:
         """Select a tool from the `TOOL_REGISTRY` that matches the query best."""
 
         # Initialization
-        best_tool: MCPTool = None
+        best_tool: MCPTool | None = None
         best_score: float = 0.0
 
         # Iterate over all tools in the registry

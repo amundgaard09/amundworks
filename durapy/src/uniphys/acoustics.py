@@ -1,13 +1,12 @@
 """
 The Acoustic Physics module for `AWPC` `UniPhys`
 
-This module contains resources for calculations and simulations for Acoustic Physics. 
+This module contains resources for calculations and simulations for Acoustic Physics.
 """
 
 import math
 
-from durapy.src.frameworks.phys_dtypes import Quantity, UNITS
-from durapy.src.commons.constants import MACH
+from ..shared.constants import MACH
 
 def sound_speed(temp: float, γ: float = 1.4, molar_mass: float = 0.02897) -> float:
     """Calculate the speed of sound in a gas given the temperature, adiabatic index (gamma), and molar mass."""
@@ -20,10 +19,10 @@ def intensity_level(intensity: float, reference_intensity: float = 1e-12) -> flo
     """Calculate the intensity level in decibels (dB) given the intensity and reference intensity."""
     return 10 * math.log10(intensity / reference_intensity)
 
-def frequency_from_wavelength(wavelength: float, speed_of_sound: float = MACH) -> float:
+def frequency_from_wavelength(wavelength: float, speed_of_sound: float = MACH.value) -> float:
     """Calculate the frequency of a sound wave given its wavelength and the speed of sound."""
     return speed_of_sound / wavelength
-def wavelength_from_frequency(freq: float, speed_of_sound: float = MACH) -> float:
+def wavelength_from_frequency(freq: float, speed_of_sound: float = MACH.value) -> float:
     """Calculate the wavelength of a sound wave given its frequency and the speed of sound."""
     return speed_of_sound / freq
 
@@ -41,10 +40,9 @@ def pressure_to_decibel(pressure: float, reference_pressure: float = 20e-6) -> f
     """Convert a pressure to decibels (dB) given a reference pressure."""
     return 20 * math.log10(pressure / reference_pressure)
 
-def sound_intensity(pressure: float, speed_of_sound: float = MACH, density: float = 1.225) -> float:
+def sound_intensity(pressure: float, speed_of_sound: float = MACH.value, density: float = 1.225) -> float:
     """Calculate the sound intensity given the pressure, speed of sound, and density of the medium."""
     return (pressure ** 2) / (speed_of_sound * density)
-def sound_pressure(intensity: float, speed_of_sound: float = MACH, density: float = 1.225) -> float:
+def sound_pressure(intensity: float, speed_of_sound: float = MACH.value, density: float = 1.225) -> float:
     """Calculate the sound pressure given the intensity, speed of sound, and density of the medium."""
     return (intensity * speed_of_sound * density) ** 0.5
-

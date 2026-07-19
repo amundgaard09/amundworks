@@ -19,6 +19,7 @@ F_1, F_2, F_3, F_4 = Fraction(-1), Fraction(-2), Fraction(-3), Fraction(-4)
 
 # ISO Base Units - Scale: 1
 NUMERICAL = Unit(symbol="NUM", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
+
 METER     = Unit(symbol="M",   dimension=Dimension((F1, F0, F0, F0, F0, F0, F0)), scale=1) # L
 KILOGRAM  = Unit(symbol="KG",  dimension=Dimension((F0, F1, F0, F0, F0, F0, F0)), scale=1) # M
 SECOND    = Unit(symbol="S",   dimension=Dimension((F0, F0, F1, F0, F0, F0, F0)), scale=1) # T
@@ -31,11 +32,12 @@ PASCAL = Unit(symbol="Pa",  dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) 
 PSI    = Unit(symbol="psi", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
 BAR    = Unit(symbol="bar", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
 
-GCONST  = Unit(symbol="UNI_G", dimension=Dimension((F3, F_1, F_2, F0, F0, F0, F0))) # L^3 / M * T^2
+G       = Unit(symbol="UNI_G", dimension=Dimension((F3, F_1, F_2, F0, F0, F0, F0))) # L^3 / M * T^2
 GRAVITY = Unit(symbol="G",   dimension=Dimension((F1, F0, F_2, F0, F0, F0, F0))) # L / T^2
 
-NEWTON  = Unit(symbol="N", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
-JOULE   = Unit(symbol="J", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))) # L^2 * M / T^2
+NEWTON    = Unit(symbol="N", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
+JOULE      = Unit(symbol="J", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))) # L^2 * M / T^2
+NEWTONMETER = Unit(symbol="Nm", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))) # L^2 * M / T^2
 
 COULOMB = Unit(symbol="C", dimension=Dimension((F0,  F0,  F1,  F1,  F0, F0, F0))) # I * T
 FARAD   = Unit(symbol="F", dimension=Dimension((F_2, F_1, F4,  F2,  F0, F0, F0))) # T^4 * I^2 / L^2 * M
@@ -45,11 +47,14 @@ OHM     = Unit(symbol="Ω", dimension=Dimension((F2,  F1,  F_3, F_2, F0, F0, F0)
 
 HERTZ = Unit(symbol="Hz", dimension=Dimension((F0, F0, F_1, F0, F0, F0, F0))) # 1 / T
 
+DEGREE    = Unit(symbol="deg", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
+RADIAN    = Unit(symbol="rad", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
+
 #Derived units
 MPS = METER / SECOND # L / T
 
 # Universal Gravitational Constant
-UNI_G = Constant(Quantity(6.74e-11, GCONST), name="Gravitational Constant") # L^3 / M * T^2
+UNI_G = Constant(Quantity(6.74e-11, G), name="Gravitational Constant") # L^3 / M * T^2
 
 # Mathematical/Dimensionless Constants
 E       = Constant(Quantity(2.718281828459045,  NUMERICAL), name="Eulers Number")
@@ -114,7 +119,7 @@ PLANCKR = Constant(Quantity(1.054571817e-34, JOULE), name="Reduced Planck Consta
 # Vacuum-related Constants
 VAC_PERMEABILITY = Constant(Quantity(1.25663706127e-06, NEWTON / AMPERE**2), name="Vacuum Permeability") # Measure of the resistance encountered when forming a magnetic field in a vacuum; also known as the magnetic constant.
 VAC_PERMITTIVITY = Constant(Quantity(8.8541878128e-12,  FARAD / METER), name="Vacuum Permittivity") # Capability of a vacuum to permit electric field lines; also known as the electric constant.
-VAC_IMPEDANCE = Constant(Quantity(376.730313412, OHM),             name="Vacuum Impedance")   # Ratio of the magnitudes of the electric and magnetic fields in an electromagnetic wave traveling through a vacuum.
+VAC_IMPEDANCE    = Constant(Quantity(376.730313412, OHM),             name="Vacuum Impedance")   # Ratio of the magnitudes of the electric and magnetic fields in an electromagnetic wave traveling through a vacuum.
 
 # Miscellaneous Constants
 STEFAN_BOLTZMANN = Constant(Quantity(5.670374419e-08, WATT / (METER**2 * KELVIN**4)), name="Stefan-Boltzmann Constant")  # Constant of proportionality in the Stefan-Boltzmann law relating total energy radiated per unit surface area of a black body.

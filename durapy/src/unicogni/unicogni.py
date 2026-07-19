@@ -3,7 +3,7 @@ The DuraPy UniCogni Package for Machine Learning.
 """
 
 from scipy import special
-from ..commons.constants import PI
+from ..shared.constants import PI
 
 USE_GPU = False  # Set to True on CUDA-compatible machine
 

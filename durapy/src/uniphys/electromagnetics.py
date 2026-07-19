@@ -31,7 +31,7 @@ _WAVLN_EM_SPEC: dict[tuple[float, float], str | dict] = {
     (400, 700): __WAVLN_VSBL_SPEC,
     (700, 1e6): "Infrared Light",
     (1e7, 1e10): "Micro Wave",
-    (1e10, INF): "Radio Wave",
+    (1e10, INF.value): "Radio Wave",
 }
 
 def _spectrum_label(λ: float, spectrum_map: dict[tuple[float, float], str | dict]) -> str:

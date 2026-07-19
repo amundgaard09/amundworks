@@ -27,18 +27,18 @@ class PerceptionEngine:
     @runtime_log
     def __init__(self, console: Console) -> None:
         """The ICARUS Perception Engine"""
-        
-        console.start_task("Starting PerceptionEngine")        
-        
+
+        console.start_task("Starting PerceptionEngine")
+
         self.queue = Queue()
         self.model = Model(str(_SPEECH_MODEL_PATH))
         self.recognizer = KaldiRecognizer(self.model, 16000)
-        
+
         console.end_task("Starting PerceptionEngine", success=True)
-    
+
     def __repr__(self):
-        return f"PerceptionEngine()"
-        
+        return "PerceptionEngine()"
+
     def callback(self, indata, frames: int, time, status) -> None:
         self.queue.put(bytes(indata))
 
@@ -47,23 +47,23 @@ class PerceptionEngine:
         emotions = EmotionMatrix()
         return emotions #placeholder for emotion interpolation
 
-    @runtime_log   
+    @runtime_log
     def listen(self) -> Query:
         """Listen for speech with `sounddevice`.`RawInputStream()`. Part of the Perception Engine."""
-        
+
         # Microphone input stream
         with RawInputStream(
-            samplerate=16000, 
-            blocksize=8000, 
-            dtype="int16", 
-            channels=1, 
+            samplerate=16000,
+            blocksize=8000,
+            dtype="int16",
+            channels=1,
             callback=self.callback
         ):
             try:
                 while True:
                     # Get audio data from the queue
                     data = self.queue.get()
-                    
+
                     # Process the audio data with the recognizer
                     if self.recognizer.AcceptWaveform(data):
                         raw_result = self.recognizer.Result()
@@ -72,11 +72,12 @@ class PerceptionEngine:
                         query = Query(
                             text=result_text,
                             emotions=self.interpolate_emotions(result_text),
-                        )   
-                    
+                        )
+
                         print(query)
                         return query
-            
+
             # Handle exceptions related to the audio input stream
             except PortAudioError as e:
                 console_print("ICARUS PERCEPTION ENGINE", "red", f"An error occured: {e}", "orange")
+                return Query(text="", emotions=EmotionMatrix())

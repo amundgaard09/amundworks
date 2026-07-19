@@ -1,15 +1,9 @@
-"""
-The `Durendal` `UniPy` package for Python.
+"""DuraPy Source"""
 
-`UniPy` provides an extensive suite of Python resources for anything, ranging from CLI-projects, provided for by the `UniCLI` module, to mathematical Python, provided for by `UniMath`.
-"""
-
-from . import types, commons, unialgo, uniCLI, unicogni, unicrypt, uniflight, unimath, uniops, uniphys, unipower, univiz
+from . import shared, uniCLI, unicogni, unicrypt, uniflight, unimath, uniops, uniphys, unipower
 
 __all__ = [
-    "types",
-    "commons",
-    "unialgo",
+    "shared",
     "uniCLI",
     "unicogni",
     "unicrypt",
@@ -18,5 +12,4 @@ __all__ = [
     "uniops",
     "uniphys",
     "unipower",
-    "univiz",
 ]

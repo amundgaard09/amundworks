@@ -10,16 +10,16 @@ import shlex
 import inspect
 
 from typing import Callable
-
+from ..shared.color_sys import color_text
 from prompt_toolkit.completion import NestedCompleter
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from ..frameworks.color_sys import color_text
-from ..commons import exceptions
+from ..shared.exceptions import UnknownSubCommand, MissingSubCommand, EmptyTokenList, UnknownModule, ArgumentError
 
 class ExitEnvironmentSignal(Exception):
     """Raise when the user wants to return to MAINEnv."""
     def __init__(self):
         super().__init__()
+
 class CommandMap:
     def __init__(self):
         pass
@@ -74,22 +74,22 @@ def dispatcher(raw_cmd_str: str, cmd_map: dict[str, dict[str, Callable]], arg_ma
 
 def validate_command(tokens: list[str | list[float]], cmd_map: dict, arg_map: dict) -> None:
     if not tokens:
-        raise exceptions.EmptyTokenList
+        raise EmptyTokenList()
 
     module = tokens[0]
     if module not in cmd_map:
-        raise exceptions.UnknownModule(module)
+        raise UnknownModule(module)
 
     if len(tokens) < 2:
-        raise exceptions.MissingSubCommand(module)
+        raise MissingSubCommand(module)
 
     command = tokens[1]
     if command not in cmd_map[module]:
-        raise exceptions.UnknownSubCommand(module, command)
+        raise UnknownSubCommand(module, command)
 
     args = tokens[2:]
     if len(args) not in arg_map[module][command]:
-        raise exceptions.IncorrectArgumentCount(cmd_map[module][command], len(args), arg_map[module][command])
+        raise ArgumentError(cmd_map[module][command], len(args), arg_map[module][command])
 
 def clear_terminal() -> None:
     """Clear the terminal screen."""
@@ -103,8 +103,10 @@ def console_print(sender: str, sender_color: str, info: str, info_color: str = "
 
 def console_input(sender: str, sender_color: str, prompt: str = "", prompt_color: str = "white") -> str | float:
     user_input = input(console_msg(sender, sender_color, prompt, prompt_color) + " ")
-    try:               return float(user_input)
-    except ValueError: return user_input
+    try:
+        return float(user_input)
+    except ValueError:
+        return user_input
 
 def console_confirm(sender: str, sender_color: str, prompt_info: str, prompt_color: str = "white") -> bool:
     while True:
@@ -141,7 +143,7 @@ class Console:
         task_id = self.progress.add_task(description=f"Starting task: {name} ...", total=None)
         self.active_tasks[name] = task_id
 
-    def end_task(self, name: str, success: bool = True, error_msg: str = None):
+    def end_task(self, name: str, success: bool = True, error_msg: str | None = None):
         """Resolves any specific task by its unique name, regardless of order."""
         task_id = self.active_tasks.pop(name, None)
 
