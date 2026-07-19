@@ -19,7 +19,7 @@ from .src.uniphys import (
     quantum,
     thermodynamics,
 )
-from .src.frameworks.phys_dtypes import PhysicalConstant, Quantity, UNITS, Unit # Change when quantity, constant, complexconstant, etc. systems are refactored
+from .src.frameworks.phys_dtypes import Constant, Quantity, UNITS, Unit # Change when quantity, constant, complexconstant, etc. systems are refactored
 __all__ = [
     "uniCLI",
     "unicogni",
@@ -46,7 +46,7 @@ __all__ = [
     "nuclear",
     "quantum",
     "thermodynamics",
-    "PhysicalConstant",
+    "Constant",
     "Quantity",
     "UNITS",
     "Unit",

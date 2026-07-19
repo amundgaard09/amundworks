@@ -45,8 +45,8 @@ class EmptyTokenList(Exception):
         super().__init__("Empty TokenList! Make sure of correct tokens before verification attempt.")
 class InvalidColors(Exception):
     """Raises when the colors passed into ResistorInsight() are invalid for the given band."""
-    def __init__(self, func: Callable, invalid_colors_indices: int):
-        super().__init__(f"Invalid colors for {color_text(func.__name__, 'blue')} at indices {invalid_colors_indices}")
+    def __init__(self, func: Callable, *args):
+        super().__init__(f"Invalid colors for {color_text(func.__name__, 'blue')} at indices {args}")
 class UnknownModule(Exception):
     """Raises when an unknown module gets caught in ValidateCommand()."""
     def __init__(self, given_module: str):

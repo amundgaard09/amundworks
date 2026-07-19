@@ -50,13 +50,14 @@ def color_text(text: Any, color: str, bold: bool = False, underline: bool = Fals
         ANSI += '\033[3m'
     return ANSI + text + '\033[0m'
 
-def _intclip(val: int, lower: int, upper: int) -> int:
+def clip_int(val: int, lower: int, upper: int) -> int:
+    """Clips the given integer to the given range."""
     if val <= lower:
         return lower
     elif val >= upper:
         return upper
     return val
-def _validatehex(hexcode: str) -> str:
+def validate_hex(hexcode: str) -> str:
     """Validates a hexstring for colors. If invalid, returns `#000000`"""
     hexcode = hexcode[1:7]
     hexchars = "abcdef0123456789"
@@ -117,7 +118,7 @@ class RGB(_BaseColor):
     @r.setter
     def r(self, new_value: int) -> None:
         """Setter: Clips and assigns the new red value."""
-        self._r = _intclip(new_value, 0, 255)
+        self._r = clip_int(new_value, 0, 255)
     @property
     def g(self) -> int:
         """Getter: Returns the green value."""
@@ -125,7 +126,7 @@ class RGB(_BaseColor):
     @g.setter
     def g(self, new_value: int) -> None:
         """Setter: Clips and assigns the new green value."""
-        self._g = _intclip(new_value, 0, 255)
+        self._g = clip_int(new_value, 0, 255)
     @property
     def b(self) -> int:
         """Getter: Returns the blue value."""
@@ -133,7 +134,7 @@ class RGB(_BaseColor):
     @b.setter
     def b(self, new_value: int) -> None:
         """Setter: Clips and assigns the new blue value."""
-        self._b = _intclip(new_value, 0, 255)
+        self._b = clip_int(new_value, 0, 255)
 
 
     def toHex(self) -> HEX:
@@ -159,7 +160,7 @@ class HEX(_BaseColor):
     "Hex color data type."
     def __init__(self, colorname: str, hexcode: str):
         super().__init__(colorname)
-        self.hexcode = _validatehex(hexcode)
+        self.hexcode = validate_hex(hexcode)
 
     def __eq__(self, other):
         if isinstance(other, HEX):
@@ -178,7 +179,7 @@ class HEX(_BaseColor):
     @r.setter
     def r(self, new_hex: str) -> None:
         """Setter: Updates the red component in the hex string."""
-        self.hexcode = _validatehex("#" + new_hex + self.hexcode[3:])
+        self.hexcode = validate_hex("#" + new_hex + self.hexcode[3:])
     @property
     def g(self) -> int:
         """Getter: Returns the green value as an integer (0-255)."""
@@ -186,7 +187,7 @@ class HEX(_BaseColor):
     @g.setter
     def g(self, new_hex: str) -> None:
         """Setter: Updates the green component in the hex string."""
-        self.hexcode = _validatehex(self.hexcode[:3] + new_hex + self.hexcode[5:])
+        self.hexcode = validate_hex(self.hexcode[:3] + new_hex + self.hexcode[5:])
     @property
     def b(self) -> int:
         """Getter: Returns the blue value as an integer (0-255)."""
@@ -194,7 +195,7 @@ class HEX(_BaseColor):
     @b.setter
     def b(self, new_hex: str) -> None:
         """Setter: Updates the blue component in the hex string."""
-        self.hexcode = _validatehex(self.hexcode[:5] + new_hex)
+        self.hexcode = validate_hex(self.hexcode[:5] + new_hex)
 
 
     def toRGB(self) -> RGB:
@@ -225,10 +226,10 @@ class CMYK(_BaseColor):
     "CMYK color data type."
     def __init__(self, colorname: str, c: int, m: int, y: int, k: int):
         super().__init__(colorname)
-        self.c = _intclip(c, 0, 100)
-        self.m = _intclip(m, 0, 100)
-        self.y = _intclip(y, 0, 100)
-        self.k = _intclip(k, 0, 100)
+        self.c = clip_int(c, 0, 100)
+        self.m = clip_int(m, 0, 100)
+        self.y = clip_int(y, 0, 100)
+        self.k = clip_int(k, 0, 100)
 
     def __eq__(self, other):
         if isinstance(other, CMYK):

@@ -3,7 +3,7 @@ The DuraPy UniCogni Package for Machine Learning.
 """
 
 from scipy import special
-from durapy.src.commons.constants import PI
+from ..commons.constants import PI
 
 USE_GPU = False  # Set to True on CUDA-compatible machine
 
@@ -30,7 +30,7 @@ def d_leaky_relu(x: xp.ndarray) -> xp.ndarray:
 
 def gelu(x: xp.ndarray) -> xp.ndarray:
     """Gaussian Error Linear Unit using the tanh approximation."""
-    return 0.5 * x * (1.0 + tanh(xp.sqrt(2.0 / PI) * (x + 0.044715 * x**3)))
+    return 0.5 * x * (1.0 + tanh(xp.sqrt(float(2.0 / PI)) * (x + 0.044715 * x**3)))
 def d_gelu(x: xp.ndarray) -> xp.ndarray:
     """Derivative of GELU."""
     try:
@@ -38,7 +38,7 @@ def d_gelu(x: xp.ndarray) -> xp.ndarray:
     except OverflowError:
         gauss = 0.0
     cdf = 0.5 * (1.0 + special.erf(x / xp.sqrt(2)))
-    pdf = (1.0 / xp.sqrt(2 * PI)) * gauss
+    pdf = (1.0 / xp.sqrt(2 * PI.value)) * gauss
     return cdf + x * pdf
 
 def silu(x: xp.ndarray) -> xp.ndarray:
@@ -52,15 +52,18 @@ def d_silu(x: xp.ndarray) -> xp.ndarray:
 def prelu(x: xp.ndarray, a: float) -> xp.ndarray:
     """Parametric ReLU."""
     return xp.maximum(0.0, x) + a * xp.minimum(0.0, x)
-def d_prelu(x: xp.ndarray, a: float) -> xp.ndarray:
+def dx_prelu(x: xp.ndarray, a: float) -> xp.ndarray:
     """Derivative of PReLU with respect to x. Note: you will also need a gradient w.r.t 'a' during backprop!"""
     return xp.where(x > 0, 1.0, a)
+def da_prelu(x: xp.ndarray, a: float) -> xp.ndarray:
+    """Derivative of PReLU with respect to 'a'."""
+    return xp.where(x < 0, x, 0.0)
 
 def cdelu(x: xp.ndarray, alpha: float = 1.0) -> xp.ndarray:
-    """Continuously Differentiable Exponential Linear Unit (CELU)."""
+    """Continuously Differentiable Exponential Linear Unit (CDELU)."""
     return xp.maximum(0.0, x) + xp.minimum(0.0, alpha * xp.expm1(x / alpha))
 def d_cdelu(x: xp.ndarray, alpha: float = 1.0) -> xp.ndarray:
-    """Derivative of the CELU activation function."""
+    """Derivative of the CDELU activation function."""
     return xp.where(x > 0, 1.0, xp.exp(x / alpha))
 
 def sigmoid(x: xp.ndarray) -> xp.ndarray:

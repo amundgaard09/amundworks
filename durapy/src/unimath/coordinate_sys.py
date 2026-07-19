@@ -6,52 +6,45 @@ from __future__ import annotations
 
 import math
 
-class _Coordinate:
+class _BaseCoordinate:
     def __init__(self, unit: str, dims: int):
         self.unit = unit
         self.dims = dims
 
-class Cartesian1D(_Coordinate):
+class Cartesian1D(_BaseCoordinate):
     """The 1-dimensional Cartesian coordinate system. (aka. the number line)"""
-    def __init__(self, unit: str, dims: int, x: float):
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, x: float):
+        super().__init__(unit=unit, dims=1)
         self.x = x
-
-class Cartesian2D(_Coordinate):
+class Cartesian2D(_BaseCoordinate):
     """The 2-dimensional Cartesian coordinate system."""
-    def __init__(self, unit: str, dims: int, x: float, y: float) -> None:
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, x: float, y: float) -> None:
+        super().__init__(unit=unit, dims=2)
         self.x = x
         self.y = y
 
     def to_polar(self) -> Polar:
         return Polar(
             unit=self.unit,
-            dims=self.dims,
             r = math.hypot(self.x, self.y),
             θ = math.atan(self.y / self.x)
         )
 
     def distance_to_origo(self) -> float:
         return math.hypot(self.x, self.y)
-
-class Cartesian3D(_Coordinate):
+class Cartesian3D(_BaseCoordinate):
     """The 3-dimensional Cartesian coordinate system."""
-    def __init__(self, unit: str, dims: int, x: float, y: float, z: float) -> None:
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, x: float, y: float, z: float) -> None:
+        super().__init__(unit=unit, dims=3)
         self.x = x
         self.y = y
         self.z = z
 
     def to_spherical(self) -> Spherical:
-        p = math.hypot(
-            math.hypot(self.x, self.y),
-            self.z
-        )
+        p = math.hypot(self.x, self.y, self.z)
 
         return Spherical(
             unit=self.unit,
-            dims=self.dims,
             r = p,
             θ = math.atan(self.y / self.x),
             φ = math.acos(self.z / p)
@@ -60,32 +53,24 @@ class Cartesian3D(_Coordinate):
     def to_cylindrical(self) -> Cylindrical:
         return Cylindrical(
             unit=self.unit,
-            dims=self.dims,
-            r = math.hypot(
-                math.hypot(self.x, self.y),
-                self.z
-            ),
+            r = math.hypot(self.x, self.y, self.z),
             θ = math.atan(self.y / self.x),
             z = self.z
         )
 
     def distance_to_origo(self) -> float:
-        return math.hypot(
-            math.hypot(self.x, self.y),
-            self.z
-        )
+        return math.hypot(self.x, self.y, self.z)
 
-class Polar(_Coordinate):
+class Polar(_BaseCoordinate):
     """The polar coordinate system."""
-    def __init__(self, unit: str, dims: int, r: float, θ: float) -> None:
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, r: float, θ: float) -> None:
+        super().__init__(unit=unit, dims=3)
         self.r = r
         self.θ = θ
 
     def to_cartesian2D(self) -> Cartesian2D:
         return Cartesian2D(
             unit=self.unit,
-            dims=self.dims,
             x = self.r * math.cos(self.θ),
             y = self.r * math.sin(self.θ)
         )
@@ -93,10 +78,10 @@ class Polar(_Coordinate):
     def distanse_to_origo(self) -> float:
         return self.r
 
-class Spherical(_Coordinate):
+class Spherical(_BaseCoordinate):
     """The spherical coordinate system."""
-    def __init__(self, unit: str, dims: int, r: float, θ: float, φ: float) -> None:
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, r: float, θ: float, φ: float) -> None:
+        super().__init__(unit=unit, dims=3)
         self.r = r
         self.θ = θ
         self.φ = φ
@@ -104,7 +89,6 @@ class Spherical(_Coordinate):
     def to_cartesian3D(self) -> Cartesian3D:
         return Cartesian3D(
             unit=self.unit,
-            dims=self.dims,
             x = self.r * self.φ * math.cos(self.θ),
             y = self.r * self.φ * math.sin(self.θ),
             z = self.r * math.cos(self.φ)
@@ -113,7 +97,6 @@ class Spherical(_Coordinate):
     def to_cylindrical(self) -> Cylindrical:
         return Cylindrical(
             unit=self.unit,
-            dims=self.dims,
             r = self.r,
             θ = self.θ,
             z = self.r * math.cos(self.φ)
@@ -122,10 +105,10 @@ class Spherical(_Coordinate):
     def distance_to_origo(self) -> float:
         return self.r
 
-class Cylindrical(_Coordinate):
+class Cylindrical(_BaseCoordinate):
     """The cylindrical coordinate system."""
-    def __init__(self, unit: str, dims: int, r: float, θ: float, z: float) -> None:
-        super().__init__(unit, dims)
+    def __init__(self, unit: str, r: float, θ: float, z: float) -> None:
+        super().__init__(unit=unit, dims=3)
         self.r = r
         self.θ = θ
         self.z = z
@@ -133,28 +116,20 @@ class Cylindrical(_Coordinate):
     def to_cartesian3D(self) -> Cartesian3D:
         return Cartesian3D(
             unit=self.unit,
-            dims=self.dims,
             x = self.r * math.sin(self.θ),
             y = self.r * math.cos(self.θ),
             z = self.z
         )
 
     def to_spherical(self) -> Spherical:
-        distance = math.hypot(
-            self.r,
-            self.z
-        )
+        dist = math.hypot(self.r, self.z)
 
         return Spherical(
             unit=self.unit,
-            dims=self.dims,
-            r = distance,
+            r = dist,
             θ = self.θ,
-            φ = math.acos(self.z / distance)
+            φ = math.acos(self.z / dist)
         )
 
     def distance_to_origo(self) -> float:
-        return math.hypot(
-            self.r,
-            self.z
-        )
+        return math.hypot(self.r, self.z)

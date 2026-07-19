@@ -1,18 +1,18 @@
 """
 The Classical Mechanics module for `AWPC` `UniPhys`
 
-This module contains resources for calculations and simulations for Classical Mechanics. 
+This module contains resources for calculations and simulations for Classical Mechanics.
 """
 
 from ..frameworks.color_sys import color_text
-from ..frameworks.phys_dtypes import Quantity, UNITS
-from ..commons.constants import EARTH_G, PI, C 
+from ..frameworks.numval_types import Quantity
+from ..commons.constants import EARTH_G, PI, C
 
 import math
 
 def torque(moment_arm_distance: float, force: float) -> Quantity:
     """Returns a `torque` quantity in newtonmeters from moment arm distance in meters and force in newtons."""
-    return Quantity((moment_arm_distance * force), UNITS["Nm"])
+    return Quantity((moment_arm_distance * force), )
 def gear_ratio(driving_teeth: int, driven_teeth: int) -> str:
     """Returns the gear ratio from the driving gear's teeth count and the driven gear's teeth count."""
     ratio = driven_teeth / driving_teeth
@@ -38,5 +38,4 @@ def potential_energy(mass: float, height: float, g: float | None = EARTH_G._valu
     return Quantity(mass * g * height, UNITS["J"])
 
 def einstein_mass_energy_equivalence(mass: float) -> Quantity:
-    return Quantity((mass * C * C), UNITS["J"])
-
+    return Quantity((mass * C * C), )

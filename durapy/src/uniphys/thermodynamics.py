@@ -1,8 +1,11 @@
 """
 The Thermodynamics module for `DuraPy` `UniPhys`
 
-This module contains resources for calculations and simulations for Thermodynamics. 
+This module contains resources for calculations and simulations for Thermodynamics.
 """
+
+from ..shared.numval_types import Quantity
+from ..shared.constants import MOLE, JOULE, KELVIN, GAS_CONSTANT
 
 def work(force: float, distance: float) -> float:
     """
@@ -18,7 +21,7 @@ def work(force: float, distance: float) -> float:
         float: The work done (in joules).
     """
     return force * distance
-def entropy(heat: float, temperature: float) -> float:
+def entropy(heat: float, temperature: float) -> Quantity:
     """
     Calculate the change in entropy given heat and temperature.
 
@@ -33,11 +36,11 @@ def entropy(heat: float, temperature: float) -> float:
     """
     if temperature <= 0:
         raise ValueError("Temperature must be greater than zero.")
-    
-    return heat / temperature
+
+    return Quantity(heat / temperature, JOULE / KELVIN)
 def heat_capacity(mass: float, specific_heat: float) -> float:
     """
-    Calculate the heat capacity of a substance given its mass and specific heat.
+    Calculates the heat capacity of a substance given its mass and specific heat.
 
     Parameters
     ----------
@@ -49,7 +52,7 @@ def heat_capacity(mass: float, specific_heat: float) -> float:
         float: The heat capacity (in joules per kelvin).
     """
     return mass * specific_heat
-def ideal_gas_law(pressure: float, volume: float, temperature: float) -> float:
+def ideal_gas_law(pressure: float, volume: float, temperature: float) -> Quantity:
     """
     Calculate the number of moles of an ideal gas given pressure, volume, and temperature.
 
@@ -63,8 +66,7 @@ def ideal_gas_law(pressure: float, volume: float, temperature: float) -> float:
     -------
         float: The number of moles of the gas.
     """
-    R = 8.314  # Universal gas constant in joules per mole per kelvin
-    return (pressure * volume) / (R * temperature)
+    return Quantity((pressure * volume) / (GAS_CONSTANT * temperature), MOLE)
 def internal_energy(heat: float, work: float) -> float:
     """
     Calculate the change in internal energy given heat and work.
@@ -109,7 +111,7 @@ def carnot_efficiency(temperature_hot: float, temperature_cold: float) -> float:
     """
     if temperature_hot <= 0 or temperature_cold <= 0:
         raise ValueError("Temperatures must be greater than zero.")
-    
+
     return 1 - (temperature_cold / temperature_hot)
 def clausius_clapeyron(temperature: float, latent_heat: float, specific_volume_liquid: float, specific_volume_vapor: float) -> float:
     """
@@ -160,6 +162,3 @@ def van_der_waals_pressure(n: float, V: float, T: float, a: float, b: float) -> 
     """
     R = 8.314  # Universal gas constant in joules per mole per kelvin
     return (n * R * T) / (V - n * b) - (a * n**2) / V**2
-
-
-
