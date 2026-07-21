@@ -1,6 +1,6 @@
 """
-The `DuraPy` `UniCrypt` module. 
-This module contains all the encryption and decryption functions of the `DuraPy` library. 
+The `DuraPy` `UniCrypt` module.
+This module contains all the encryption and decryption functions of the `DuraPy` library.
 These include methods such as binary, ceasar, vigenere, railfence and OTP with encryption and decryption for all cryptography methods.
 """
 
@@ -12,25 +12,25 @@ def binary_decrypt(binary: str) -> str:
 def ceasar_encrypt(plaintext: str, key: int) -> str:
     cipher = ""
     for char in plaintext:
-        if char.isalpha():               
-            pos = ord(char.lower()) - 96 
-            new_pos = (pos + key - 1) % 26 + 1   
-            new_char = chr(new_pos + 96)        
-            cipher += new_char                
-        else:                                
-            cipher += char 
+        if char.isalpha():
+            pos = ord(char.lower()) - 96
+            new_pos = (pos + key - 1) % 26 + 1
+            new_char = chr(new_pos + 96)
+            cipher += new_char
+        else:
+            cipher += char
     return cipher
 def ceasar_decrypt(cipher: str, key: int) -> str:
     plaintext = ""
     for char in cipher:
-        if char.isalpha():               
+        if char.isalpha():
             pos = ord(char.lower()) - 96
-            new_pos = (pos - key - 1) % 26 + 1   
-            new_char = chr(new_pos + 96)        
-            plaintext += new_char                
-        else:                                 
+            new_pos = (pos - key - 1) % 26 + 1
+            new_char = chr(new_pos + 96)
+            plaintext += new_char
+        else:
             plaintext += char
-    return plaintext 
+    return plaintext
 def vigenere_encrypt(plaintext: str, key: str) -> str:
     cipher = ""
 
@@ -68,18 +68,18 @@ def railfence_encrypt(plaintext: str, key: int) -> str:
 
     for char in plaintext:
         rows[pos].append(char)
-    
+
         pos += direction
         if pos == 0 or pos == key - 1:
             direction *= -1
-    
+
     return ''.join([''.join(row) for row in rows])
 def railfence_decrypt(cipher: str, key: int) -> str:
     key = int(key)
     pattern, rows = [], []
     pos, idx, direction =  0, 0, 1
     plaintext = ''
-    
+
     for _ in range(len(cipher)):
         pattern.append(pos)
         pos += direction
@@ -87,24 +87,24 @@ def railfence_decrypt(cipher: str, key: int) -> str:
             direction *= -1
 
     counts = [pattern.count(r) for r in range(key)]
-    
+
     for c in counts:
         rows.append(list(cipher[idx:idx + c]))
         idx += c
 
     row_ptrs = [0] * key
-    
+
     for r in pattern:
         plaintext += rows[r][row_ptrs[r]]
         row_ptrs[r] += 1
 
     return plaintext
-def OTP_encrypt(plaintext: str, key: str) -> str:
+def otp_encrypt(plaintext: str, key: str) -> str:
     binary_text = ''.join(format(ord(i), '08b') for i in plaintext)
     binary_key = ''.join(format(ord(i), '08b') for i in key)
     cipher = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(binary_text, binary_key))
     return ' '.join(cipher[i:i+8] for i in range(0, len(cipher), 8))
-def OTP_decrypt(cipher: str, key: str) -> str:
+def otp_decrypt(cipher: str, key: str) -> str:
     bintext = ''.join(format(ord(i), '08b') for i in key)
     plaintext_bits = ''.join(str(int(b1) ^ int(b2)) for b1, b2 in zip(cipher, bintext))
     return ''.join(chr(int(plaintext_bits[i:i+8], 2)) for i in range(0, len(plaintext_bits), 8))

@@ -1,19 +1,15 @@
-"""
-The `DuraPy` `UniCLI` module.
-This module contains the standard command-line interface framework from the `DuraPy` library.
-It provides the necessary functions and classes to create a command-line interface for the `DuraPy` library,
-including command parsing, argument validation, and command dispatching.
-"""
+"""DuraPy UniCLI Source"""
 
 import os
 import shlex
 import inspect
 
 from typing import Callable
-from ..shared.color_sys import color_text
+from ..shared.color_system import color_text
+from ..shared.exceptions import ArgumentError
 from prompt_toolkit.completion import NestedCompleter
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from ..shared.exceptions import UnknownSubCommand, MissingSubCommand, EmptyTokenList, UnknownModule, ArgumentError
+from .exceptions import UnknownSubCommand, MissingSubCommand, EmptyTokenList, UnknownModule
 
 class ExitEnvironmentSignal(Exception):
     """Raise when the user wants to return to MAINEnv."""

@@ -1,8 +1,4 @@
-"""
-The Fluid dynamics module for `AWPC` `UniPhys`
-
-This module contains resources for calculations and simulations for Fluid Dynamics. 
-"""
+"""UniPhys Fluid Dynamics Source"""
 
 def reynolds_number(velocity: float, characteristic_length: float, kinematic_viscosity: float) -> float:
     """

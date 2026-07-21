@@ -1,8 +1,4 @@
-"""
-The Astrophysics module for `AWPC` `UniPhys`
-
-This module contains resources for calculations and simulations for Astrophysics.
-"""
+"""UniPhys Astrophysics Source"""
 
 # Alpha - A α, Beta - B β, Gamma - Γ γ, Delta - Δ δ,  Epsilon - E ε, Zeta - Z ζ, Eta - H η,
 # Theta - Θ θ, Iota - I ι, Kappa - K κ, Lambda - Λ λ, Mu - M μ,      Nu - N ν,   Xi - Ξ ξ,  Omicron - O ο,
@@ -11,7 +7,8 @@ This module contains resources for calculations and simulations for Astrophysics
 import math
 
 from ..shared.numval_types import Quantity
-from ..shared.constants import C, PI, MPS, UNI_G, METER, EARTH_M, EARTH_R, HUBBLE, NEWTON, SECOND, GRAVITY
+from ..shared.constants import C, PI, UNI_G, EARTH_M, EARTH_R, HUBBLE
+from ..shared.units import G, MPS, METER, NEWTON, SECOND
 
 def schwarzschild_radius(M: float) -> Quantity:
     return Quantity(((2 * UNI_G * M) / C * C), METER)
@@ -29,7 +26,7 @@ def escape_velocity(radius: float = EARTH_R.value, mass: float = EARTH_M.value) 
 def newtonian_gravitation(mass1: float, mass2: float, distance: float) -> Quantity:
     return Quantity((UNI_G * mass1 * mass2 / distance ** 2), NEWTON)
 def surface_gravity(mass: float, radius: float) -> Quantity:
-    return Quantity((UNI_G * mass / radius ** 2), GRAVITY)
+    return Quantity((UNI_G * mass / radius ** 2), G)
 
 def tsiolkovsky_rocket_equation(exhaust_vel: float, initial_mass: float, final_mass: float) -> Quantity:
     if final_mass > initial_mass:

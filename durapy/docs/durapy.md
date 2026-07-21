@@ -15,7 +15,6 @@
     - [UniOps](#uniops)
     - [UniPhys](#uniphys)
     - [UniPower](#unipower)
-    - [UniSignal](#unisignal)
   - [License and Usage](#license-and-usage---durendal-open-source-philosophy)
 
 ## DuraPy Overview
@@ -45,8 +44,6 @@ UniCrypt is a function library for data encryption and decryption.
 ### UniPhys
 
 ### UniPower
-
-### UniSignal
 
 ## License and Usage - Durendal Open Source Philosophy
 

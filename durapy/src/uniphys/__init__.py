@@ -5,7 +5,16 @@ The functions are designed to be easy to use and understand, with clear input an
 The library is still in development and may contain some unstable functions that are not yet fully tested.
 """
 
-from . import acoustics, astrophysics, electromagnetics, fluid_dynamics, mechanics, nuclear, quantum, thermodynamics
+from . import (
+    acoustics,
+    astrophysics,
+    electromagnetics,
+    fluid_dynamics,
+    mechanics,
+    nuclear,
+    quantum,
+    thermodynamics
+)
 
 __all__ = [
     "acoustics",

@@ -139,3 +139,17 @@
 
 - Started work on the Textual Text User Interface (TUI)
 - Made the intent engine a class, `IntentEngine`, and got rid of the `global` `TOOL_REGISTRY`
+
+### Tuesday -  21.07.2026
+
+- Fixed init-files all throughout the DuraPy library.
+- Added rules for upimporting.
+- Removed unused files and clutter in DuraPy.
+- Added new files under UniMath, splitting the module into its subsequent domains (algebra, trig, etc.).
+- Added a type library for UniPower, for electronic components.
+- Split shared.constants into constants and units.
+- Removed uneccesary top-level .toml-file.
+- Refreshed exceptions -- now all module-specific exceptions reside in their respective modules.
+- Started work on refreshing the test package.
+
+DuraPy v.1 stable is soon ready.

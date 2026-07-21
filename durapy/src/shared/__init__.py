@@ -1,8 +1,8 @@
 
-from . import color_sys, numval_types, constants, exceptions
+from . import color_system, numval_types, constants, exceptions
 
 __all__ = [
-    "color_sys",
+    "color_system",
     "numval_types",
     "constants",
     "exceptions",

@@ -4,10 +4,10 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "durapy"
-version = "0.0.1.9"
+name = "DuraPy"
+version = "1.0.0.0"
 description = "DuraPy - Multi-disciplinary engineering software for STEM workflows"
-readme = "README.md"
+readme = "docs/README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 keywords = ["engineering", "math", "physics", "science", "python", "cli", "stem"]

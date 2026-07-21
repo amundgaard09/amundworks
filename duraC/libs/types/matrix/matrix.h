@@ -9,11 +9,11 @@ typedef struct {
     float* data;      // Pointer to the actual matrix on the heap
     int rows;         // The rows of the matrix
     int cols;         // The columns of the matrix
-    int capacity;     // How many elements it can hold 
-} Matrix; 
+    int capacity;     // How many elements it can hold
+} Matrix;
 
 void init_matrix(Matrix *M, int rows, int cols);
-void print_dims(Matrix *M);
+void print_shape(Matrix *M);
 
 float get_element(Matrix *M, int row, int col);
 void set_element(Matrix *M, int row, int col, float value);

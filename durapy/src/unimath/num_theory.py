@@ -1,22 +1,3 @@
-"""
-The UniMath function library for the `DuraPy` library.
-"""
-
-import math
-import sympy
-
-from ..shared.constants import PI
-
-def d2r(deg: float) -> float:
-    """Return radians from degrees."""
-    return float(deg / 180 * PI)
-def r2d(rad: float) -> float:
-    """Return degrees from radians."""
-    return float(rad / PI * 180)
-
-def avg(*args: int | float) -> float:
-    """Return the average of the given arguments."""
-    return sum(args) / len(args)
 
 def fibonacci_integer(fib_idx: float) -> int:
     """Fibonacci integer generator that returns the Fibonacci integer at the given index."""
@@ -39,6 +20,7 @@ def fibonacci_integer(fib_idx: float) -> int:
         fib0, fib1 = fib1, fib2
 
     return fib2
+
 def fibonacci_list(n: int) -> list[int]:
     """Fibonacci sequence generator that returns a list of the sequence up to the given length."""
 
@@ -61,116 +43,6 @@ def fibonacci_list(n: int) -> list[int]:
         fiblist.append(fib2)
 
     return fiblist
-
-def lovelace(a: float, b: float, c: float, d: float, e: float, f: float) -> tuple:
-    """Lovelace's algorithm for solving systems of linear equations."""
-    if a*e == b*d:
-        raise ValueError("The system has no unique solution.")
-
-    x = c*e - b*f / (a*e - b*d)
-    y = a*f - c*d / (a*e - b*d)
-    return (x, y)
-
-def interpolate_triangle(a: float, b: float, c: float, A: float | None = None, B: float | None = None, C: float | None = None) -> tuple[float, tuple[float, float, float], tuple[float, float, float], tuple[float, float, float]]:
-    """
-    Extrapolate the sides of a triangle from the AAAS case (3x Angle + 1x Side)
-
-    Returns
-    -------
-        Area, (A, B, C), (a, b, c), (sin(a), sin(b), sin(c))
-    """
-
-    if sum((a, b, c)) != 180:
-        raise ValueError("A triangles angles can't sum to anything other than 180 degrees!")
-
-    sin_A = math.sin(d2r(a))
-    sin_B = math.sin(d2r(b))
-    sin_C = math.sin(d2r(c))
-
-    if A and not B and not C:
-        B = (A * sin_B) / sin_A
-        C = (A * sin_C) / sin_A
-
-    elif B and not A and not C:
-        A = (B * sin_A) / sin_B
-        C = (B * sin_C) / sin_B
-
-    elif C and not A and not B:
-        A = (C * sin_A) / sin_C
-        B = (C * sin_B) / sin_C
-
-    else:
-        raise ValueError("A, B, and C cannot all be None!")
-
-    area = herons_formula(A, B, C)
-
-    return area, (A, B, C), (a, b, c), (sin_A, sin_B, sin_C)
-
-def pythagoras(a: float | None = None, b: float | None = None, c: float | None = None) -> float:
-    """
-    Calculates the missing side of a right-angled triangle using either normal or reverse pythagoras.
-    Formula: `A² + B² = C²` for normal, and `A² = C² - B²` or  `B² = C² - A²` for reverse.
-
-    The function can take in any two sides and will return the missing side. If more than one side is missing, the function will return `None`. Same thing when 3 values are given.
-    """
-
-    if not a and b and c:
-        return math.sqrt(c**2 - b**2)
-    elif a and not b and c:
-        return math.sqrt(c**2 - a**2)
-    elif a and b and not c:
-        return math.sqrt(a**2 + b**2)
-    else:
-        raise ValueError("Pythagoras requires exactly two sides to be known.")
-
-
-def cosine_rule(len_A: float, len_B: float, angle_A: float) -> float:
-    return math.sqrt(len_A ** 2 + len_B ** 2 - ((2 * len_A * len_B) * math.cos(d2r(angle_A))))
-def reverse_cosine_rule(len_A: float, len_B: float, len_C: float) -> tuple[float, float, float]:
-    """
-    Returns a tuple of the three angles in degrees, in the order of AngleA, AngleB, and AngleC.
-
-    Formula:
-        Angle A = arccos( ( B² + C² - A² ) / ( 2 * B * C ) )
-    """
-
-    return (
-        r2d(math.acos((len_B ** 2 + len_C ** 2 - len_A ** 2) / (2 * len_B * len_C))),  # AngleA
-        r2d(math.acos((len_C ** 2 + len_A ** 2 - len_B ** 2) / (2 * len_C * len_A))),  # AngleB
-        r2d(math.acos((len_A ** 2 + len_B ** 2 - len_C ** 2) / (2 * len_A * len_B)))   # AngleC
-    )
-
-def tangent_formula(func1: str, func2: str) -> list[str]:
-    """Returns the tangent(s) between two functions by finding the points where the derivatives are equal and then calculating the slope of the tangent line at those points."""
-
-    x = sympy.symbols('x')
-    f1 = sympy.sympify(func1)
-    f2 = sympy.sympify(func2)
-    df1 = sympy.diff(f1, x)
-    df2 = sympy.diff(f2, x)
-
-    slope_eq = sympy.Eq(df1, df2)
-    tan_points = sympy.solve(slope_eq, x)
-    tangents = []
-
-    for idx, point in enumerate(tan_points, 1):
-        string = f"Tangent {idx} - point: {point} - y: {f1.subs(x, point)} - slope: {df1.subs(x, point)}"
-        tangents.append(string)
-
-    return tangents
-
-def sas_area(a: float, b: float, C: float) -> float:
-    """Returns the area of a triangle from two sides and the included angle."""
-    if not all([a, b, C]):
-        raise ValueError("sas_area needs three arguments!")
-    return (0.5 * a * b * math.sin(math.radians(C)))
-def herons_formula(a: float, b: float, c: float) -> float:
-    """Returns the area of a triangle from the side lengths."""
-    if not all([a, b, c]):
-        raise ValueError("herons_formula needs three arguments!")
-    S = (a + b + c) / 2
-    return math.sqrt(S * (S - a) * (S - b) * (S - c))
-
 
 def factorial(n: int) -> int:
     """Returns the factorial of a non-negative integer `n`."""

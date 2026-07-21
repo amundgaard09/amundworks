@@ -3,7 +3,7 @@
 #include "formulas.hpp"
 
 #define _PI 3.14159265359
-#define _C 299792458 
+#define _C 299792458.f
 
 float toDegrees(float radians) { return (radians / _PI * 180); }
 

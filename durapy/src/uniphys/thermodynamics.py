@@ -1,11 +1,8 @@
-"""
-The Thermodynamics module for `DuraPy` `UniPhys`
-
-This module contains resources for calculations and simulations for Thermodynamics.
-"""
+"""UniPhys Thermodynamics Source"""
 
 from ..shared.numval_types import Quantity
-from ..shared.constants import MOLE, JOULE, KELVIN, GAS_CONSTANT
+from ..shared.constants import GAS_CONSTANT
+from ..shared.units import MOLE, JOULE, KELVIN
 
 def work(force: float, distance: float) -> float:
     """

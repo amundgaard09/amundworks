@@ -1,12 +1,9 @@
-"""
-The Classical Mechanics module for `AWPC` `UniPhys`
+"""UniPhys Classical Mechanics Source"""
 
-This module contains resources for calculations and simulations for Classical Mechanics.
-"""
-
-from ..shared.color_sys import color_text
+from ..shared.color_system import color_text
 from ..shared.numval_types import Quantity
-from ..shared.constants import C, PI, JOULE, EARTH_G, DEGREE, RADIAN, NEWTONMETER
+from ..shared.constants import C, PI, EARTH_G
+from ..shared.units import JOULE, DEGREE, RADIAN, NEWTONMETER
 
 import math
 

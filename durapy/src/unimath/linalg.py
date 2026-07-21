@@ -18,16 +18,15 @@ import math
 import copy
 import random
 
-from typing import overload
+from typing import overload, Sequence, Any
 
-from typing_extensions import Sequence # type: ignore
 from ..shared.exceptions import ArgumentError
 from .decorators import requires_square#, requires_real
 
 USE_GPU = False
 
 if USE_GPU:
-    import cupy as xp # type: ignore # type
+    import cupy as xp # type: ignore
 else:
     import numpy as xp
 
@@ -35,7 +34,7 @@ EPSILON = 1e-9
 
 Real = int | float
 Scalar = int | float | complex
-Numerical = int | float | list[float] | list[list[float]] | complex | xp.ndarray
+Numerical = int | float | complex | xp.ndarray | list[float] | list[list[float]]
 
 def is_close(a: Numerical, b: Numerical) -> bool:
     """Checks if two floats / list-like objects of floats are close"""
@@ -186,7 +185,7 @@ class Matrix:
         fill:       float = 0,
     ) -> None:
         """
-        N*M-dimensionalMatrix.
+        N*M-dimensional Matrix.
 
         Args
         ----
@@ -232,13 +231,13 @@ class Matrix:
             else:
                 array = [[fill for _ in range(cols)] for _ in range(rows)]
 
-        self._data = array if array else [[0.0, 0.0], [0.0, 0.0]]
-        self._rows = len(self._data)
-        self._cols = len(self._data[0]) if self._rows > 0 else 0
+        self._array = array if array else [[0.0, 0.0], [0.0, 0.0]]
+        self._rows = len(self._array)
+        self._cols = len(self._array[0]) if self._rows > 0 else 0
 
     @property
     def shape(self) -> tuple[int, int]:
-        """Returns the dimensions of the matrix in the format: (`Rows`,`Cols`)"""
+        """Returns the dimensions of the matrix in the format: (`rows`,`cols`)"""
         return self._rows, self._cols
 
     @property
@@ -250,7 +249,7 @@ class Matrix:
     def zeros(self) -> int:
         """Returns the number of elements which are zero."""
         _zeros = 0
-        for row in self._data:
+        for row in self._array:
             for element in row:
                 _zeros += 1 if element == 0 else 0
         return _zeros
@@ -258,15 +257,15 @@ class Matrix:
     def nonzeros(self) -> int:
         """Returns the number of elements which are not zero."""
         _nonzeros = 0
-        for row in self._data:
+        for row in self._array:
             for element in row:
                 _nonzeros += 1 if element != 0 else 0
         return _nonzeros
 
     def __getitem__(self, idx: int) -> list:
-        return self._data[idx]
+        return self._array[idx]
     def __setitem__(self, key: int, value: list[float]) -> None:
-        self._data[key] = value
+        self._array[key] = value
 
     def set_row(self, idx: int, newrow: list) -> None:
         if len(newrow) != self._cols:
@@ -277,7 +276,7 @@ class Matrix:
     def set_column(self, idx: int, newcolumn: list) -> None:
         if len(newcolumn) != self._rows:
             raise ValueError("New column length doesn't match the dimensions of the matrix!")
-        for j in range(len(self._data)):
+        for j in range(len(self._array)):
             self[j][idx] = newcolumn[j]
     def column(self, idx: int) -> list:
         return [self[j][idx] for j in range(len(self[0]))]
@@ -290,11 +289,11 @@ class Matrix:
                 return str(self)
         return str(self)
     def __bool__(self) -> bool:
-        return any(any(cell != 0 for cell in row) for row in self._data)
+        return any(any(cell != 0 for cell in row) for row in self._array)
     def __iter__(self):
-        return iter(self._data)
+        return iter(self._array)
     def __repr__(self) -> str:
-        return f"Matrix({self._data!r})"
+        return f"Matrix({self._array!r})"
     def __str__(self) -> str:
         return_str = ""
         for row in self:
@@ -306,12 +305,12 @@ class Matrix:
     def __len__(self) -> int:
         return self._rows
     def __abs__(self) -> float:
-        return math.sqrt(sum(cell * cell for row in self._data for cell in row))
+        return math.sqrt(sum(cell * cell for row in self._array for cell in row))
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Matrix):
-            return is_close(self._data, other._data) and self._rows == other._rows and self._cols == other._cols
+            return is_close(self._array, other._array) and self._rows == other._rows and self._cols == other._cols
         else:
-            return self._data == other
+            return self._array == other
 
     def __add__(self, other: Matrix | int | float) -> Matrix:
         if isinstance(other, Matrix):
@@ -333,13 +332,9 @@ class Matrix:
             return Matrix([[self[i][j] - other for j in range(self._cols)] for i in range(self._rows)])
         return NotImplemented
     def __rsub__(self, other: Matrix | int | float) -> Matrix:
-        if isinstance(other, Matrix):
-            if self._rows != other._rows or self._cols != other._cols:
-                raise ValueError("Matrix subtraction only takes same-size dimensions!")
-            return Matrix([[other[i][j] - self[i][j] for j in range(self._cols)] for i in range(self._rows)])
-        elif isinstance(other, (int, float)):
-            return Matrix([[other - self[i][j] for j in range(self._cols)] for i in range(self._rows)])
-        return NotImplemented
+        if not isinstance(other, Matrix):
+            return NotImplemented # Cant subtract a matrix from a int/float
+        return other.__sub__(self)
 
     def __mul__(self, other: int | float) -> Matrix:
         if isinstance(other, (int, float)):
@@ -347,15 +342,15 @@ class Matrix:
         return NotImplemented
     def __rmul__(self, other: int | float) -> Matrix:
         if isinstance(other, (int, float)):
-            return Matrix([[self[i][j] * other for j in range(self._cols)] for i in range(self._rows)])
+            return self.__mul__(other) # Commutative
         return NotImplemented
 
     def __truediv__(self, other: int | float) -> Matrix:
         if isinstance(other, (int, float)):
             return Matrix([[self[i][j] / other for j in range(self._cols)] for i in range(self._rows)])
         return NotImplemented
-    def __rtruediv__(self, other: object):
-        return NotImplemented
+    def __rtruediv__(self, other: Any):
+        return NotImplemented # Cant divide something by a matrix
 
     @overload
     def __matmul__(self, other: Matrix) -> Matrix: ...
@@ -363,12 +358,13 @@ class Matrix:
     def __matmul__(self, other: NDVector) -> NDVector: ...
     def __matmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
         if isinstance(other, Matrix):
-            if self._cols != other._rows:
+            if self.shape[1] != other.shape[0]:
                 raise ValueError("Matrix multiplication requires the number of columns in the first matrix to be equal to the number of rows in the second matrix!")
-            result = [[0.0 for _ in range(other._cols)] for _ in range(self._rows)]
-            for i in range(self._rows):
-                for j in range(other._cols):
-                    for k in range(self._cols):
+
+            result = [[0.0 for _ in range(other.shape[1])] for _ in range(self.shape[0])]
+            for i in range(self.shape[0]):
+                for j in range(other.shape[1]):
+                    for k in range(self.shape[1]):
                         result[i][j] += (self[i][k] * other[k][j])
 
             return Matrix(array=result)
@@ -383,6 +379,7 @@ class Matrix:
 
             return NDVector(result)
 
+        # Only vectors and matrices use __matmul__, other types use __mul__
         else:
             return NotImplemented
 
@@ -391,29 +388,7 @@ class Matrix:
     @overload
     def __rmatmul__(self, other: NDVector) -> NDVector: ...
     def __rmatmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
-        if isinstance(other, Matrix): # matrix-matrix multiplication
-            if self.shape[1] != other.shape[0]:
-                raise ValueError("Matrix multiplication requires the number of columns in the first matrix to be equal to the number of rows in the second matrix!")
-            result = [[0.0 for _ in range(self._cols)] for _ in range(other._rows)]
-            for i in range(other._rows):
-                for j in range(self._cols):
-                    for k in range(other._cols):
-                        result[i][j] += (other[i][k] * self[k][j])
-
-            return Matrix(array=result)
-
-        elif isinstance(other, NDVector): # matrix-vector dot product
-            if self.shape[1] != other.shape[0]:
-                raise ValueError("Matrix multiplication requires the number of columns in the first matrix to be equal to the number of rows in the second matrix!")
-            result = [0.0 for _ in range(self.shape[0])]
-            for i in range(self.shape[0]):
-                for j in range(self.shape[1]):
-                    result[i] += (self[i][j] * other[j])
-
-            return NDVector(components=result)
-
-        else:
-            return NotImplemented
+        return other.__matmul__(self) # only need to define one method
 
     @staticmethod
     def __sign(expr: float, idx: int) -> float:
@@ -434,14 +409,14 @@ class Matrix:
     @requires_square
     def _det(self) -> float:
         if self.shape == 2:
-            return self.__2x2_det(self._data)
+            return self.__2x2_det(self._array)
         if self.shape == 1:
-            return self._data[0][0]
+            return self._array[0][0]
 
         detsum = 0.0
 
         for idx1, _ in enumerate(self[0]):
-            minor = self.__minor_extract(self._data, 0, idx1)
+            minor = self.__minor_extract(self._array, 0, idx1)
             detsum += self.__sign((self[0][idx1] * self._det(minor)), idx1)
 
         return detsum
@@ -647,7 +622,7 @@ class Matrix:
 
     @requires_square
     def _trace(self) -> float:
-        return sum(self[idx][idx] for idx in range(len(self._data)))
+        return sum(self[idx][idx] for idx in range(len(self._array)))
 
     @property
     def trace(self) -> float:

@@ -5,25 +5,17 @@ The library is still in development and may contain some unstable functions that
 """
 
 import math
-import types
 import typing
 
-from ..shared.color_sys import ANSI_COLORS
+from types import MappingProxyType
+from .exceptions import InconsistencyError, InvalidColors
+from ..shared.exceptions import ArgumentError
 from ..shared.numval_types import Quantity
-from ..shared.constants import (
-    OHM,
-    VOLT,
-    WATT,
-    SECOND,
-)
-from ..shared.exceptions import (
-    ArgumentError,
-    InvalidColors,
-    InconsistencyError,
+from ..shared.color_system import ANSI_COLORS
+from ..shared.constants import PI
+from ..shared.units import OHM, WATT, VOLT, SECOND
 
-)
-
-BANDS: types.MappingProxyType[str, int] = types.MappingProxyType({
+BANDS: MappingProxyType[str, int] = MappingProxyType({
     "black":  0,
     "brown":  1,
     "red":    2,
@@ -35,7 +27,9 @@ BANDS: types.MappingProxyType[str, int] = types.MappingProxyType({
     "gray":   8,
     "white":  9,
 })
-MULTIPLIERS: types.MappingProxyType[str, float] = types.MappingProxyType({
+MULTIPLIERS: MappingProxyType[str, float] = MappingProxyType({
+    "silver": 0.01,
+    "gold":   0.1,
     "black":  1.0,
     "brown":  10.0,
     "red":    100.0,
@@ -46,10 +40,8 @@ MULTIPLIERS: types.MappingProxyType[str, float] = types.MappingProxyType({
     "violet": 10000000.0,
     "gray":   100000000.0,
     "white":  1000000000.0,
-    "gold":   0.1,
-    "silver": 0.01,
 })
-TOLERANCES: types.MappingProxyType[str, float] = types.MappingProxyType({
+TOLERANCES: MappingProxyType[str, float] = MappingProxyType({
     "brown":  1.0,
     "red":    2.0,
     "green":  0.5,
@@ -63,6 +55,7 @@ TOLERANCES: types.MappingProxyType[str, float] = types.MappingProxyType({
 def ohms_law(v: float | None = None, i: float | None = None, r: float | None = None) -> tuple[float, float, float]:
     """Ohms Law calculation for voltage, current, and resistivity. Returns: (V, I, R)"""
 
+    # Find missing parameters
     missing = [param for param, value in zip(("v", "i", "r"), (v, i, r)) if value is None]
 
     if v is None:
@@ -90,26 +83,28 @@ def rc_time_constant(capacitance: float, resistance: float) -> Quantity:
 
 def inductor_impedance(hertz: float, inductance: float) -> Quantity:
     """Calculates the impedance of an inductor at a given frequency in hertz and inductance in henrys."""
-    return Quantity((2 * math.pi * hertz * inductance), OHM)
+    return Quantity((2 * PI * hertz * inductance), OHM)
 
 def power_dissipation(v: float | None = None, i: float | None = None, r: float | None = None) -> Quantity:
     """Calculates power dissipation from voltage, current and resistance. If all three parameters are given, it checks for consistency between the three formulas P = I^2 * R, P = V^2 / R and P = V * I."""
 
+    # Find missing parameters
     missing = [param for param, value in zip(("v", "i", "r"), (v, i, r)) if value is None]
 
     if v is None:
-        if i is None or r is None:
+        if i is None or r is None: # Too many missing arguments
             raise ArgumentError(power_dissipation, missing)
         return Quantity(i ** 2 * r, WATT)
 
     elif i is None:
-        if r is None:
+        if r is None: # Too many missing arguments
             raise ArgumentError(power_dissipation, missing)
         return Quantity(v ** 2 / r, WATT)
 
-    elif r is None:
+    elif r is None: # If V or I was none, the earlier if/elif chains would've tripped, so no raising required
         return Quantity(v * i, WATT)
 
+    # All parameters given - Check for consistency
     else:
         P1 = i ** 2 * r
         P2 = v ** 2 / r
@@ -119,15 +114,16 @@ def power_dissipation(v: float | None = None, i: float | None = None, r: float |
         if not math.isclose(P1, P2):
             # P1 != P3 -> Error with P1
             if not math.isclose(P1, P3):
-                raise InconsistencyError(ohms_law, "Inconsistency with P1 = I ** 2 * R")
+                raise InconsistencyError("Inconsistency with P1 = I ** 2 * R")
             # P1 == P3 -> Error with P2
             else:
-                raise InconsistencyError(ohms_law, "Inconsistency with P2 = V ** 2 / R")
+                raise InconsistencyError("Inconsistency with P2 = V ** 2 / R")
+
         # P1 == P2
         else:
             # P2 != P3 -> Error with P3
             if not math.isclose(P2, P3):
-                raise InconsistencyError(ohms_law, "Inconsistency with P3 = V * I")
+                raise InconsistencyError("Inconsistency with P3 = V * I")
             # P1 == P2 == P3 -> All formulas agree
             else:
                 return Quantity(sum([P1, P2, P3]) / 3, WATT)
@@ -138,35 +134,42 @@ def resistor_visual(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -
         ansi = ANSI_COLORS.get(color.lower(), "\033[0m")
         reset = "\033[0m"
         return f"{ansi}    {reset}"
+
     if C5 is not None:
         return f"    <----------------------------->\n    |                             |\n    |  ┌────┬────┬────┬────┬────┐ |\n   ----│{cblock(C1)}│{cblock(C2)}│{cblock(C3)}│{cblock(C4)}│{cblock(C5)}|----\n    |  └────┴────┴────┴────┴────┘ |\n    |                             |\n    <----------------------------->"
+
     return f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{cblock(C1)}│{cblock(C2)}│{cblock(C3)}│{cblock(C4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->"
 
 def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
     """Returns the resistance value of a resistor given its color bands."""
 
+    # Try given colors
     try:
         b1 = BANDS[C1]
         b2 = BANDS[C2]
-    except KeyError as e:
-        raise InvalidColors(resistor_value, str(e)) from e
 
+    # Invalid colors given
+    except KeyError as e:
+        raise InvalidColors(str(e)) from e
+
+    # 4-color mode
     if C5 is None:
         try:
             multiplier = MULTIPLIERS[C3]
             tolerance = TOLERANCES[C4]
         except KeyError as e:
-            raise InvalidColors(resistor_value, str(e)) from e
+            raise InvalidColors(str(e)) from e
 
         ohms = (b1 * 10 + b2) * multiplier
 
+    # C5 given, 5-color mode
     else:
         try:
             b3 = BANDS[C3]
             multiplier = MULTIPLIERS[C4]
             tolerance = TOLERANCES[C5]
         except KeyError as e:
-            raise InvalidColors(resistor_value, str(e)) from e
+            raise InvalidColors(str(e)) from e
 
         ohms = (b1 * 100 + b2 * 10 + b3) * multiplier
 
@@ -175,7 +178,7 @@ def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) ->
     lower = ohms * (1 - tolerance_decimal)
     upper = ohms * (1 + tolerance_decimal)
 
-    return (ohms, tolerance, lower, upper)
+    return (ohms, tolerance, lower, upper) # Change to Quantity return type? Q(x, OHM)
 
 def total_esr(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> float:
     """Calculates total ESR of a list of capacitors based on their connection type. Caps are in the format (capacitance, voltage, esr) for now."""
@@ -190,18 +193,21 @@ def total_esr(caps: list[tuple], connection: typing.Literal["parallel", "series"
 
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
+
 def total_capacitance(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
     """Calculates total capacitance, voltage limit and ESR of a list of capacitors based on their connection type."""
 
     if connection == "parallel":
         total_capacitance = sum(cap[0] for cap in caps)
         volt_limit = min([cap[1] for cap in caps])
+        return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"
+
 
     elif connection == "series":
         total_capacitance = 1 / sum(1/cap[0] for cap in caps)
         volt_limit = sum([cap[1] for cap in caps])
+        return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"
+
 
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
-
-    return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"

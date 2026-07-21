@@ -7,13 +7,13 @@ build-backend = "setuptools.build_meta"
 name = "icarus"
 version = "0.0.3-alpha"
 description = "ICARUS - Multipotent Agentic AI platform"
-readme = "README.md"
+readme = "docs/README.md"
 requires-python = ">=3.10"
 keywords = ["engineering", "math", "physics", "science", "python", "cli", "agent", "ai"]
 authors = [{name = "Simon Stordal Amundgård"}]
 
 dependencies = [
-    "sounddevice",
+    "sounddevice", # Find and add the rest of the dependencies
     "elevenlabs",
     "dotenv",
     "durapy",

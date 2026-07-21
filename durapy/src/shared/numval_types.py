@@ -124,7 +124,7 @@ class Quantity:
         # Handle Quantity input
         if isinstance(value, Quantity):
             self._value = value._value
-            self.unit = value.unit
+            self.unit = unit if unit else value.unit
 
         # Handle float/complex input
         else:
@@ -134,6 +134,10 @@ class Quantity:
     @property
     def value(self) -> float:
         return self._value.real
+
+    @property
+    def imagvalue(self) -> float:
+        return self._value.imag
 
     def __repr__(self) -> str:
         return f"Quantity({self._value}, {self.unit})"

@@ -4,6 +4,18 @@ This module contains all the encryption and decryption functions of the `DuraPy`
 These include methods such as binary, ceasar, vigenere, railfence and OTP with encryption and decryption for all cryptography methods.
 """
 
-from . import unicrypt
+from .unicrypt import (
+    binary_encrypt, binary_decrypt,
+    ceasar_encrypt, ceasar_decrypt,
+    vigenere_encrypt, vigenere_decrypt,
+    railfence_encrypt, railfence_decrypt,
+    otp_encrypt, otp_decrypt
+)
 
-__all__ = ["unicrypt"]
+__all__ = [
+    "binary_encrypt", "binary_decrypt",
+    "ceasar_encrypt", "ceasar_decrypt",
+    "vigenere_encrypt", "vigenere_decrypt",
+    "railfence_encrypt", "railfence_decrypt",
+    "otp_encrypt", "otp_decrypt"
+]

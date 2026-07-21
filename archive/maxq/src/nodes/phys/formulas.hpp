@@ -1,6 +1,6 @@
 
-#ifndef FORMULAS.HPP
-#define FORMULAS.HPP
+#ifndef FORMULAS_HPP
+#define FORMULAS_HPP
 
 float toDegrees(float radians);
 float Torque(float moment_arm_distance, float force);

@@ -1,8 +1,4 @@
-"""
-The Nuclear Physics module for `DuraPy` `UniPhys`
-
-This module contains resources for calculations and simulations for Nuclear Physics.
-"""
+"""UniPhys Nuclear Physics Source"""
 
 from ..shared.numval_types import Quantity
 from ..shared.constants import E

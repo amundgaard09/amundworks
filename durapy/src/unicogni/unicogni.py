@@ -1,6 +1,4 @@
-"""
-The DuraPy UniCogni Package for Machine Learning.
-"""
+"""DuraPy UniCogni Source"""
 
 from scipy import special
 from ..shared.constants import PI

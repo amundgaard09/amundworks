@@ -5,8 +5,9 @@ It provides the necessary functions and classes to create a command-line interfa
 including command parsing, argument validation, and command dispatching.
 """
 
-from . import uniCLI
+from . import uniCLI, exceptions
 
 __all__ = [
     "uniCLI",
+    "exceptions",
 ]

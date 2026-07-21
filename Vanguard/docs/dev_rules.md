@@ -1,3 +1,4 @@
+# Vanguard Development Rules
 
 1. The raw MD-file is the only source of truth; The Article-object is only a thin wrapper for the search engine and indexing.
-2. 
+2.

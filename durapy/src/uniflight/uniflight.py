@@ -1,10 +1,11 @@
 """The `DuraPy` `UniFlight` module provides a collection of functions and classes for performing calculations and simulations related to flight dynamics, aerodynamics, and propulsion."""
 
-from ..shared.color_sys import color_text
+from ..shared.color_system import color_text
 from ..shared.numval_types import Quantity
-from ..shared.constants import MACH, PASCAL, NEWTON
+from ..shared.constants import MACH
+from ..shared.units import PASCAL, NEWTON
 
-def T2W_ratio(thrust: float, weight: float) -> str:
+def tw_ratio(thrust: float, weight: float) -> str:
     """Thrust to Weight ratio calculator. Ensure consistent units!"""
     ratio = thrust / weight
     return f"Ratio: {color_text(f'{ratio}', 'green' if ratio > 1 else 'red' if ratio != 1 else 'yellow')}"

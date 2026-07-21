@@ -1,12 +1,10 @@
-import durapy, unittest
 
-from durapy.src.frameworks.phys_dtypes import Quantity, UNITS
+import unittest
 
+from ..src.shared.numval_types import Quantity
 
 class DuraPyPackageTests(unittest.TestCase):
     def test_package_imports_and_exposes_unimath(self):
-        from durapy import unimath
-
         self.assertTrue(callable(unimath.pythagoras))
         self.assertEqual(unimath.pythagoras(A=3, B=4), 5.0)
 

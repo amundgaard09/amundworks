@@ -49,7 +49,7 @@ void Update(std::vector<std::vector<char>>& grid) {
         }
     }
 
-    grid = newGrid; 
+    grid = newGrid;
 }
 
 void PrintGrid(std::vector<std::vector<char>>& grid){
@@ -64,7 +64,7 @@ void PrintGrid(std::vector<std::vector<char>>& grid){
 int main() {
     grid[4][3] = '#';
     grid[4][4] = '#';
-    grid[4][5] = '#'; 
+    grid[4][5] = '#';
 
     while (true) {
         system("cls");

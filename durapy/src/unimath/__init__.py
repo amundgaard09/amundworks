@@ -1,5 +1,39 @@
 """The UniMath module for DuraPy."""
 
-from . import coordinate_systems, linalg_dtypes, unimath, decorators, exceptions
+from .coordinate_systems import (
+    Cartesian1D,
+    Cartesian2D,
+    Cartesian3D,
+    Cylindrical,
+    Spherical,
+    Polar,
+)
 
-__all__ = ["coordinate_sys", "linalg_dtypes", "unimath", "decorators", "exceptions"]
+from . import (
+    algebra,
+    algorithms,
+    decorators,
+    exceptions,
+    geometry,
+    linalg,
+    num_theory,
+    trigonometry
+)
+
+__all__ = [
+    "Cartesian1D",
+    "Cartesian2D",
+    "Cartesian3D",
+    "Cylindrical",
+    "Spherical",
+    "Polar",
+
+    "algebra",
+    "algorithms",
+    "decorators",
+    "exceptions",
+    "geometry",
+    "linalg",
+    "num_theory",
+    "trigonometry"
+]

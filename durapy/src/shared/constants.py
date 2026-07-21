@@ -11,50 +11,34 @@ The constants are stored as instances of the `Constant` class, which includes th
 
 # Order: Length, Mass, Time, Electric Charge, Thermodynamic Temperature, Amount of Substance, Luminous Intensity
 
+from .units import (
+    NUMERICAL,
+    UNIGUNIT,
+    KILOGRAM,
+    COULOMB,
+    SECOND,
+    NEWTON,
+    KELVIN,
+    AMPERE,
+    METER,
+    FARAD,
+    JOULE,
+    HERTZ,
+    MOLE,
+    WATT,
+    VOLT,
+    OHM,
+    MPS,
+    G,
+)
+
 from fractions import Fraction
-from ..shared.numval_types import Quantity, Constant, Unit, Dimension
+from ..shared.numval_types import Quantity, Constant
 
-F0, F1, F2, F3, F4 = Fraction(0), Fraction(1), Fraction(2), Fraction(3), Fraction(4)
-F_1, F_2, F_3, F_4 = Fraction(-1), Fraction(-2), Fraction(-3), Fraction(-4)
-
-# ISO Base Units - Scale: 1
-NUMERICAL = Unit(symbol="NUM", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
-
-METER     = Unit(symbol="M",   dimension=Dimension((F1, F0, F0, F0, F0, F0, F0)), scale=1) # L
-KILOGRAM  = Unit(symbol="KG",  dimension=Dimension((F0, F1, F0, F0, F0, F0, F0)), scale=1) # M
-SECOND    = Unit(symbol="S",   dimension=Dimension((F0, F0, F1, F0, F0, F0, F0)), scale=1) # T
-AMPERE    = Unit(symbol="B",   dimension=Dimension((F0, F0, F0, F1, F0, F0, F0)), scale=1) # I
-KELVIN    = Unit(symbol="K",   dimension=Dimension((F0, F0, F0, F0, F1, F0, F0)), scale=1) # Θ
-MOLE      = Unit(symbol="MOL", dimension=Dimension((F0, F0, F0, F0, F0, F1, F0)), scale=1) # N
-CANDELA   = Unit(symbol="CD",  dimension=Dimension((F0, F0, F0, F0, F0, F0, F1)), scale=1) # J
-
-PASCAL = Unit(symbol="Pa",  dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
-PSI    = Unit(symbol="psi", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
-BAR    = Unit(symbol="bar", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
-
-G       = Unit(symbol="UNI_G", dimension=Dimension((F3, F_1, F_2, F0, F0, F0, F0))) # L^3 / M * T^2
-GRAVITY = Unit(symbol="G",   dimension=Dimension((F1, F0, F_2, F0, F0, F0, F0))) # L / T^2
-
-NEWTON    = Unit(symbol="N", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))) # L * M / T^2
-JOULE      = Unit(symbol="J", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))) # L^2 * M / T^2
-NEWTONMETER = Unit(symbol="Nm", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))) # L^2 * M / T^2
-
-COULOMB = Unit(symbol="C", dimension=Dimension((F0,  F0,  F1,  F1,  F0, F0, F0))) # I * T
-FARAD   = Unit(symbol="F", dimension=Dimension((F_2, F_1, F4,  F2,  F0, F0, F0))) # T^4 * I^2 / L^2 * M
-WATT    = Unit(symbol="W", dimension=Dimension((F2,  F1,  F_3, F0,  F0, F0, F0))) # L^2 * M / T^3
-VOLT    = Unit(symbol="V", dimension=Dimension((F2,  F1,  F_2, F_1, F0, F0, F0))) # L^2 * M / T^2 * I
-OHM     = Unit(symbol="Ω", dimension=Dimension((F2,  F1,  F_3, F_2, F0, F0, F0))) # L^2 * M / T^3 * I^2
-
-HERTZ = Unit(symbol="Hz", dimension=Dimension((F0, F0, F_1, F0, F0, F0, F0))) # 1 / T
-
-DEGREE    = Unit(symbol="deg", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
-RADIAN    = Unit(symbol="rad", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1) # N/A
-
-#Derived units
-MPS = METER / SECOND # L / T
+F_4, F_3, F_2, F_1, F0, F1, F2, F3, F4 = Fraction(-4), Fraction(-3), Fraction(-2), Fraction(-1), Fraction(0), Fraction(1), Fraction(2), Fraction(3), Fraction(4)
 
 # Universal Gravitational Constant
-UNI_G = Constant(Quantity(6.74e-11, G), name="Gravitational Constant") # L^3 / M * T^2
+UNI_G = Constant(Quantity(6.74e-11, UNIGUNIT), name="Gravitational Constant") # L^3 / M * T^2
 
 # Mathematical/Dimensionless Constants
 E       = Constant(Quantity(2.718281828459045,  NUMERICAL), name="Eulers Number")
@@ -103,10 +87,10 @@ YEAR = Constant(Quantity(31536000, SECOND), name="Year")
 # Luminous Intensity Constants - J
 
 # Gravity Constants - L / T^2
-EARTH_G = Constant(Quantity(9.8, GRAVITY), name="Surface Gravity of the Earth")
-MOON_G = Constant(Quantity(1.62, GRAVITY), name="Surface Gravity of the Moon")
-MARS_G = Constant(Quantity(3.71, GRAVITY), name="Surface Gravity of Mars")
-SUN_G = Constant(Quantity(274, GRAVITY), name="Surface Gravity of the Sun")
+EARTH_G = Constant(Quantity(9.8, G), name="Surface Gravity of the Earth")
+MOON_G = Constant(Quantity(1.62, G), name="Surface Gravity of the Moon")
+MARS_G = Constant(Quantity(3.71, G), name="Surface Gravity of Mars")
+SUN_G = Constant(Quantity(274, G), name="Surface Gravity of the Sun")
 
 # Speed Constants - L / T
 C    = Constant(Quantity(299792458, MPS), name="Speed of Light")

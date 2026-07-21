@@ -1,64 +1,50 @@
 """DuraPy package entrypoint."""
 
-from .src.shared import constants, exceptions
-from .src.shared.color_sys import CMYK, HEX, RGB, color_text
-from .src.shared.numval_types import Constant, Quantity, Unit, Dimension
+# Always import the module, not singular functions, classes, etc
+# Never use import functionality provided by this init file within the DuraPy library!
+# This will create circular import bugs!
 
-from .src.uniCLI import uniCLI
-from .src.unicogni import unicogni
-from .src.unicrypt import unicrypt
-from .src.uniflight import uniflight
-from .src.unipower import unipower
-from .src.unimath import coordinate_systems, linalg_dtypes, algebra, geometry, unimath
-from .src.uniops import conpidcon, forward_kinematics, inverse_kinematics
-from .src.uniphys import (
-    acoustics,
-    astrophysics,
-    electromagnetics,
-    fluid_dynamics,
-    mechanics,
-    nuclear,
-    quantum,
-    thermodynamics,
+# IMPORT RULES:
+#
+# For single module modules:
+# from durapy import "MODULE" -> Module exposes all functionality through its init file.
+#
+# from durapy import uniCLI; x = uniCLI.TaskConsole()
+#
+# EXCEPT!
+#
+# The shared library upimports directly, skipping the module:
+#
+# from durapy import constants, exceptions, etc
+
+from .src.shared import constants, exceptions, color_system, numval_types, units
+
+from .src import (
+    uniCLI,
+    unicogni,
+    unicrypt,
+    uniflight,
+    unimath,
+    uniops,
+    uniphys,
+    unipower,
 )
 
 __all__ = [
+    "color_system",
+    "constants",
+    "exceptions",
+    "numval_types",
+    "units",
+
     "uniCLI",
     "unicogni",
     "unicrypt",
     "uniflight",
-    "unipower",
-    "Constant",
-    "Quantity",
-    "Unit",
-    "Dimension",
-
-    "constants",
-    "exceptions",
-
-    "RGB",
-    "CMYK",
-    "HEX",
-    "color_text",
-
-    "coordinate_systems",
-    "linalg_dtypes",
-    "algebra",
-    "geometry",
     "unimath",
-
-    "conpidcon",
-    "forward_kinematics",
-    "inverse_kinematics",
-
-    "acoustics",
-    "astrophysics",
-    "electromagnetics",
-    "fluid_dynamics",
-    "mechanics",
-    "nuclear",
-    "quantum",
-    "thermodynamics",
+    "uniops",
+    "uniphys",
+    "unipower",
 ]
 
-__version__ = "0.0.1.9"
+__version__ = "1.0.0.0"
