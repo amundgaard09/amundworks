@@ -45,6 +45,7 @@ Repository = "https://github.com/amundgaard09/durendal"
 Issues = "https://github.com/amundgaard09/durendal/issues"
 
 [tool.setuptools]
+packages = ["durapy"]
 include-package-data = true
 
 [tool.setuptools.packages.find]
