@@ -24,7 +24,6 @@ jobs:
         pip install build wheel setuptools
 
     - name: Build distribution packages
-      working-directory: durapy
       run: python -m build
 
     - name: Publish to PyPI
