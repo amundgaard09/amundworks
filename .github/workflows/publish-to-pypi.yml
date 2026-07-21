@@ -24,9 +24,8 @@ jobs:
         pip install build wheel setuptools
 
     - name: Build distribution packages
-      run: |
-          cd durapy
-          python -m build
+      working-directory: durapy
+      run: python -m build
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
