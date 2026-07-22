@@ -4,7 +4,9 @@ Third Iteration - XO Neural Net Series
 Matrix-Based MNIST Classification Neural Net
 """
 
-import time, keras, numpy as np
+import time
+import keras
+import numpy as np
 from durapy import unicogni
 
 ACTIVATIONS = {
@@ -15,79 +17,79 @@ ACTIVATIONS = {
 }
 
 class DenseLayer:
-    def __init__(self, NInputs: int, NOutputs: int, Activation: str):
+    def __init__(self, n_in: int, n_out: int, act: str):
         """Initializes a dense layer with given input and output sizes and activation function."""
-        self.Weights: np.ndarray = np.random.randn(NInputs, NOutputs) * np.sqrt(2.0 / NInputs) # He Initialization for weights.
-        self.Bias:    np.ndarray = np.zeros(NOutputs)                                          # New bias array filled with zeros.
-        self.Activation, self.DerivativeActivation = ACTIVATIONS[Activation]
-    
-    def Forward(self, Input: np.ndarray) -> np.ndarray:
+        self.weight: np.ndarray = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in) # He Initialization for weights.
+        self.bias: np.ndarray = np.zeros(n_out)                                          # New bias array filled with zeros.
+        self.act, self.dact = ACTIVATIONS[act]
+
+    def Forward(self, in_arr: np.ndarray) -> np.ndarray:
         """Forward pass for the layer. Computes the output based on the input and current weights and biases."""
-        self.Input = Input
-        self.Z = Input @ self.Weights + self.Bias # Z ->      Post transformation - Pre activation.
-        self.Output = self.Activation(self.Z)
-        return self.Output
-    
+        self.in_arr = in_arr
+        self.Z = in_arr @ self.weight + self.bias # Z ->      Post transformation - Pre activation.
+        self.out = self.act(self.Z)
+        return self.out
+
     ### GOL / dX > Gradient of Loss. ### Reshaping > "Verification" of array dimensions ### .T > Transposing ###
-    def Backward(self, dA: np.ndarray, LearningRate: float) -> np.ndarray:
+    def Backward(self, dA: np.ndarray, learning_rate: float) -> np.ndarray:
         """Backward pass for the layer. Calculates gradients and updates weights and biases."""
-        dZ: np.ndarray = dA * self.DerivativeActivation(self.Z)                               # dA -> Output GOL. dZ -> Z GOL.
-        X:  np.ndarray = self.Input if self.Input.ndim > 1 else self.Input.reshape(1, -1)     # X  -> Reshaped input.
+        dZ: np.ndarray = dA * self.dact(self.Z)                               # type: ignore | double declaration of dZ
+        X:  np.ndarray = self.in_arr if self.in_arr.ndim > 1 else self.in_arr.reshape(1, -1)     # X  -> Reshaped input.
         dZ: np.ndarray = dZ         if dZ.ndim         > 1 else dZ.reshape(1, -1)             # dZ -> Reshaped dZ.
         dW: np.ndarray = X.T @ dZ / X.shape[0]                                                # dW -> Weight GOL. Batch averaged. X.T @ dZm computes the sum of gradients for each weight across the batch, and dividing by X.shape[0] gives the average.
         dB: np.ndarray = dZ.mean(axis=0)                                                      # dB -> Bias   GOL, Batch averaged.
-        dI: np.ndarray = dZ @ self.Weights.T                                                  # dI -> Input  GOL. For backpropagation to previous layers. 
+        dI: np.ndarray = dZ @ self.weight.T                                                  # dI -> Input  GOL. For backpropagation to previous layers.
 
-        self.Weights -= LearningRate * dW
-        self.Bias    -= LearningRate * dB
-        
-        return dI.reshape(self.Input.shape)
-    
+        self.weight -= learning_rate * dW
+        self.bias    -= learning_rate * dB
+
+        return dI.reshape(self.in_arr.shape)
+
 class NeuralNetwork:
     def __init__(
-        self, 
-        InputNeuronCount: int, 
-        DenseLayerCount: int, 
-        DenseLayerNeuronCount: int, 
-        OutputNeuronCount: int,
-        ActivationsPerLayer: list[str], 
-        LearningRate: float
+        self,
+        n_in: int,
+        n_layers: int,
+        n_layer_neurons: int,
+        n_out: int,
+        acts: list[str],
+        learning_rate: float
     ):
-        
-        self.InputNeuronCount = InputNeuronCount
-        self.DenseLayerCount = DenseLayerCount
-        self.OutputNeuronCount = OutputNeuronCount
-        self.LearningRate = LearningRate
-        self.Layers: list[DenseLayer] = []
- 
-        PreviousNeuronCount = InputNeuronCount
-        
-        for idx in range(DenseLayerCount):
+
+        self.n_in = n_in
+        self.n_layers = n_layers
+        self.n_out = n_out
+        self.learning_rate = learning_rate
+        self.layers: list[DenseLayer] = []
+
+        prev_n_neurons = n_in
+
+        for idx in range(n_layers):
             layer = DenseLayer(
-                PreviousNeuronCount, 
-                DenseLayerNeuronCount, 
-                ActivationsPerLayer[idx]
+                prev_n_neurons,
+                n_layer_neurons,
+                acts[idx]
             )
-            self.Layers.append(layer)
-            PreviousNeuronCount = DenseLayerNeuronCount
+            self.layers.append(layer)
+            prev_n_neurons = n_layer_neurons
 
         # Output layer
-        self.Layers.append(DenseLayer(PreviousNeuronCount, OutputNeuronCount, ActivationsPerLayer[-1]))
-    
+        self.layers.append(DenseLayer(prev_n_neurons, n_out, acts[-1]))
+
     def Forward(self, input_arr: np.ndarray) -> np.ndarray:
         """_Forward pass for the entire network._
 
         Args:
             Input (list[float]): An array of input values to the network, where each value corresponds to the input of an input neuron.
-            
+
         Returns:
             Output (list[float]): An array of output values from the network, where each value corresponds to the output of an output neuron.
         """
         x = input_arr
-        for layer in self.Layers:
+        for layer in self.layers:
             x = layer.Forward(x)
-        return x  
-    
+        return x
+
     def Backward(self, out_target: np.ndarray):
         """
         Backward pass for the entire network. Computes gradients and updates weights and biases based on the target output.
@@ -96,59 +98,59 @@ class NeuralNetwork:
             TargetOutput (np.ndarray): The expected output values for the given input, used to calculate the loss and update the network's parameters during backpropagation.
             OutputPrediction (np.ndarray): The predicted output values from the network's forward pass, used to calculate the loss and update the network's parameters during backpropagation.
         """
-        out_pred: np.ndarray = self.Layers[-1].Output
+        out_pred: np.ndarray = self.layers[-1].out
         batch_size = out_target.shape[0] if out_target.ndim > 1 else 1
-        initial_GOL = (unicogni.softmax(out_pred) - out_target) / batch_size 
-        
-        for layer in reversed(self.Layers):
-            initial_GOL = layer.Backward(initial_GOL, self.LearningRate)
-    
+        initial_GOL = (unicogni.softmax(out_pred) - out_target) / batch_size
+
+        for layer in reversed(self.layers):
+            initial_GOL = layer.Backward(initial_GOL, self.learning_rate)
+
     def Train(self, X: np.ndarray, y: np.ndarray, epochs: int):
         """Training loop for the network.
-        
+
         Args:
             X (np.ndarray): Input data.
             y (np.ndarray): Target labels.
             epochs (int): Number of training epochs.
         """
         lastloss = float('inf')
-        
-        BATCHCOUNT = X.shape[0] // BATCHSIZE 
-        
+
+        BATCHCOUNT = X.shape[0] // BATCHSIZE
+
         for epoch in range(epochs):
-            
+
             shuffle_indices = np.random.permutation(X.shape[0])
             X = X[shuffle_indices]
             y = y[shuffle_indices]
-            
-            EpochLoss = 0.0
-            
+
+            epochloss = 0.0
+
             for batches in range(0, X.shape[0], BATCHSIZE):
                 X_batch = X[batches:batches+BATCHSIZE]
                 y_batch = y[batches:batches+BATCHSIZE]
-                
+
                 self.Forward(X_batch)
                 self.Backward(y_batch)
-                
-                EpochLoss += unicogni.cross_entropy_loss(y_batch, self.Layers[-1].Output)
-                
-            EpochLoss /= (X.shape[0] / BATCHCOUNT)
-                
-            Marker = "\033[92m ### \033[0m" if EpochLoss < lastloss else "\033[91m ### \033[0m"
-            print(f"Epoch {epoch + 1}/{epochs}, Loss: {EpochLoss:.6f} {Marker}")
-            lastloss = EpochLoss     
-    
+
+                epochloss += unicogni.cross_entropy_loss(y_batch, self.layers[-1].out)
+
+            epochloss /= (X.shape[0] / BATCHCOUNT)
+
+            marker = "\033[92m ### \033[0m" if epochloss < lastloss else "\033[91m ### \033[0m"
+            print(f"Epoch {epoch + 1}/{epochs}, Loss: {epochloss:.6f} {marker}")
+            lastloss = epochloss
+
     def Predict(self, X: np.ndarray) -> np.ndarray:
         """Make predictions on new data.
-        
+
         Args:
             X (np.ndarray): Input data.
-        
+
         Returns:
             np.ndarray: Predictions.
         """
-        return self.Forward(X) 
-    
+        return self.Forward(X)
+
     @staticmethod
     def NormalizeData(X: np.ndarray) -> np.ndarray:
         mean = np.mean(X, axis=0)
@@ -157,12 +159,12 @@ class NeuralNetwork:
         return (X - mean) / std
 
 MNISTNET = NeuralNetwork(
-    InputNeuronCount=784,
-    DenseLayerCount=2,
-    DenseLayerNeuronCount=256,
-    OutputNeuronCount=10,
-    ActivationsPerLayer= ["relu", "relu", "linear"],
-    LearningRate=0.1
+    n_in=784,
+    n_layers=2,
+    n_layer_neurons=256,
+    n_out=10,
+    acts= ["relu", "relu", "linear"],
+    learning_rate=0.1
 )
 
 #### -- DATA PREPROCESSING -- ####
@@ -193,7 +195,7 @@ Y = train_labels
 
 #### -- TRAINING LOOP -- ####
 
-epochs = 200 
+epochs = 200
 start_time = time.time()
 
 BATCHSIZE = 128

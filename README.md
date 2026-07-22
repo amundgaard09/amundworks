@@ -30,19 +30,21 @@ This is the list of projects built / currently being built under Durendal. This 
 
 ### Vanguard - Markdown Knowledge Database System
 
-[View Vanguard README](Vanguard/README.md)
+[View Vanguard README](Vanguard/docs/README.md)
+
+**Vanguard** is a knowledge database system inspired by Markdown. It is a lightweight Markdown database with capabilites to download non-MD files and convert them for fast indexing and consistency.
 
 ### XO - Multi-architecture Neural Net Series
 
-[View XO README](XO-Series/README.md)
+[View XO README](XO-Series/docs/README.md)
 
 **XO** is a series of neural networks designed for applications such as image recognition, natural language processing, and more. The **XO** series is built upon the **DuraPy** ecosystem and is designed to be easily integrated with other tools and libraries built upon it aswell.
 
-### Vulcan - The All-In-One Life Operating System
+### Vulcan - Personal Productivity Platform
 
-[View Vulcan README](Vulcan/README.md)
+[View Vulcan README](Vulcan/docs/README.md)
 
-**Vulcan** is a personal productivity platform developed as part of the Durendal Engineering Ecosystem. Vulcan is especially built for student-athletes, but it is designed to be flexible and adaptable for anyone looking to improve their productivity and organization. 
+**Vulcan** is a personal productivity platform developed as part of the Durendal Engineering Ecosystem. Vulcan focuses on student-athletes, but it is designed to be flexible and adaptable for anyone looking to improve their productivity and organization. 
 
 ## INACTIVE PROJECTS
 

@@ -23,7 +23,7 @@ from typing import overload, Sequence, Any
 
 from .decorators import requires_square#, requires_real
 from ..shared.exceptions import ArgumentError
-from _maxcompute import mat_mat_mul, mat_vec_mul, vec_mat_mul, dot_product, outer_product
+from ._maxcompute import mat_mat_mul, mat_vec_mul, vec_mat_mul, dot_product, outer_product
 
 USE_GPU = False
 
@@ -59,9 +59,6 @@ def is_close(a: Numerical, b: Numerical) -> bool:
 class NDVector:
     """
     `DuraPy` Dataclass for N-dimensional vectors.
-
-    This class is to be used for applications where more than 3 dimensions in a vector is needed.
-    Use the `D3Vector` class for 3-dimensional vectors.
 
     Args
     ----
@@ -361,11 +358,14 @@ class Matrix:
     @overload
     def __matmul__(self, other: NDVector) -> NDVector: ...
     def __matmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
+        print("MATMUL STARTED")
         if isinstance(other, Matrix):
-            return Matrix(array=mat_mat_mul(np.array(self._array), np.array(other._array)).tolist())
+            print("DISPATCHED TO MATRIX-MATRIX MULTIPLICATION IN MATMUL")
+            return Matrix(array=mat_mat_mul(np.array(self._array, dtype=np.float64), np.array(other._array, dtype=np.float64)).tolist())
 
         elif isinstance(other, NDVector):
-            return NDVector(components=mat_vec_mul(np.array(self._array), np.array(other.components)).tolist())
+            print("DISPATCHED TO MATRIX-VECTOR MULTIPLICATION IN MATMUL - CORRECT DISPATCH")
+            return NDVector(components=mat_vec_mul(np.array(self._array, dtype=np.float64), np.array(other.components, dtype=np.float64)).tolist())
 
         else:
             return NotImplemented
@@ -376,46 +376,6 @@ class Matrix:
     def __rmatmul__(self, other: NDVector) -> NDVector: ...
     def __rmatmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
         return other.__matmul__(self) # only need to define one method
-
-    @staticmethod
-    def __sign(expr: float, idx: int) -> float:
-        return expr * (-1) ** abs(idx)
-    @staticmethod
-    def __2x2_det(_array: list[list[float]]) -> float:
-        if len(_array) == 2 and all(len(row) == 2 for row in _array):
-            A, B, C, D = _array[0][0], _array[0][1], _array[1][0], _array[1][1]
-            return (A * D) - (B * C)
-        raise ValueError("Can't calculate a base case 2x2 determinant of a non-2x2 matrix!")
-    @staticmethod
-    def __minor_extract(arr: list[list[float]], row_idx: int, col_idx: int) -> Matrix:
-        """Extracts the minor matrix by removing the specified row and column from the given array."""
-        without_row = [arr[idx] for idx in range(len(arr)) if idx != row_idx]
-        without_col = [[without_row[idx1][idx2] for idx2 in range(len(without_row[idx1])) if idx2 != col_idx] for idx1 in range(len(without_row))]
-        return Matrix(array=without_col)
-
-    @requires_square
-    def _det(self) -> float:
-        if self.shape == 2:
-            return self.__2x2_det(self._array)
-        if self.shape == 1:
-            return self._array[0][0]
-
-        detsum = 0.0
-
-        for idx1, _ in enumerate(self[0]):
-            minor = self.__minor_extract(self._array, 0, idx1)
-            detsum += self.__sign((self[0][idx1] * self._det(minor)), idx1)
-
-        return detsum
-
-    @property
-    def det(self) -> float:
-        """
-        Returns the determinant of the matrix through Laplace Expansion.
-
-        The determinant is used to determine if the Matrix is invertible or singular (collapses space).
-        """
-        return self._det()
 
     def _T(self) -> Matrix:
         rows, cols = self.shape
@@ -436,6 +396,48 @@ class Matrix:
         """
         return self._T()
 
+    def is_square(self) -> bool:
+        return self._cols == self._rows
+
+    @staticmethod
+    def __sign(expr: float, idx: int) -> float:
+        return expr * (-1) ** abs(idx)
+    @staticmethod
+    def __2x2_det(_array: list[list[float]]) -> float:
+        if len(_array) == 2 and all(len(row) == 2 for row in _array):
+            A, B, C, D = _array[0][0], _array[0][1], _array[1][0], _array[1][1]
+            return (A * D) - (B * C)
+        raise ValueError("Can't calculate a base case 2x2 determinant of a non-2x2 matrix!")
+    @staticmethod
+    def __minor_extract(arr: list[list[float]], row_idx: int, col_idx: int) -> Matrix:
+        """Extracts the minor matrix by removing the specified row and column from the given array."""
+        without_row = [arr[idx] for idx in range(len(arr)) if idx != row_idx]
+        without_col = [[without_row[idx1][idx2] for idx2 in range(len(without_row[idx1])) if idx2 != col_idx] for idx1 in range(len(without_row))]
+        return Matrix(array=without_col)
+
+    @requires_square
+    def _det(self) -> float:
+        if self.shape[0] == 2:
+            return self.__2x2_det(self._array)
+        if self.shape[0] == 1:
+            return self._array[0][0]
+
+        detsum = 0.0
+
+        for idx1, _ in enumerate(self[0]):
+            minor = self.__minor_extract(self._array, 0, idx1)
+            detsum += self.__sign(self[0][idx1] * self._det(minor), idx1)
+
+        return detsum
+
+    @property
+    def det(self) -> float:
+        """
+        Returns the determinant of the matrix through Laplace Expansion.
+
+        The determinant is used to determine if the Matrix is invertible or singular (collapses space).
+        """
+        return self._det()
 
     def __build_augmented(self) -> Matrix:
         """Builds the augmented matrix by concatenating the original matrix with its identity matrix."""
@@ -608,8 +610,17 @@ class Matrix:
         return self._eigen()
 
     @requires_square
+    def _diagonal(self) -> list[float]:
+        return [self[idx][idx] for idx in range(self.shape[0])]
+
+    @property
+    def diagonal(self) -> list[float]:
+        """Returns the diagonal of the matrix as a list."""
+        return self._diagonal()
+
+    @requires_square
     def _trace(self) -> float:
-        return sum(self[idx][idx] for idx in range(len(self._array)))
+        return math.fsum(self._diagonal())
 
     @property
     def trace(self) -> float:
@@ -619,11 +630,6 @@ class Matrix:
         The trace is defined as the sum of all the elements on the diagonal, e. g. `A_00`, `A_11`, `A_22`, etc.
         """
         return self._trace()
-
-    @property
-    def diagonal(self) -> list:
-        """Returns the diagonal of the matrix as a list."""
-        return [self[idx][idx] for idx in range(self.shape[0])]
 
     @requires_square
     def to_identity(self) -> Matrix:

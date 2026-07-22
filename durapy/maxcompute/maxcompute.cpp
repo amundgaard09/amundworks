@@ -1,6 +1,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <iostream>
 
 namespace py = pybind11;
 
@@ -33,22 +34,42 @@ py::array_t<double> mat_mat_mul(py::array_t<double> a, py::array_t<double> b) {
 
 // 2. Matrix-Vector Multiplication (Returns a 2D column matrix [N, 1])
 py::array_t<double> mat_vec_mul(py::array_t<double> a, py::array_t<double> b) {
+
+    std::cout << "ENTERED MATVEC" << std::endl;
+
+    std::cout << "A ndim: " << a.ndim() << std::endl;
+    std::cout << "B ndim: " << b.ndim() << std::endl;
+
     auto r_a = a.unchecked<2>();
-    auto r_b = b.unchecked<1>(); // 1D accessor
+    auto r_b = b.unchecked<1>();
+
+    std::cout << "AFTER UNCHECKED" << std::endl;
 
     size_t rows_a = r_a.shape(0);
-    size_t cols_a = r_a.shape(1);
+    std::cout << "ROWS: " << rows_a << std::endl;
 
-    py::array_t<double> result({rows_a, size_t(1)});
-    auto r_res = result.mutable_unchecked<2>();
+    size_t cols_a = r_a.shape(1);
+    std::cout << "COLS: " << cols_a << std::endl;
+
+    py::array_t<double> result(static_cast<py::ssize_t>(rows_a)); // CRASHES HERE
+    std::cout << "RESULT CREATED" << std::endl;
+
+    auto r_res = result.mutable_unchecked<1>();
+    std::cout << "RESULT ACCESSOR CREATED" << std::endl;
+
+    std::cout << "Result ndim: " << result.ndim() << std::endl;
+    std::cout << "Starting mat-vec multiplication" << std::endl;
 
     for (size_t i = 0; i < rows_a; ++i) {
         double sum = 0.0;
         for (size_t j = 0; j < cols_a; ++j) {
             sum += r_a(i, j) * r_b(j);
         }
-        r_res(i, 0) = sum;
+        r_res(i) = sum;
     }
+
+    std::cout << "Finished mat-vec multiplication | SUCCESS" << std::endl;
+
     return result;
 }
 
@@ -76,13 +97,11 @@ py::array_t<double> vec_mat_mul(py::array_t<double> a, py::array_t<double> b) {
 // 4. Vector Dot Product (Returns a primitive scalar)
 double dot_product(py::array_t<double> a, py::array_t<double> b) {
     auto r_a = a.unchecked<1>();
-    size_t size = r_a.shape(0);
-    const double* ptr_a = a.data();
-    const double* ptr_b = b.data();
+    auto r_b = b.unchecked<1>();
 
     double result = 0.0;
-    for (size_t i = 0; i < size; ++i) {
-        result += ptr_a[i] * ptr_b[i];
+    for (size_t i = 0; i < r_a.size(); i++) {
+        result += r_a(i) * r_b(i);
     }
     return result;
 }
