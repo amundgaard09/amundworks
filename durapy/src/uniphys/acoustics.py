@@ -2,12 +2,11 @@
 
 import math
 
-from ..shared.constants import MACH
+from ..shared.constants import MACH, GAS_CONSTANT
 
 def sound_speed(temp: float, γ: float = 1.4, molar_mass: float = 0.02897) -> float:
     """Calculate the speed of sound in a gas given the temperature, adiabatic index (gamma), and molar mass."""
-    R = 8.314  # Universal gas constant in J/(mol*K)
-    return ((γ * R * temp) / molar_mass) ** 0.5
+    return ((γ * GAS_CONSTANT.value * temp) / molar_mass) ** 0.5
 def sound_pressure_level(pressure: float, reference_pressure: float = 20e-6) -> float:
     """Calculate the sound pressure level (SPL) in decibels (dB) given the pressure and reference pressure."""
     return 20 * math.log10(pressure / reference_pressure)
@@ -41,4 +40,4 @@ def sound_intensity(pressure: float, speed_of_sound: float = MACH.value, density
     return (pressure ** 2) / (speed_of_sound * density)
 def sound_pressure(intensity: float, speed_of_sound: float = MACH.value, density: float = 1.225) -> float:
     """Calculate the sound pressure given the intensity, speed of sound, and density of the medium."""
-    return (intensity * speed_of_sound * density) ** 0.5
+    return math.sqrt(intensity * speed_of_sound * density)

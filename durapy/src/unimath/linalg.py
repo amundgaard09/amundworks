@@ -17,11 +17,13 @@ from __future__ import annotations
 import math
 import copy
 import random
+import numpy as np
 
 from typing import overload, Sequence, Any
 
-from ..shared.exceptions import ArgumentError
 from .decorators import requires_square#, requires_real
+from ..shared.exceptions import ArgumentError
+from _maxcompute import mat_mat_mul, mat_vec_mul, vec_mat_mul, dot_product, outer_product
 
 USE_GPU = False
 
@@ -129,9 +131,15 @@ class NDVector:
             return NDVector([other.components[i] - self.components[i] for i in range(len(self.components))])
         return NotImplemented
 
-    def __mul__(self, other: Real) -> NDVector:
+    @overload
+    def __mul__(self, other: Real) -> NDVector: ...
+    @overload
+    def __mul__(self, other: NDVector) -> float: ...
+    def __mul__(self, other: Real | NDVector) -> NDVector | float:
         if isinstance(other, Real): # scalar multiplication
             return NDVector([other * self.components[i] for i in range(len(self.components))])
+        if isinstance(other, NDVector): # vector multiplication | Dot product
+            return dot_product(np.array(self.components), np.array(other.components))
         return NotImplemented
     def __rmul__(self, other: Real) -> NDVector:
         return self.__mul__(other)
@@ -151,15 +159,11 @@ class NDVector:
         else:
             return NotImplemented
 
-    @overload
-    def __matmul__(self, other: NDVector) -> NDVector: ...
-    @overload
-    def __matmul__(self, other: Matrix) -> Matrix: ...
-    def __matmul__(self, other: NDVector | Matrix) -> NDVector | Matrix:
-        if isinstance(other, NDVector):
-            return NDVector([x * y for x, y in zip(self.components, other.components)])
+    def __matmul__(self, other: NDVector | Matrix) -> Matrix:
+        if isinstance(other, NDVector): # Outer product
+            return Matrix(array=outer_product(np.array(self.components), np.array(other.components)).tolist())
         elif isinstance(other, Matrix):
-            return other.__rmatmul__(self)
+            return Matrix(array=vec_mat_mul(np.array(self.components), np.array(other._array)).tolist())
         else:
             return NotImplemented
 
@@ -169,7 +173,7 @@ class NDVector:
     def __rmatmul__(self, other: Matrix) -> Matrix: ...
     def __rmatmul__(self, other: NDVector | Matrix) -> NDVector | Matrix:
         if isinstance(other, NDVector):
-            return NDVector([x * y for x, y in zip(self.components, other.components)])
+            return other.__rmatmul__(self) # Same as __matmul__, but with the arguments reversed
         elif isinstance(other, Matrix):
             return other.__matmul__(self)
         else:
@@ -358,28 +362,11 @@ class Matrix:
     def __matmul__(self, other: NDVector) -> NDVector: ...
     def __matmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
         if isinstance(other, Matrix):
-            if self.shape[1] != other.shape[0]:
-                raise ValueError("Matrix multiplication requires the number of columns in the first matrix to be equal to the number of rows in the second matrix!")
-
-            result = [[0.0 for _ in range(other.shape[1])] for _ in range(self.shape[0])]
-            for i in range(self.shape[0]):
-                for j in range(other.shape[1]):
-                    for k in range(self.shape[1]):
-                        result[i][j] += (self[i][k] * other[k][j])
-
-            return Matrix(array=result)
+            return Matrix(array=mat_mat_mul(np.array(self._array), np.array(other._array)).tolist())
 
         elif isinstance(other, NDVector):
-            if self._cols != other.shape[0]:
-                raise ValueError("Matrix multiplication requires the number of columns in the first matrix to be equal to the number of rows in the second matrix!")
-            result = [0.0 for _ in range(self._rows)]
-            for i in range(self._rows):
-                for j in range(self._cols):
-                    result[i] += (self[i][j] * other[j])
+            return NDVector(components=mat_vec_mul(np.array(self._array), np.array(other.components)).tolist())
 
-            return NDVector(result)
-
-        # Only vectors and matrices use __matmul__, other types use __mul__
         else:
             return NotImplemented
 

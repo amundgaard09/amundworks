@@ -2,10 +2,8 @@
 import time
 
 class ContinuousPIDController:
-    """
-    A Continuous PID Controller algorithm.
-    """
-    def __init__(self, kp: float, ki: float, kd: float, setpoint=0) -> None:
+    """A Continuous PID Controller algorithm"""
+    def __init__(self, kp: float = 0, ki: float = 0, kd: float = 0, setpoint: int = 0) -> None:
         self.kp = kp
         self.ki = ki
         self.kd = kd

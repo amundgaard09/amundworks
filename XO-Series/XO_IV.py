@@ -2,7 +2,6 @@
 XO Neural Net Series Revision IV
 
 Optimization ideas for MLPs (brief):
- - Weight initialization (He/Xavier) to improve convergence.
  - Activation functions: use ReLU/LeakyReLU, avoid saturating activations where possible.
  - Batch normalization to stabilize and accelerate training.
  - Dropout to reduce overfitting.
@@ -22,12 +21,7 @@ Optimization ideas for MLPs (brief):
 from durapy import unicogni
 from typing import Callable
 
-USE_GPU = False
-
-if USE_GPU:
-    import cupy as xp # type: ignore
-else:
-    import numpy as xp # cross platform
+import numpy as xp
 
 ACTIVATIONS: dict[str, tuple[Callable[[xp.ndarray], xp.ndarray], Callable[[xp.ndarray], xp.ndarray] | None]] = {
     "relu":    (lambda Z: xp.maximum(0, Z), lambda Z: (Z > 0).astype(float)),

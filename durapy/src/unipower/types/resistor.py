@@ -1,5 +1,7 @@
 
-#from ...shared.constants import OHM
+from ...shared.color_system import ANSI_COLORS
+from ...shared.units import OHM
+from ...shared.numval_types import Quantity
 from ..exceptions import InvalidColors
 from types import MappingProxyType
 
@@ -40,7 +42,7 @@ TOLERANCES: MappingProxyType[str, float] = MappingProxyType({
     "silver": 10.0,
 })
 
-def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
+def _color_2_value_(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
     """Returns the resistance value of a resistor given its color bands."""
 
     # Try given colors
@@ -81,6 +83,35 @@ def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) ->
     return (ohms, tolerance, lower, upper)
 
 class Resistor:
-    def __init__(self, args: tuple | float | None = None) -> None:
-        if isinstance(args, tuple):
-            pass
+    """Resistor class that represents a resistor with color bands and ohms value."""
+    def __init__(self, colors: tuple[str, str, str, str, str | None]) -> None:
+        self._ohms, self.tolerance, self.lower, self.upper = _color_2_value_(*colors)
+        self.c_1, self.c_2, self.c_3, self.c_4, self.c_5 = colors
+
+    def __repr__(self) -> str:
+        return f"Resistor(ohms={self._ohms}, tolerance={self.tolerance}, lower={self.lower}, upper={self.upper})"
+    def __str__(self) -> str:
+        return f"{self._ohms} Ω +- {self.tolerance}% - LO: {self.lower}, HI: {self.upper}"
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Resistor):
+            return False
+        return self._ohms == other._ohms and self.tolerance == other.tolerance and self.lower == other.lower and self.upper == other.upper
+
+    @property
+    def ohms(self) -> Quantity:
+        return Quantity(self._ohms, OHM)
+
+    @property
+    def color_code(self) -> tuple[str, str, str, str, str | None]:
+        return self.c_1, self.c_2, self.c_3, self.c_4, self.c_5
+
+    def visualize(self) -> str:
+        """Prints a ASCII representation of a resistor with the color code"""
+        def block(color: str):
+            ansi = ANSI_COLORS.get(color.lower(), "\033[0m")
+            reset = "\033[0m"
+            return f"{ansi}    {reset}"
+
+        if self.c_5:
+            return f"    <----------------------------->\n    |                             |\n    |  ┌────┬────┬────┬────┬────┐ |\n   ----│{block(self.c_1)}│{block(self.c_2)}│{block(self.c_3)}│{block(self.c_4)}│{block(self.c_5)}|----\n    |  └────┴────┴────┴────┴────┘ |\n    |                             |\n    <----------------------------->"
+        return f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{block(self.c_1)}│{block(self.c_2)}│{block(self.c_3)}│{block(self.c_4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->"

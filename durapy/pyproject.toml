@@ -1,11 +1,10 @@
-
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=68", "wheel", "pybind11"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "DuraPy"
-version = "1.0.0.0"
+version = "1.0.0.3"
 description = "DuraPy - Multi-disciplinary engineering software for STEM workflows"
 readme = "docs/README.md"
 requires-python = ">=3.10"
@@ -34,5 +33,5 @@ Homepage = "https://github.com/amundgaard09/durendal"
 Repository = "https://github.com/amundgaard09/durendal"
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["durapy*"]
+where = ["src"]
+include = ["*"]

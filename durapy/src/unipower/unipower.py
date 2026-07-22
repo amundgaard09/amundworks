@@ -5,15 +5,13 @@ The library is still in development and may contain some unstable functions that
 """
 
 import math
-import typing
 
 from types import MappingProxyType
-from .exceptions import InconsistencyError, InvalidColors
-from ..shared.exceptions import ArgumentError
+from .exceptions import InconsistencyError
 from ..shared.numval_types import Quantity
-from ..shared.color_system import ANSI_COLORS
+from ..shared.exceptions import ArgumentError
+from ..shared.units import OHM, WATT, VOLT, SECOND, FARAD
 from ..shared.constants import PI
-from ..shared.units import OHM, WATT, VOLT, SECOND
 
 BANDS: MappingProxyType[str, int] = MappingProxyType({
     "black":  0,
@@ -126,88 +124,35 @@ def power_dissipation(v: float | None = None, i: float | None = None, r: float |
                 raise InconsistencyError("Inconsistency with P3 = V * I")
             # P1 == P2 == P3 -> All formulas agree
             else:
-                return Quantity(sum([P1, P2, P3]) / 3, WATT)
+                return Quantity(math.fsum([P1, P2, P3]) / 3, WATT)
 
-def resistor_visual(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> str:
-    """Prints a ASCII representation of a resistor with the color code"""
-    def cblock(color: str):
-        ansi = ANSI_COLORS.get(color.lower(), "\033[0m")
-        reset = "\033[0m"
-        return f"{ansi}    {reset}"
-
-    if C5 is not None:
-        return f"    <----------------------------->\n    |                             |\n    |  ┌────┬────┬────┬────┬────┐ |\n   ----│{cblock(C1)}│{cblock(C2)}│{cblock(C3)}│{cblock(C4)}│{cblock(C5)}|----\n    |  └────┴────┴────┴────┴────┘ |\n    |                             |\n    <----------------------------->"
-
-    return f"    <------------------------->\n    |                         |\n    |  ┌────┬────┬────┬────┐  |\n   ----│{cblock(C1)}│{cblock(C2)}│{cblock(C3)}│{cblock(C4)}│----\n    |  └────┴────┴────┴────┘  |\n    |                         |\n    <------------------------->"
-
-def resistor_value(C1: str, C2: str, C3: str, C4: str, C5: str | None = None) -> tuple[float, float, float, float]:
-    """Returns the resistance value of a resistor given its color bands."""
-
-    # Try given colors
-    try:
-        b1 = BANDS[C1]
-        b2 = BANDS[C2]
-
-    # Invalid colors given
-    except KeyError as e:
-        raise InvalidColors(str(e)) from e
-
-    # 4-color mode
-    if C5 is None:
-        try:
-            multiplier = MULTIPLIERS[C3]
-            tolerance = TOLERANCES[C4]
-        except KeyError as e:
-            raise InvalidColors(str(e)) from e
-
-        ohms = (b1 * 10 + b2) * multiplier
-
-    # C5 given, 5-color mode
-    else:
-        try:
-            b3 = BANDS[C3]
-            multiplier = MULTIPLIERS[C4]
-            tolerance = TOLERANCES[C5]
-        except KeyError as e:
-            raise InvalidColors(str(e)) from e
-
-        ohms = (b1 * 100 + b2 * 10 + b3) * multiplier
-
-    tolerance_decimal = tolerance / 100
-
-    lower = ohms * (1 - tolerance_decimal)
-    upper = ohms * (1 + tolerance_decimal)
-
-    return (ohms, tolerance, lower, upper) # Change to Quantity return type? Q(x, OHM)
-
-def total_esr(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> float:
+def total_esr(caps: list[tuple[float, float, float]], connection: str) -> Quantity:
     """Calculates total ESR of a list of capacitors based on their connection type. Caps are in the format (capacitance, voltage, esr) for now."""
     if connection == "series":
-        return sum(cap[2] for cap in caps)
+        return Quantity(math.fsum(cap[2] for cap in caps), OHM)
 
     elif connection == "parallel":
         try:
-            return 1 / sum(1 / cap[2] for cap in caps if cap[2] != 0)
+            return Quantity(1 / math.fsum(1 / cap[2] for cap in caps if cap[2] != 0), OHM)
         except ZeroDivisionError:
-            return 0
+            return Quantity(0, OHM)
 
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")
 
-def total_capacitance(caps: list[tuple], connection: typing.Literal["parallel", "series"]) -> str: ### caps (capacitance, voltage, esr) (for now)
+def total_capacitance(caps: list[tuple[float, float, float]], connection: str) -> tuple[Quantity, Quantity, Quantity]: ### caps (capacitance, voltage, esr) (for now)
     """Calculates total capacitance, voltage limit and ESR of a list of capacitors based on their connection type."""
 
     if connection == "parallel":
-        total_capacitance = sum(cap[0] for cap in caps)
+        total_capacitance = math.fsum(cap[0] for cap in caps)
         volt_limit = min([cap[1] for cap in caps])
-        return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"
+        return Quantity(total_capacitance, FARAD), Quantity(volt_limit, VOLT), Quantity(total_esr(caps, connection), OHM)
 
 
     elif connection == "series":
-        total_capacitance = 1 / sum(1/cap[0] for cap in caps)
-        volt_limit = sum([cap[1] for cap in caps])
-        return f"Total Capacitance: {total_capacitance}, Volt Limit: {volt_limit}, Total ESR: {total_esr(caps, connection)}"
-
+        total_capacitance = 1 / math.fsum(1/cap[0] for cap in caps)
+        volt_limit = math.fsum([cap[1] for cap in caps])
+        return Quantity(total_capacitance, FARAD), Quantity(volt_limit, VOLT), Quantity(total_esr(caps, connection), OHM)
 
     else:
         raise ValueError("Connection type must be 'parallel' or 'series'")

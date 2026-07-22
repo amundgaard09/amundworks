@@ -1,3 +1,5 @@
+"""Decorators for mathematical operations on matrices and vectors."""
+
 from __future__ import annotations
 
 from functools import wraps

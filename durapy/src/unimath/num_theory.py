@@ -1,3 +1,6 @@
+"""DuraPy Number Theory module"""
+
+import math
 
 def fibonacci_integer(fib_idx: float) -> int:
     """Fibonacci integer generator that returns the Fibonacci integer at the given index."""

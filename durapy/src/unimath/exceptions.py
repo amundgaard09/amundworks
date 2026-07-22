@@ -1,3 +1,4 @@
+"""UniMath Exceptions module"""
 
 class ImpossibleTriangleError(Exception): # Remove?
     """Raise when the sum of the angles of a triangle is not 180 degrees, a mathematical impossibility."""

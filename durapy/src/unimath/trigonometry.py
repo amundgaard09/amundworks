@@ -1,3 +1,4 @@
+"""DuraPy Trigonometry module"""
 
 import math
 import sympy

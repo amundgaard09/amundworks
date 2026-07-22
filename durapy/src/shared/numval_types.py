@@ -1,4 +1,4 @@
-"""The Quantity and Constant class represents a physical quantity with a value and dimensions."""
+"""The `Constant`, `Quantity`, `Dimension` and `Unit` classes represent physical quantities with values and dimensions."""
 
 from __future__ import annotations
 from dataclasses import dataclass
@@ -140,9 +140,9 @@ class Quantity:
         return self._value.imag
 
     def __repr__(self) -> str:
-        return f"Quantity({self._value}, {self.unit})"
+        return f"Quantity({self._value!r}, {self.unit!r})"
     def __str__(self) -> str:
-        return f"{self._value} {self.unit}"
+        return f"{self._value} {self.unit.symbol}"
     def __abs__(self) -> Quantity:
         return Quantity(abs(self._value), self.unit)
     def __neg__(self) -> Quantity:
@@ -169,13 +169,11 @@ class Quantity:
         return self.__mul__(other) # Commutative
 
     def __truediv__(self, other: Quantity | float | int) -> Quantity:
-        if not isinstance(other, Quantity):
-            if isinstance(other, (int, float)):
-                return Quantity(self._value / other, self.unit)
-            else:
-                raise TypeError(f"Cannot divide Quantity by {type(other)}")
-        newunit = self.unit / other.unit
-        return Quantity(self._value / other._value, newunit)
+        if isinstance(other, Quantity):
+            return Quantity(self.value / other.value, self.unit / other.unit)
+        if isinstance(other, (int, float)):
+            return Quantity(self._value / other, self.unit)
+        raise TypeError(f"Cannot divide Quantity by {type(other)}")
     def __rtruediv__(self, other: Quantity | float | int) -> Quantity:
         if not isinstance(other, Quantity):
             return Quantity(other / self._value, -self.unit)
@@ -247,3 +245,7 @@ class Constant(Quantity):
     @property
     def value(self) -> float:
         return self.quantity._value.real
+
+    @property
+    def unit(self) -> Unit:
+        return self.quantity.unit

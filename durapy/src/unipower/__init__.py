@@ -10,8 +10,6 @@ from .unipower import (
     rc_time_constant,
     inductor_impedance,
     power_dissipation,
-    resistor_visual,
-    resistor_value,
     total_esr,
     total_capacitance,
 )
@@ -34,8 +32,6 @@ __all__ = [
     "rc_time_constant",
     "inductor_impedance",
     "power_dissipation",
-    "resistor_visual",
-    "resistor_value",
     "total_esr",
     "total_capacitance",
 
