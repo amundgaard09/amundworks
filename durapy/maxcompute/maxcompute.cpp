@@ -1,11 +1,11 @@
 
+#include <cmath>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
-#include <iostream>
 
 namespace py = pybind11;
 
-// 1. Matrix-Matrix Multiplication
+// Matrix-Matrix Multiplication
 py::array_t<double> mat_mat_mul(py::array_t<double> a, py::array_t<double> b) {
     auto r_a = a.unchecked<2>(); // 2D accessor
     auto r_b = b.unchecked<2>(); // 2D accessor
@@ -32,33 +32,16 @@ py::array_t<double> mat_mat_mul(py::array_t<double> a, py::array_t<double> b) {
     return result;
 }
 
-// 2. Matrix-Vector Multiplication (Returns a 2D column matrix [N, 1])
+// Matrix-Vector Multiplication (Returns a 2D column matrix [N, 1])
 py::array_t<double> mat_vec_mul(py::array_t<double> a, py::array_t<double> b) {
-
-    std::cout << "ENTERED MATVEC" << std::endl;
-
-    std::cout << "A ndim: " << a.ndim() << std::endl;
-    std::cout << "B ndim: " << b.ndim() << std::endl;
-
     auto r_a = a.unchecked<2>();
     auto r_b = b.unchecked<1>();
 
-    std::cout << "AFTER UNCHECKED" << std::endl;
-
     size_t rows_a = r_a.shape(0);
-    std::cout << "ROWS: " << rows_a << std::endl;
-
     size_t cols_a = r_a.shape(1);
-    std::cout << "COLS: " << cols_a << std::endl;
 
-    py::array_t<double> result(static_cast<py::ssize_t>(rows_a)); // CRASHES HERE
-    std::cout << "RESULT CREATED" << std::endl;
-
+    py::array_t<double> result(static_cast<py::ssize_t>(rows_a));
     auto r_res = result.mutable_unchecked<1>();
-    std::cout << "RESULT ACCESSOR CREATED" << std::endl;
-
-    std::cout << "Result ndim: " << result.ndim() << std::endl;
-    std::cout << "Starting mat-vec multiplication" << std::endl;
 
     for (size_t i = 0; i < rows_a; ++i) {
         double sum = 0.0;
@@ -68,12 +51,10 @@ py::array_t<double> mat_vec_mul(py::array_t<double> a, py::array_t<double> b) {
         r_res(i) = sum;
     }
 
-    std::cout << "Finished mat-vec multiplication | SUCCESS" << std::endl;
-
     return result;
 }
 
-// 3. Vector-Matrix Multiplication (Returns a 2D column matrix [N, 1])
+// Vector-Matrix Multiplication (Returns a 2D column matrix [N, 1])
 py::array_t<double> vec_mat_mul(py::array_t<double> a, py::array_t<double> b) {
     auto r_a = a.unchecked<1>();
     auto r_b = b.unchecked<2>();
@@ -94,7 +75,7 @@ py::array_t<double> vec_mat_mul(py::array_t<double> a, py::array_t<double> b) {
     return result;
 }
 
-// 4. Vector Dot Product (Returns a primitive scalar)
+// Vector Dot Product (Returns a primitive scalar)
 double dot_product(py::array_t<double> a, py::array_t<double> b) {
     auto r_a = a.unchecked<1>();
     auto r_b = b.unchecked<1>();
@@ -107,25 +88,25 @@ double dot_product(py::array_t<double> a, py::array_t<double> b) {
 }
 
 py::array_t<double> outer_product(py::array_t<double> a, py::array_t<double> b) {
-    // 1. Enforce that input arrays are 1D vectors
+    // Enforce that input arrays are 1D vectors
     if (a.ndim() != 1 || b.ndim() != 1) {
         throw std::invalid_argument("Inputs must be 1D vectors for an outer product.");
     }
 
-    // 2. Get read-only 1D proxies for the input vectors
+    // Get read-only 1D proxies for the input vectors
     auto r_a = a.unchecked<1>();
     auto r_b = b.unchecked<1>();
 
     size_t size_a = r_a.shape(0);
     size_t size_b = r_b.shape(0);
 
-    // 3. Allocate a 2D result matrix of shape (size_a, size_b)
+    // Allocate a 2D result matrix of shape (size_a, size_b)
     py::array_t<double> result({size_a, size_b});
 
-    // 4. Get a mutable 2D proxy to write the results
+    // Get a mutable 2D proxy to write the results
     auto r_res = result.mutable_unchecked<2>();
 
-    // 5. Compute the outer product: A[i, j] = a[i] * b[j]
+    // Compute the outer product: A[i, j] = a[i] * b[j]
     for (size_t i = 0; i < size_a; ++i) {
         double val_a = r_a(i); // Cache to avoid redundant lookups
         for (size_t j = 0; j < size_b; ++j) {
@@ -141,9 +122,9 @@ PYBIND11_MODULE(_maxcompute, m) {
     m.doc() = "MX | MaxCompute C++ Accelerated Computation Platform";
 
     // call_guard releases the GIL so these math operations can scale up multi-threaded Python apps
-    m.def("mat_mat_mul", &mat_mat_mul, "Matrix-Matrix multiplication", py::call_guard<py::gil_scoped_release>());
-    m.def("mat_vec_mul", &mat_vec_mul, "Matrix-Vector multiplication", py::call_guard<py::gil_scoped_release>());
-    m.def("vec_mat_mul", &vec_mat_mul, "Vector-Matrix multiplication", py::call_guard<py::gil_scoped_release>());
-    m.def("dot_product", &dot_product, "Vector-dot product", py::call_guard<py::gil_scoped_release>());
-    m.def("outer_product", &outer_product, "Vector-outer product", py::call_guard<py::gil_scoped_release>());
+    m.def("mat_mat_mul", &mat_mat_mul, "Matrix-Matrix multiplication");
+    m.def("mat_vec_mul", &mat_vec_mul, "Matrix-Vector multiplication");
+    m.def("vec_mat_mul", &vec_mat_mul, "Vector-Matrix multiplication");
+    m.def("dot_product", &dot_product, "Vector-dot product");
+    m.def("outer_product", &outer_product, "Vector-outer product");
 }

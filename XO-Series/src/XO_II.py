@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 def _sigmoid(Z):
-    return 1 / (1 + np.exp(-Z))    
+    return 1 / (1 + np.exp(-Z))
 def _dsigmoid(Z):
     s = _sigmoid(Z)
     return s * (1 - s)
@@ -37,39 +37,39 @@ class DenseLayer:
         return self.Output
     def Backward(self, dA: np.ndarray, LearningRate: float):
         dZ: np.ndarray = dA * self.dact(self.Z)
-        X:  np.ndarray  = self.Input if self.Input.ndim > 1 else self.Input.reshape(1, -1)
+        X:  np.ndarray = self.Input if self.Input.ndim > 1 else self.Input.reshape(1, -1)
         dZ: np.ndarray = dZ  if dZ.ndim  > 1 else dZ.reshape(1, -1)
-        dW: np.ndarray  = X.T @ dZ / X.shape[0]
-        dB: np.ndarray  = dZ.mean(axis=0)
+        dW: np.ndarray = X.T @ dZ / X.shape[0]
+        dB: np.ndarray = dZ.mean(axis=0)
         dI: np.ndarray = dZ @ self.Weights.T
-        
+
         self.Weights -= LearningRate * dW
         self.Bias    -= LearningRate * dB
-        
+
         return dI.reshape(self.Input.shape)
 class NeuralNetwork:
     def __init__(
-        self, 
-        InputNeuronCount: int, 
-        DenseLayerCount: int, 
-        DenseLayerNeuronCount: int, 
+        self,
+        InputNeuronCount: int,
+        DenseLayerCount: int,
+        DenseLayerNeuronCount: int,
         OutputNeuronCount: int,
-        ActivationFunctionsPerLayer: list[str], 
+        ActivationFunctionsPerLayer: list[str],
         LearningRate: float
     ):
-        
+
         self.InputNeuronCount = InputNeuronCount
         self.DenseLayerCount = DenseLayerCount
         self.OutputNeuronCount = OutputNeuronCount
         self.LearningRate = LearningRate
         self.Layers: list[DenseLayer] = []
- 
+
         PreviousNeuronCount = InputNeuronCount
-        
+
         for idx in range(DenseLayerCount):
             layer = DenseLayer(
-                PreviousNeuronCount, 
-                DenseLayerNeuronCount, 
+                PreviousNeuronCount,
+                DenseLayerNeuronCount,
                 ActivationFunctionsPerLayer[idx]
             )
             self.Layers.append(layer)
@@ -82,37 +82,37 @@ class NeuralNetwork:
 
         Args:
             Input (list[float]): A vectorlist of input values to the network, comprised of individual input values for each input neuron.
-            
+
         Returns:
             Output (list[float]): A vectorlist of output values from the network, comprised of individual output values from each output neuron.
         """
         x = Input
         for layer in self.Layers:
             x = layer.Forward(x)
-        return x  
+        return x
     def Backward(self, TargetOutput: np.ndarray):
         """Backward pass for the entire network.
-        
+
         Args:
             TargetOutput (np.ndarray): Target output values for backpropagation.
         """
         OutputPrediction = self.Layers[-1].Output
         n = TargetOutput.shape[0] if TargetOutput.ndim > 1 else 1
         dA = 2 * (OutputPrediction - TargetOutput) / n
-        
+
         for layer in reversed(self.Layers):
             dA = layer.Backward(dA, self.LearningRate)
     def Train(self, X: np.ndarray, y: np.ndarray, epochs: int):
         """Training loop for the network.
-        
+
         Args:
             X (np.ndarray): Input data.
             y (np.ndarray): Target labels.
             epochs (int): Number of training epochs.
         """
-        
+
         lastloss = float('inf')
-        
+
         for epoch in range(epochs):
             self.Forward(X)
             self.Backward(y)
@@ -120,17 +120,17 @@ class NeuralNetwork:
                 loss = MSE(y, self.Layers[-1].Output)  # post-update loss
                 Marker = "\033[92m ### \033[0m" if loss < lastloss else "\033[91m ### \033[0m"
                 print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss:.6f} {Marker}")
-                lastloss = loss     
+                lastloss = loss
     def Predict(self, X: np.ndarray) -> np.ndarray:
         """Make predictions on new data.
-        
+
         Args:
             X (np.ndarray): Input data.
-        
+
         Returns:
             np.ndarray: Predictions.
         """
-        return self.Forward(X) 
+        return self.Forward(X)
     @staticmethod
     def NormalizeData(X: np.ndarray) -> np.ndarray:
         mean = np.mean(X, axis=0)
@@ -187,4 +187,3 @@ for i in range(len(X)):
         print("\033[92m -- Correct Prediction! -- \033[0m")
     else:
         print("\033[91m -- Incorrect Prediction! -- \033[0m")
-

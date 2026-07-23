@@ -14,7 +14,7 @@ from vosk import Model, KaldiRecognizer
 from core.types import Query, EmotionMatrix
 from sounddevice import RawInputStream, PortAudioError
 from durapy.src.uniCLI.uniCLI import Console, console_print
-from core.utilities.decorators import runtime_log
+from ..shared.decorators import runtime_log
 from json import loads
 
 # Path to Icarus folder

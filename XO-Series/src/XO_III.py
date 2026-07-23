@@ -7,6 +7,7 @@ Matrix-Based MNIST Classification Neural Net
 import time
 import keras
 import numpy as np
+
 from durapy import unicogni
 
 ACTIVATIONS = {
@@ -170,27 +171,27 @@ MNISTNET = NeuralNetwork(
 #### -- DATA PREPROCESSING -- ####
 
 #data set
-((X_train, Y_train), (X_test,  Y_test)) = keras.datasets.mnist.load_data()
+((x_train, y_train), (x_test,  y_test)) = keras.datasets.mnist.load_data()
 
-X_train, Y_train, X_test, Y_test = np.array(X_train), np.array(Y_train), np.array(X_test), np.array(Y_test)
+x_train, y_train, x_test, y_test = np.array(x_train), np.array(y_train), np.array(x_test), np.array(y_test)
 
 #reshaping and normalizing
-X_train = np.reshape(X_train, (X_train.shape[0], -1))
-X_test = np.reshape(X_test, (X_test.shape[0], -1))
-X_train = X_train / 255.0
-X_test = X_test / 255.0
+x_train = np.reshape(x_train, (x_train.shape[0], -1))
+x_test = np.reshape(x_test, (x_test.shape[0], -1))
+x_train = x_train / 255.0
+x_test = x_test / 255.0
 
 #one-hot encoding of labels
-train_labels = np.zeros((Y_train.size, Y_train.max() + 1))
-test_labels = np.zeros((Y_test.size, Y_test.max() + 1))
+train_labels = np.zeros((y_train.size, y_train.max() + 1))
+test_labels = np.zeros((y_test.size, y_test.max() + 1))
 
-train_rows = np.arange(Y_train.size)
-test_rows = np.arange(Y_test.size)
+train_rows = np.arange(y_train.size)
+test_rows = np.arange(y_test.size)
 
-train_labels[train_rows, Y_train] = 1
-test_labels[test_rows, Y_test] = 1
+train_labels[train_rows, y_train] = 1
+test_labels[test_rows, y_test] = 1
 
-X = X_train
+X = x_train
 Y = train_labels
 
 #### -- TRAINING LOOP -- ####
@@ -209,7 +210,7 @@ print(f"Time per Epoch: {elapsed_time/epochs:.4f} seconds")
 
 correct_preds = np.zeros(10, dtype=int)
 
-raw_preds = MNISTNET.Predict(X_test)
+raw_preds = MNISTNET.Predict(x_test)
 preds = np.argmax(raw_preds, axis=1)
 test_label_idxs = np.argmax(test_labels, axis=1)
 

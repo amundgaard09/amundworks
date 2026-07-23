@@ -2,6 +2,15 @@
 
 import math
 
+def lovelace(a: float, b: float, c: float, d: float, e: float, f: float) -> tuple[float, float]:
+    """Lovelace's algorithm for solving systems of linear equations."""
+    D = a*e - b*d
+    if D == 0:
+        raise ValueError("The system has no unique solution.")
+    x = c*e - b*f / D
+    y = a*f - c*d / D
+    return x, y
+
 def fibonacci_integer(fib_idx: float) -> int:
     """Fibonacci integer generator that returns the Fibonacci integer at the given index."""
 

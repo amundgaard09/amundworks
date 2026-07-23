@@ -20,7 +20,6 @@ import random
 import numpy as np
 
 from typing import overload, Sequence, Any
-
 from .decorators import requires_square#, requires_real
 from ..shared.exceptions import ArgumentError
 from ._maxcompute import mat_mat_mul, mat_vec_mul, vec_mat_mul, dot_product, outer_product
@@ -56,7 +55,7 @@ def is_close(a: Numerical, b: Numerical) -> bool:
     else:
         return False
 
-class NDVector:
+class Vector:
     """
     `DuraPy` Dataclass for N-dimensional vectors.
 
@@ -92,98 +91,83 @@ class NDVector:
     def __repr__(self) -> str:
         return f"<{(component for component in self.components)}>"
     def __str__(self) -> str:
-        return str(self.components)
-    def __abs__(self) -> NDVector:
-        return NDVector([abs(component) for component in self.components])
+        return str(self.components).replace(",", "")
+    def __abs__(self) -> Vector:
+        return Vector([abs(component) for component in self.components])
     def __len__(self) -> int:
         return len(self.components)
-    def __neg__(self) -> NDVector:
-        return NDVector([-(component) for component in self.components])
+    def __neg__(self) -> Vector:
+        return Vector([-(component) for component in self.components])
     def __eq__(self, value: object) -> bool:
-        if isinstance(value, NDVector):
+        if isinstance(value, Vector):
             return (self.components == value.components)
         elif isinstance(value, list):
             return (self.components == value)
         return NotImplemented
 
-    def __add__(self, other: Real | NDVector) -> NDVector:
+    def __add__(self, other: Real | Vector) -> Vector:
         if isinstance(other, Real): # scalar addition
-            return NDVector([self.components[i] + other for i in range(len(self.components))])
-        if isinstance(other, NDVector): # vector addition
-            return NDVector([self.components[i] + other.components[i] for i in range(len(self.components))])
+            return Vector([self.components[i] + other for i in range(len(self.components))])
+        if isinstance(other, Vector): # vector addition
+            return Vector([self.components[i] + other.components[i] for i in range(len(self.components))])
         return NotImplemented
-    def __radd__(self, other: Real | NDVector) -> NDVector:
+    def __radd__(self, other: Real | Vector) -> Vector:
         return self.__add__(other)
 
-    def __sub__(self, other: Real | NDVector) -> NDVector:
+    def __sub__(self, other: Real | Vector) -> Vector:
         if isinstance(other, Real): # scalar subtraction
-            return NDVector([self.components[i] - other for i in range(len(self.components))])
-        if isinstance(other, NDVector): # vector subtraction
-            return NDVector([self.components[i] - other.components[i] for i in range(len(self.components))])
+            return Vector([self.components[i] - other for i in range(len(self.components))])
+        if isinstance(other, Vector): # vector subtraction
+            return Vector([self.components[i] - other.components[i] for i in range(len(self.components))])
         return NotImplemented
-    def __rsub__(self, other: Real | NDVector) -> NDVector:
-        if isinstance(other, Real): # scalar subtraction
-            return NDVector([other - self.components[i] for i in range(len(self.components))])
-        if isinstance(other, NDVector): # vector subtraction
-            return NDVector([other.components[i] - self.components[i] for i in range(len(self.components))])
-        return NotImplemented
+    def __rsub__(self, other: Vector) -> Vector:
+        return other.__sub__(self)
 
     @overload
-    def __mul__(self, other: Real) -> NDVector: ...
+    def __mul__(self, other: Real) -> Vector: ...
     @overload
-    def __mul__(self, other: NDVector) -> float: ...
-    def __mul__(self, other: Real | NDVector) -> NDVector | float:
+    def __mul__(self, other: Vector) -> float: ...
+    def __mul__(self, other: Real | Vector) -> Vector | float:
         if isinstance(other, Real): # scalar multiplication
-            return NDVector([other * self.components[i] for i in range(len(self.components))])
-        if isinstance(other, NDVector): # vector multiplication | Dot product
+            return Vector([other * self.components[i] for i in range(len(self.components))])
+        if isinstance(other, Vector): # vector multiplication | Dot product
             return dot_product(np.array(self.components), np.array(other.components))
         return NotImplemented
-    def __rmul__(self, other: Real) -> NDVector:
+    def __rmul__(self, other: Real) -> Vector:
         return self.__mul__(other)
 
-    def __truediv__(self, other: Real | NDVector) -> NDVector:
+    def __truediv__(self, other: Real | Vector) -> Vector:
         if isinstance(other, Real): # scalar division
-            return NDVector([component / other for component in self.components])
-        elif isinstance(other, NDVector): # vector division
-            return NDVector([x / y for x, y in zip(self.components, other.components)])
-        else:
-            return NotImplemented
-    def __rtruediv__(self, other: Real | NDVector) -> NDVector:
-        if isinstance(other, Real): # scalar division
-            return NDVector([other / component for component in self.components])
-        elif isinstance(other, NDVector): # vector division
-            return NDVector([y / x for y, x in zip(other.components, self.components)])
-        else:
-            return NotImplemented
+            return Vector([component / other for component in self.components])
+        if isinstance(other, Vector): # vector division
+            return Vector([x / y for x, y in zip(self.components, other.components)])
+        return NotImplemented
+    def __rtruediv__(self, other: Vector) -> Vector:
+        return other.__truediv__(self)
 
-    def __matmul__(self, other: NDVector | Matrix) -> Matrix:
-        if isinstance(other, NDVector): # Outer product
+    def __matmul__(self, other: Vector | Matrix) -> Matrix:
+        if isinstance(other, Vector): # Outer product
             return Matrix(array=outer_product(np.array(self.components), np.array(other.components)).tolist())
-        elif isinstance(other, Matrix):
+        if isinstance(other, Matrix):
             return Matrix(array=vec_mat_mul(np.array(self.components), np.array(other._array)).tolist())
-        else:
-            return NotImplemented
+        return NotImplemented
 
     @overload
-    def __rmatmul__(self, other: NDVector) -> NDVector: ...
+    def __rmatmul__(self, other: Vector) -> Vector: ...
     @overload
     def __rmatmul__(self, other: Matrix) -> Matrix: ...
-    def __rmatmul__(self, other: NDVector | Matrix) -> NDVector | Matrix:
-        if isinstance(other, NDVector):
-            return other.__rmatmul__(self) # Same as __matmul__, but with the arguments reversed
-        elif isinstance(other, Matrix):
-            return other.__matmul__(self)
-        else:
-            return NotImplemented
+    def __rmatmul__(self, other: Vector | Matrix) -> Vector | Matrix:
+        return other.__matmul__(self)
+
+### NOTE | Functions are split into functions and properties to bypass the effects of @requires_square, since it messes up type hints
 
 class Matrix:
     def __init__(self,
         array: list[list[float]]  | None = None,
         shape: tuple[int, int]    | None = None,
         randomfill: bool          | None = False,
-        randtype:   type  = float,
         randrange:  tuple = (-1, 1),
-        fill:       float = 0,
+        fill:       float = 0.0,
     ) -> None:
         """
         N*M-dimensional Matrix.
@@ -205,30 +189,19 @@ class Matrix:
         if shape == (0, 0):
             raise ValueError("Matrix can't have 0 rows or columns!")
 
-        if array and shape:
-            raise ValueError("Both array and size parameters are provided! Only one should be specified.")
-
-        if array is not None:
+        if array:
+            if shape:
+                raise ArgumentError("Both array and size parameters are provided! Only one should be specified.")
             if len(array) == 0 or any(len(row) != len(array[0]) for row in array):
                 raise ValueError("Matrix must be rectangular and non-empty")
+        else:
+            if not shape:
+                raise ArgumentError("Missing array and size parameters! Matrix() needs atleast 1!")
 
-        if not shape and not array:
-            raise ArgumentError("Missing array and size parameters! Matrix() needs atleast 1!")
-
-        if array is not None:
-            if len(array) == 0 or any(len(row) != len(array[0]) for row in array):
-                raise ValueError("Matrix must be rectangular and non-empty")
-
-        if array is None and shape:
+        if not array and shape:
             rows, cols = shape
             if randomfill:
-                if randtype is float:
-                    array = [[random.uniform(*randrange) for _ in range(cols)] for _ in range(rows)]
-                elif randtype is int:
-                    array = [[random.randint(*randrange) for _ in range(cols)] for _ in range(rows)]
-                else:
-                    array = [[0 for _ in range(cols)] for _ in range(rows)]
-
+                array = [[random.uniform(*randrange) for _ in range(cols)] for _ in range(rows)]
             else:
                 array = [[fill for _ in range(cols)] for _ in range(rows)]
 
@@ -247,40 +220,49 @@ class Matrix:
         return self._rows * self._cols
 
     @property
-    def zeros(self) -> int:
+    def zeroes(self) -> int:
         """Returns the number of elements which are zero."""
-        _zeros = 0
+        zero = 0
         for row in self._array:
             for element in row:
-                _zeros += 1 if element == 0 else 0
-        return _zeros
+                zero += 1 if math.isclose(element, 0) else 0
+        return zero
     @property
-    def nonzeros(self) -> int:
+    def nonzeroes(self) -> int:
         """Returns the number of elements which are not zero."""
-        _nonzeros = 0
+        nonzero = 0
         for row in self._array:
             for element in row:
-                _nonzeros += 1 if element != 0 else 0
-        return _nonzeros
+                nonzero += 1 if not math.isclose(element, 0) else 0
+        return nonzero
 
     def __getitem__(self, idx: int) -> list:
+        if idx < 0 or idx > self.shape[0]:
+            raise IndexError("Key out of bounds!")
         return self._array[idx]
     def __setitem__(self, key: int, value: list[float]) -> None:
+        if key < 0 or key > self.shape[0]:
+            raise IndexError("Key out of bounds!")
+        if len(value) != self._cols:
+            raise ValueError("New row length doesn't match the dimensions of the matrix!")
         self._array[key] = value
 
-    def set_row(self, idx: int, newrow: list) -> None:
-        if len(newrow) != self._cols:
-            raise ValueError("New row length doesn't match the dimensions of the matrix!")
-        self[idx] = newrow
-    def row(self, idx: int) -> list:
+    def set_row(self, idx: int, new_row: list) -> None:
+        self[idx] = new_row
+    def row(self, idx: int) -> list[float]:
         return self[idx]
-    def set_column(self, idx: int, newcolumn: list) -> None:
-        if len(newcolumn) != self._rows:
+    def set_column(self, idx: int, new_col: list[float]) -> None:
+        if len(new_col) != self._rows:
             raise ValueError("New column length doesn't match the dimensions of the matrix!")
         for j in range(len(self._array)):
-            self[j][idx] = newcolumn[j]
-    def column(self, idx: int) -> list:
-        return [self[j][idx] for j in range(len(self[0]))]
+            self[j][idx] = new_col[j]
+    def column(self, idx: int) -> list[float]:
+        return [self[j][idx] for j in range(len(self))]
+
+    def to_row_vectors(self) -> list[Vector]:
+        return [Vector(components=row) for row in self]
+    def to_column_vectors(self) -> list[Vector]:
+        return [Vector(components=column) for column in self.T]
 
     def __format__(self, format_spec: str) -> str:
         match format_spec:
@@ -298,7 +280,7 @@ class Matrix:
     def __str__(self) -> str:
         return_str = ""
         for row in self:
-            return_str += str(row) + "\n"
+            return_str += str(row).replace(",", "") + "\n"
 
         return return_str
     def __neg__(self) -> Matrix:
@@ -356,26 +338,22 @@ class Matrix:
     @overload
     def __matmul__(self, other: Matrix) -> Matrix: ...
     @overload
-    def __matmul__(self, other: NDVector) -> NDVector: ...
-    def __matmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
-        print("MATMUL STARTED")
+    def __matmul__(self, other: Vector) -> Vector: ...
+    def __matmul__(self, other: Matrix | Vector) -> Matrix | Vector:
         if isinstance(other, Matrix):
-            print("DISPATCHED TO MATRIX-MATRIX MULTIPLICATION IN MATMUL")
             return Matrix(array=mat_mat_mul(np.array(self._array, dtype=np.float64), np.array(other._array, dtype=np.float64)).tolist())
 
-        elif isinstance(other, NDVector):
-            print("DISPATCHED TO MATRIX-VECTOR MULTIPLICATION IN MATMUL - CORRECT DISPATCH")
-            return NDVector(components=mat_vec_mul(np.array(self._array, dtype=np.float64), np.array(other.components, dtype=np.float64)).tolist())
+        if isinstance(other, Vector):
+            return Vector(components=mat_vec_mul(np.array(self._array, dtype=np.float64), np.array(other.components, dtype=np.float64)).tolist())
 
-        else:
-            return NotImplemented
+        return NotImplemented
 
     @overload
     def __rmatmul__(self, other: Matrix) -> Matrix: ...
     @overload
-    def __rmatmul__(self, other: NDVector) -> NDVector: ...
-    def __rmatmul__(self, other: Matrix | NDVector) -> Matrix | NDVector:
-        return other.__matmul__(self) # only need to define one method
+    def __rmatmul__(self, other: Vector) -> Vector: ...
+    def __rmatmul__(self, other: Matrix | Vector) -> Matrix | Vector:
+        return other.__matmul__(self)
 
     def _T(self) -> Matrix:
         rows, cols = self.shape
@@ -397,6 +375,7 @@ class Matrix:
         return self._T()
 
     def is_square(self) -> bool:
+        """Returns if the matrix is square (rows = columns). Decides if the matrix has certain properties, like determinant, inverse, etc."""
         return self._cols == self._rows
 
     @staticmethod
@@ -424,7 +403,7 @@ class Matrix:
 
         detsum = 0.0
 
-        for idx1, _ in enumerate(self[0]):
+        for idx1, _ in enumerate(self._array[0]):
             minor = self.__minor_extract(self._array, 0, idx1)
             detsum += self.__sign(self[0][idx1] * self._det(minor), idx1)
 
@@ -442,10 +421,10 @@ class Matrix:
     def __build_augmented(self) -> Matrix:
         """Builds the augmented matrix by concatenating the original matrix with its identity matrix."""
         n = self.shape[0]
-        i = self.to_identity()
+        i = self.to_identity
 
         aug = Matrix(
-            array = [[0 for _ in range(2 * n)] for _ in range(n)],
+            array = [[0.0 for _ in range(2 * n)] for _ in range(n)],
         )
 
         for j in range(n):
@@ -457,10 +436,11 @@ class Matrix:
 
     @requires_square
     def _inverse(self) -> Matrix | None:
+
         if self.det == 0:
             return None
 
-        n = self.shape[0]
+        n, _ = self.shape
         aug = self.__build_augmented()
 
 
@@ -484,8 +464,7 @@ class Matrix:
                     factor = aug[j][i]
                     aug[j] = [aug[j][k] - factor * aug[i][k] for k in range(2 * n)]
 
-        inverse = [row[n:] for row in aug]
-        return Matrix(inverse)
+        return Matrix(array = [row[n:] for row in aug])
     @property
     def inverse(self) -> Matrix | None:
         """
@@ -521,7 +500,7 @@ class Matrix:
                 continue
 
             if pivot_row_idx != row_idx:
-                A[row_idx], A[pivot_row_idx] = A[pivot_row_idx], A[row_idx]
+                A[row_idx], A[pivot_row_idx] = A[pivot_row_idx], A[row_idx] # Swap
 
             for i in range(row_idx + 1, N):
                 factor = (A[i][col] / A[row_idx][col])
@@ -570,17 +549,17 @@ class Matrix:
         return Q, R
 
     @requires_square
-    def _eigen(self, max_iters: int = 150) -> tuple[list[float], Matrix]:
+    def _eigen(self, max_iters: int = 150) -> tuple[list[float], list[Vector]]:
         n = self.shape[0]
-        Ak = Matrix([[self[r][c] for c in range(n)] for r in range(n)])
-        i = Matrix(shape=(n, n)).to_identity()
+        ak = Matrix([[self[r][c] for c in range(n)] for r in range(n)])
+        i = Matrix(shape=(n, n)).to_identity
 
         # Iteratively apply QR decomposition to converge on eigenvalues
         for _ in range(max_iters):
-            Q, R = self.__QR_decomp(Ak)
+            Q, R = self.__QR_decomp(ak)
 
             # Update Ak and i to converge on eigenvalues
-            Ak = R @ Q
+            ak = R @ Q
             i = i @ Q
 
             # Check for convergence (off-diagonal elements should be small)
@@ -588,17 +567,17 @@ class Matrix:
             for r in range(n):
                 for c in range(n):
                     if r != c:
-                        off_diagonal_sum += abs(Ak[r][c])
+                        off_diagonal_sum += abs(ak[r][c])
 
             # If off-diagonal elements are small, we've converged
             if off_diagonal_sum < EPSILON:
                 break
 
         # Extract eigenvalues and eigenvectors
-        eigenvals = [Ak[i][i] for i in range(n)]
-        return eigenvals, i
+        eigenvals = [ak[i][i] for i in range(n)]
+        return eigenvals, i.to_column_vectors()
     @property
-    def eigen(self) -> tuple[list[float], Matrix]:
+    def eigen(self) -> tuple[list[float], list[Vector]]:
         """
         Computes eigenvalues and eigenvectors using the iterative QR algorithm.
 
@@ -632,13 +611,17 @@ class Matrix:
         return self._trace()
 
     @requires_square
-    def to_identity(self) -> Matrix:
+    def _to_identity(self) -> Matrix:
         """Matrix constructor that returns the identity matrix of the given size."""
         matrix = Matrix(shape=self.shape)
         for idx in range(self.shape[0]):
             matrix[idx][idx] = 1
 
         return matrix
+
+    @property
+    def to_identity(self) -> Matrix:
+        return self._to_identity(self)
 
     @requires_square
     def is_singular(self) -> bool:
@@ -647,7 +630,7 @@ class Matrix:
     @requires_square
     def is_identity(self) -> bool:
         """Returns if the matrix is equal to the identity matrix of the same dimension."""
-        return self == Matrix(shape=self.shape).to_identity()
+        return self == self.to_identity
     @requires_square
     def is_diagonal(self) -> bool:
         """Returns if the matrix is diagonal.

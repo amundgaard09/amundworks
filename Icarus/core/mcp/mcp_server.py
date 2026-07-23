@@ -3,17 +3,17 @@ import json
 import importlib.util
 
 from pathlib import Path
-from durapy import uniCLI
+from durapy.src.uniCLI import Console
 from types import ModuleType
-from core.mcp.types import MCPTool, InputSchema, MCPProperty
-from core.utilities.exceptions import MissingFileError, SkillLoadError
-from core.utilities.decorators import runtime_log
+from .types import MCPTool, InputSchema, MCPProperty
+from ..shared.exceptions import MissingFileError, SkillLoadError
+from ..shared.decorators import runtime_log
 
 def is_dunder(string: str) -> bool:
     return string.strip().startswith("__") and string.strip().endswith("__")
 
 class MCPServer:
-    def __init__(self, console: uniCLI.Console) -> None:
+    def __init__(self, console: Console) -> None:
         """Initialize the MCP Server"""
         console.start_task("Starting MCP Server")
 

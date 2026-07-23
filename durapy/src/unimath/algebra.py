@@ -53,7 +53,7 @@ def quadratic_solutions(A: float, B: float, C: float) -> tuple[float, float] | f
     if A == 0:
         raise ValueError("Invalid quadratic equation! A cannot be 0.")
 
-    D: float = B**2 - 4*A*C
+    D = B**2 - 4*A*C
 
     if D > 0:
         x1 = (-B - math.hypot(0, D)) / (2 * A)
@@ -84,18 +84,18 @@ def quadratic_factorized(a: float, b: float, c: float) -> str:
         return f"{a}(x {sign(x1)} {x1})²"
 
     else:
-        return f"{a}x² {sign(b)} {abs(b)}x {sign(c)} {abs(c)}" # Uses sign() for clean formatting to avoid things like "- -5.0" instead of "-5.0"
+        return f"{a}x² {sign(b)} {abs(b)}x {sign(c)} {abs(c)}"
 def quadratic_evaluation(a: float, b: float, c: float, x: float) -> float:
     """Evaluate a quadratic polynomial."""
     return a*x**2 + b*x + c
 
-def cubic_vertex(a: float, b: float, c: float, d: float) -> list:
-    """Returns the vertex (aka the minimum/maximum point) of a cubic function in the form of `(x, y)`."""
+def cubic_vertex(a: float, b: float, c: float, d: float) -> list[tuple[float, sympy.Basic]]:
+    """Returns the vertices (aka the minimum/maximum points) of a cubic function in the form of `(x, y)`."""
     x = sympy.symbols('x')
     f = sympy.sympify(f"{a}*x**3 + {b}*x**2 + {c}*x + {d}")
     dif = sympy.diff(f, x)
     crit_points = sympy.solve(dif, x)
-    vertices = []
+    vertices: list[tuple[float, sympy.Basic]] = []
 
     for point in crit_points:
         y = f.subs(x, point)
@@ -119,9 +119,11 @@ def cubic_zeros(a: float, b: float, c: float, d: float) -> list:
 def cubic_evaluation(a: float, b: float, c: float, d: float, x: float) -> float:
     """Evaluate a cubic polynomial."""
     return a*x**3 + b*x**2 + c*x + d
-def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: int, upper: int) -> list[float]:
+def cubic_evaluation_bruteforce(a: float, b: float, c: float, d: float, lower: int, upper: int) -> list[int]:
     """Brute Force evaluation of a third-degree polynomial. The function checks all evaluations from `LowerBound` to `UpperBound` and highlights roots as green."""
-    x_vals, y_vals, roots = [], [], []
+    x_vals: list[int] = []
+    y_vals: list[float] = []
+    roots: list[int] = []
 
     for x in range(int(lower), int(upper+1)):
         result = cubic_evaluation(a, b, c, d, x)

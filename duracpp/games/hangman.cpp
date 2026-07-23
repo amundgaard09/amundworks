@@ -5,13 +5,13 @@
 #include <vector>
 
 int _int_clip(int value, int upper, int lower) {
-    if (value > upper) { return upper; } 
-    else if (value < lower) { return lower; } 
+    if (value > upper) { return upper; }
+    else if (value < lower) { return lower; }
     else { return value; }
 }
 
 int main() {
-    
+
     int Difficulty;
     int GuessCount = 0;
     int IncorrectGuessCount = 0;
@@ -81,4 +81,3 @@ int main() {
 
     return 0;
 }
-

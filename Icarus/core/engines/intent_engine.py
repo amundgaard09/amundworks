@@ -13,7 +13,7 @@ from difflib import SequenceMatcher
 from core.types import Query, ToolCall
 from core.mcp.mcp_server import MCPServer
 from durapy.src.uniCLI.uniCLI import Console
-from core.utilities.decorators import runtime_log
+from ..shared.decorators import runtime_log
 from re import findall
 
 class IntentEngine:

@@ -82,7 +82,7 @@ class DenseLayer:
 
         return dI.reshape(self.in_arr.shape)
 
-class Sequential:
+class SequentialMLP:
     def __init__(
         self,
         neurons_in: int,
@@ -216,10 +216,10 @@ class Sequential:
 
             # Iterate over batches of data
             for batch_start in range(0, x.shape[0], batch_size):
-                X_batch = x[batch_start:batch_start + batch_size]
+                x_batch = x[batch_start:batch_start + batch_size]
                 y_batch = y[batch_start:batch_start + batch_size]
 
-                self.forward(X_batch, training=True)
+                self.forward(x_batch, training=True)
                 self.backward(y_batch, learning_rate)
 
                 epoch_loss += unicogni.cross_entropy_loss(y_batch, self.layers[-1].out)

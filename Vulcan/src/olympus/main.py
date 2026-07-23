@@ -37,7 +37,7 @@ Docs and other resources can be found in the [Durendal GitHub](https://github.co
 #|#                                                                    #|#
 ### ------------------------------------------------------------------ ###
 
-from src.modules.dtypes import (
+from modules.dtypes import (
     Step,
     Exercise,
     Session,
@@ -51,7 +51,7 @@ from src.modules.dtypes import (
     SeasonPlan,
 )
 
-from src.modules.builders import (
+from modules.builders import (
     cli_create_event,
     cli_create_session,
     cli_create_day_plan,
@@ -70,7 +70,6 @@ from src.modules.builders import (
     view_season_plan,
     view_training_block,
     view_athlete_profile,
-    view_student_athlete_profile,
 )
 
 import json

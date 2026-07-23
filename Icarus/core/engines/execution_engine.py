@@ -9,9 +9,9 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 """
 
 from core.mcp.mcp_server import MCPServer
-from durapy.src.uniCLI.uniCLI import Console
+from durapy.src.uniCLI import Console
 from core.types import ToolCall, Response, EmotionMatrix
-from core.utilities.decorators import runtime_log
+from core.shared.decorators import runtime_log
 
 class ExecutionEngine:
     @runtime_log
@@ -27,8 +27,7 @@ class ExecutionEngine:
     def __repr__(self):
         return "ExecutionEngine()"
 
-    @staticmethod
-    def handle_unknown() -> str: # Add closest function system
+    def handle_unknown(self) -> str:
         return "I didn't understand that." # Did you mean: etc...
 
     @runtime_log

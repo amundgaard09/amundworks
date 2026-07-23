@@ -1,4 +1,3 @@
-
 /* header placeholder core */
 
 #include "HPF.h"
