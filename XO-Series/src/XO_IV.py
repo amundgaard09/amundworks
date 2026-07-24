@@ -18,16 +18,17 @@ Optimization ideas for MLPs (brief):
  - Reduce model size (pruning, quantization) for deployment efficiency.
 """
 
-from durapy import unicogni
-from typing import Callable
+from collections.abc import Callable
 
 import numpy as xp
 
+from durapy import unicogni
+
 ACTIVATIONS: dict[str, tuple[Callable[[xp.ndarray], xp.ndarray], Callable[[xp.ndarray], xp.ndarray] | None]] = {
     "relu":    (lambda Z: xp.maximum(0, Z), lambda Z: (Z > 0).astype(float)),
-    "linear":  (lambda Z: Z,                lambda Z: xp.ones_like(Z)),
+    "linear":  (lambda Z: Z, lambda Z:      xp.ones_like(Z)),
     "sigmoid": (unicogni.sigmoid,           unicogni.d_sigmoid),
-    "softmax": (unicogni.softmax,           None) # Softmax derivative is handled differently in backpropagation, so we set it to None here.
+    "softmax": (unicogni.softmax,           None)  # Softmax derivative is handled differently in backpropagation, so we set it to None here.
 }
 
 class DenseLayer:
@@ -37,10 +38,10 @@ class DenseLayer:
         n_outputs: int,
         act: str,
         weight_decay: float = 0.0,
-        dropout_rate: float = 0.0
+        dropout_rate: float = 0.0,
     ) -> None:
         """Initializes a dense layer with given input and output sizes and activation function."""
-        self.weights: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs) # He initialization
+        self.weights: xp.ndarray = xp.random.randn(n_inputs, n_outputs) * xp.sqrt(2.0 / n_inputs)  # He initialization
         self.bias: xp.ndarray = xp.zeros(n_outputs)
         self.act, self.dact = ACTIVATIONS.get(act, ACTIVATIONS["relu"])
         self.weight_decay = weight_decay
@@ -56,7 +57,7 @@ class DenseLayer:
         if training and self.dropout_rate > 0.0:
             self.dropout_mask = xp.random.rand(*self.out.shape) > self.dropout_rate
             self.out *= self.dropout_mask
-            self.out /= (1.0 - self.dropout_rate)
+            self.out /= 1.0 - self.dropout_rate
 
         return self.out
 
@@ -64,15 +65,15 @@ class DenseLayer:
         """Backward pass for the layer. Calculates gradients and updates weights and biases."""
         if self.dropout_rate > 0.0 and self.dropout_mask is not None:
             dA = dA * self.dropout_mask
-            dA /= (1.0 - self.dropout_rate)
+            dA /= 1.0 - self.dropout_rate
 
         dZ = dA if self.dact is None else dA * self.dact(self.Z)
 
-        X  = xp.atleast_2d(self.in_arr)
+        X = xp.atleast_2d(self.in_arr)
         dZ = xp.atleast_2d(dZ)
-        dB = dZ.mean(axis=0) # dB -> Bias   GOL, Batch averaged.
-        dW = X.T @ dZ / X.shape[0] # dW -> Weight GOL. Batch averaged.
-        dI = dZ @ self.weights.T # dI -> Input  GOL. For backpropagation to previous layers.
+        dB = dZ.mean(axis=0)  # dB -> Bias   GOL, Batch averaged.
+        dW = X.T @ dZ / X.shape[0]  # dW -> Weight GOL. Batch averaged.
+        dI = (dZ @ self.weights.T)  # dI -> Input  GOL. For backpropagation to previous layers.
 
         if self.weight_decay > 0.0:
             dW += self.weight_decay * self.weights
@@ -82,24 +83,24 @@ class DenseLayer:
 
         return dI.reshape(self.in_arr.shape)
 
-class SequentialMLP:
+class Sequential:
     def __init__(
         self,
         neurons_in: int,
         neurons_out: int,
-        layer_count: int,
+        n_layers: int,
         layer_neurons: int,
         layer_acts: list[str],
         learning_rate: float = 0.01,
         weight_decay: float = 0.0,
         dropout_rate: float = 0.0,
-        lr_decay: float = 0.0
+        lr_decay: float = 0.0,
     ) -> None:
         """Sequential model constructor. Initializes a feedforward neural network with the specified architecture and hyperparameters."""
 
         self.neurons_in = neurons_in
         self.neurons_out = neurons_out
-        self.layer_count = layer_count
+        self.n_layers = n_layers
         self.layer_neurons = layer_neurons
         self.layer_acts = layer_acts
         self.learning_rate = learning_rate
@@ -117,21 +118,21 @@ class SequentialMLP:
                 n_outputs=self.layer_neurons,
                 act=self.layer_acts[0],
                 weight_decay=self.weight_decay,
-                dropout_rate=self.dropout_rate
+                dropout_rate=self.dropout_rate,
             )
         )
 
         prev_neuron_count = self.layer_neurons
 
         # Hidden layers
-        for idx in range(layer_count):
+        for idx in range(n_layers):
             self.layers.append(
                 DenseLayer(
                     n_inputs=prev_neuron_count,
                     n_outputs=self.layer_neurons,
                     act=self.layer_acts[idx],
                     weight_decay=self.weight_decay,
-                    dropout_rate=self.dropout_rate
+                    dropout_rate=self.dropout_rate,
                 )
             )
 
@@ -144,7 +145,7 @@ class SequentialMLP:
                 n_outputs=self.neurons_out,
                 act=self.layer_acts[-1],
                 weight_decay=self.weight_decay,
-                dropout_rate=self.dropout_rate
+                dropout_rate=self.dropout_rate,
             )
         )
 
@@ -174,13 +175,13 @@ class SequentialMLP:
 
         # Compute the loss gradient based on the output layer's activation function
         if self.layers[-1].dact is None:
-            loss_gradient = (out_pred - out_target) / batch_size
+            loss_grad = (out_pred - out_target) / batch_size
         else:
-            loss_gradient = (unicogni.softmax(out_pred) - out_target) / batch_size
+            loss_grad = (unicogni.softmax(out_pred) - out_target) / batch_size
 
         # Backpropagate through the layers in reverse order
         for layer in reversed(self.layers):
-            loss_gradient = layer.backward(loss_gradient, learning_rate)
+            loss_grad = layer.backward(loss_grad, learning_rate)
 
     def get_learning_rate(self, epoch: int) -> float:
         """Compute current learning rate using a simple decay schedule."""
@@ -198,14 +199,13 @@ class SequentialMLP:
         """
 
         # Initialize last_loss to infinity for tracking improvement
-        last_loss = float('inf')
+        last_loss = float("inf")
 
         # Calculate the number of batches based on the batch size and input data size
         BATCHCOUNT = max(1, (x.shape[0] + batch_size - 1) // batch_size)
 
         # Training loop
         for epoch in range(epochs):
-
             # Shuffle the data at the beginning of each epoch to ensure randomness in training
             learning_rate = self.get_learning_rate(epoch)
             random_idxs = xp.random.permutation(x.shape[0])
@@ -216,8 +216,8 @@ class SequentialMLP:
 
             # Iterate over batches of data
             for batch_start in range(0, x.shape[0], batch_size):
-                x_batch = x[batch_start:batch_start + batch_size]
-                y_batch = y[batch_start:batch_start + batch_size]
+                x_batch = x[batch_start : batch_start + batch_size]
+                y_batch = y[batch_start : batch_start + batch_size]
 
                 self.forward(x_batch, training=True)
                 self.backward(y_batch, learning_rate)
@@ -227,7 +227,10 @@ class SequentialMLP:
             # Average the loss over all batches for the epoch
             epoch_loss /= BATCHCOUNT
 
-            print(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss:.6f} "f"{'\033[92m ### \033[0m' if epoch_loss < last_loss else '\033[91m ### \033[0m'}")
+            print(
+                f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss:.6f}"
+                + '\033[92m ### \033[0m' if epoch_loss < last_loss else '\033[91m ### \033[0m'
+            )
 
             last_loss = epoch_loss
 

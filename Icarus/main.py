@@ -8,17 +8,15 @@ This file contains the entrypoint for ICARUS.
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-from .core.mcp.mcp_server import MCPServer
-from .core.shared.decorators import runtime_log
-from .core.boot_tools import check_wifi, check_microphone
-from .core.engines import (
-    IntentEngine,
-    ExecutionEngine,
-    FeedbackEngine,
-    PerceptionEngine
-)
+from durapy import uniCLI
 
-from durapy.src.uniCLI import Console, clear_terminal
+from src.boot_tools import check_microphone, check_wifi
+from src.core import ExecutionEngine, FeedbackEngine, IntentEngine, PerceptionEngine
+from src.mcp.mcp_server import MCPServer
+from src.shared.decorators import runtime_log
+
+Console = uniCLI.Console
+clear_terminal = uniCLI.clear_terminal
 
 class IcarusKernel:
     """The IcarusKernel class unifies all resources that ICARUS provides, such as NLP, computer vision, and more."""

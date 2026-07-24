@@ -1,6 +1,6 @@
 
-import ssl
 import socket
+import ssl
 
 HOST = '0.0.0.0'
 PORT = 65432

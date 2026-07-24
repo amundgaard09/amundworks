@@ -1,9 +1,8 @@
 
 import math
 import random
-import pygame
 
-pygame.init()
+import pygame
 
 DISPLAYSIZE = (800, 800)
 HUNTERCOLOR = (255, 0, 0)
@@ -12,6 +11,8 @@ PREYCOLOR = (0, 0, 255)
 hunterR = 10
 preyR = 5
 hunterSpeed = 3 # pixels per frame
+
+pygame.init()
 
 pygame.display.set_caption("Pathfinder Algorith Test | Durendal")
 window = pygame.display.set_mode(DISPLAYSIZE)

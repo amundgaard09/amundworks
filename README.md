@@ -14,7 +14,7 @@ The **Durendal GitHub repository** is the open-source collection of all projects
 
 ## ACTIVE PROJECTS
 
-This is the list of projects built / currently being built under Durendal. This list is subject to change. Archived projects can be found below this list.
+This is the list of projects currently under development under Durendal. This list is subject to change. Inactive and archived projects can be found below this list.
 
 ### DuraPy - The Durendal Python Collection
 
@@ -40,21 +40,23 @@ This is the list of projects built / currently being built under Durendal. This 
 
 **XO** is a series of neural networks designed for applications such as image recognition, natural language processing, and more. The **XO** series is built upon the **DuraPy** ecosystem and is designed to be easily integrated with other tools and libraries built upon it aswell.
 
-### Vulcan - Personal Productivity Platform
+### Olympus - Personal Productivity Platform
 
-[View Vulcan README](Vulcan/docs/README.md)
+[View Olympus README](Olympus/docs/README.md)
 
-**Vulcan** is a personal productivity platform developed as part of the Durendal Engineering Ecosystem. Vulcan focuses on student-athletes, but it is designed to be flexible and adaptable for anyone looking to improve their productivity and organization. 
+**Olympus** is a personal productivity platform developed as part of the Durendal Engineering Ecosystem. Olympus focuses on student-athletes, but it is designed to be flexible and adaptable for anyone looking to improve their productivity and organization. 
 
 ## INACTIVE PROJECTS
 
+This section contains projects that aren't currently actively maintained.
+
 ### MAX-Q - Composable Systems Engine
+
+[View MAX-Q README](archive/maxq/docs/README.md)
 
 **MAX-Q** is a *Composable Systems Engine* (**CSE**) designed to streamline the assembly and management of modular IT resources and business processes. By acting as a central orchestration layer, MAX-Q allows developers to "compose" sophisticated systems from independent, best-of-breed services and microservices. It enables rapid scalability, modularity and quick and easy maintenance.
 
 ### UniForge CLI - The Ultimate Command Line Interface STEMP Toolchain
-
-[View UniForge README](uniforge/README.md)
 
 **UniForge** is a Python-based CLI toolkit for performing STEM-related calculations and simulations. Whether you're a student looking to learn more about STEMP or a professional engineer working on STEM-related projects, **UniForge** is designed to be a valuable resource for your work and studies.
 
@@ -68,7 +70,7 @@ This is the list of old projects no longer being maintained / further developed 
 
 ### TANGO I - Tactical Aerospace Networked Global Operator
 
-**TANGO I** was the first iteration of what would be the **TANGO** Series. As the title suggests, **TANGO** was supposed to be a useful program for aerospace-based mission planning and control tasks, featuring a complete suite of tools for visualisation, communications, navigation, and other neccessities. **TANGO** was and still is abandoned, but a successor may be built in the future.
+**TANGO I** was the first iteration of the **TANGO** Series. As the title suggests, **TANGO** was supposed to be a program for aerospace-based mission planning and control tasks, featuring a complete suite of tools for visualisation, communications, navigation, and other neccessities. **TANGO** was and still is abandoned, but a successor may be built in the future.
 
 ## Durendal Open Source Philosophy
 

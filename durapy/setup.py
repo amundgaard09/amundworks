@@ -1,6 +1,8 @@
 # setup.py
-from setuptools import setup, Extension
+
 import sys
+
+from setuptools import Extension, setup
 
 # Secure compilation flags depending on the OS compiler detected
 if sys.platform == "win32":
@@ -22,7 +24,7 @@ class Pybind11Extension(Extension):
 ext_modules = [
     Pybind11Extension(
         name="src.unimath._maxcompute",               # Target path where the .pyd/.so file lands
-        sources=["maxcompute/maxcompute.cpp"],         # Path to your C++ source file
+        sources=["src/maxcompute/maxcompute.cpp"],    # Path to your C++ source file
         extra_compile_args=extra_compile_args,
         language="c++",
     ),

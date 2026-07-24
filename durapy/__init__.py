@@ -17,9 +17,7 @@
 #
 # from durapy import constants, exceptions, etc
 
-from .src.shared import constants, exceptions, color_system, numval_types, units
-
-from .src import (
+from src import (
     uniCLI,
     unicogni,
     unicrypt,
@@ -29,14 +27,13 @@ from .src import (
     uniphys,
     unipower,
 )
+from src.shared import color_system, constants, exceptions, numval_types, units
 
 __all__ = [
     "color_system",
     "constants",
     "exceptions",
     "numval_types",
-    "units",
-
     "uniCLI",
     "unicogni",
     "unicrypt",
@@ -45,6 +42,7 @@ __all__ = [
     "uniops",
     "uniphys",
     "unipower",
+    "units",
 ]
 
 __version__ = "1.0.0.3"

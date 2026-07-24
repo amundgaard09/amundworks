@@ -1,6 +1,7 @@
 
-import ssl
 import socket
+import ssl
+
 
 def create_context(cafile: str = "server.crt") -> ssl.SSLContext:
 	"""Create and return an SSL context for a client."""
@@ -25,8 +26,9 @@ def close(ssl_socket: ssl.SSLSocket | None) -> None:
 	if ssl_socket:
 		try:
 			ssl_socket.shutdown(socket.SHUT_RDWR)
-		except Exception:
-			pass
+		except Exception as e:
+			print(f"An error occured: {e}")
+
 		ssl_socket.close()
 
 def main(host_ip: str = "192.168.X.X", port: int = 65432, cafile: str = "server.crt") -> None:
