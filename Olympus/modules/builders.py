@@ -15,7 +15,7 @@ from modules.dtypes import (
     StudentAthleteProfile,
 )
 
-from durapy.src.shared.color_systems import color_text as color_text
+from durapy.durapy.shared.color_systems import color_text as color_text
 from questionary import select, text
 from pathlib import Path
 from json import JSONDecodeError, load, dump

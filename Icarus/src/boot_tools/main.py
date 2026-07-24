@@ -3,7 +3,7 @@ import subprocess
 import platform
 
 from typing import Callable
-from durapy.src.uniCLI import Console, console_print
+from durapy.durapy.uniCLI import Console, console_print
 from ..shared.decorators import runtime_log
 
 def check_windows_wifi() -> bool:

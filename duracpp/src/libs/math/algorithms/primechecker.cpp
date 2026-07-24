@@ -8,17 +8,17 @@ int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(NULL);
 
-    int CheckStop;
+    int upper;
 
     std::cout << "Welcome to the Prime Checker!" << std::endl;
-    std::cout << "Enter the CheckStop:" << std::endl;
-    std::cin >> CheckStop;
+    std::cout << "Enter the upper limit:" << std::endl;
+    std::cin >> upper;
 
     std::vector<int> PrimeArray;
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    for (int idx = 2; idx < CheckStop; ++idx) {
+    for (int idx = 2; idx < upper; ++idx) {
         if (isprime(idx)) {
             PrimeArray.push_back(idx);
         }

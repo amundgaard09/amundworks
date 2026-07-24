@@ -9,7 +9,7 @@ The ICARUS Complex is a Durendal project. More information can be found at the [
 """
 
 from src.mcp.mcp_server import MCPServer
-from durapy.src.uniCLI import Console
+from durapy.durapy.uniCLI import Console
 from src.types import ToolCall, Response, EmotionMatrix
 from src.shared.decorators import runtime_log
 

@@ -1,8 +1,8 @@
 """
 The `OLYMPUS` Console \n
-The Olympus Interface is a tool for elite athletes to log their training, recovery, and overall well-being in a structured way. 
-It provides a comprehensive overview of daily activities, training sessions, and upcoming events, 
-allowing athletes to track their progress and make informed decisions about their training and recovery strategies. 
+The Olympus Interface is a tool for elite athletes to log their training, recovery, and overall well-being in a structured way.
+It provides a comprehensive overview of daily activities, training sessions, and upcoming events,
+allowing athletes to track their progress and make informed decisions about their training and recovery strategies.
 
 The interface is designed to be user-friendly and efficient, enabling athletes to quickly log their data and access neccesary tools for optimal performace.
 """
@@ -27,8 +27,8 @@ The interface is designed to be user-friendly and efficient, enabling athletes t
 SCHEDULEPATH, SESSIONFILE, SLEEP_SCORES, GOALS, LOGFILE, LOGPATH, EVENTFILE, SCHEDULE = (None for _ in range(8))
 
 import sys, json, time, datetime, questionary
-from durapy.src.frameworks.color_sys import color_text
-from durapy.src.uniCLI.uniCLI import clear_terminal
+from durapy.durapy.frameworks.color_sys import color_text
+from durapy.durapy.uniCLI.uniCLI import clear_terminal
 
 from Vulcan.olympus.src.modules.dtypes import (
     Step,
@@ -44,7 +44,7 @@ def save_event(event: Event):
     events.append(event)
 
     with open(EVENTFILE, "w", encoding="utf-8") as f:
-        json.dump([e.to_dict() for e in events], f, indent=4) 
+        json.dump([e.to_dict() for e in events], f, indent=4)
 def load_events() -> list[Event]:
     try:
         with open(EVENTFILE, "r", encoding="utf-8") as f:
@@ -52,7 +52,7 @@ def load_events() -> list[Event]:
         return [Event.from_dict(e) for e in data]
     except (FileNotFoundError, json.JSONDecodeError):
         return []
-    
+
 def save_session(session: Session):
     sessions = load_sessions()
     sessions.append(session)
@@ -90,7 +90,7 @@ def load_schedule() -> dict[str, list[str]] | None:
         "saturday": [],
         "sunday": [],
     }
-    
+
     try:
         with open(SCHEDULEPATH, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -106,7 +106,7 @@ def edit_schedule():
     print("not implemented yet, returning to main screen...")
     time.sleep(2)
     mainscreen()
-    
+
 def writefile(filepath: str, content: str) -> None:
     with open(filepath, 'a') as f:
         f.write(content + "\n")
@@ -136,29 +136,29 @@ def mainscreen():
     datetime_now = datetime.datetime.now()
     datetime_str = get_current_datetime_str()
     date_str = datetime_now.strftime("%Y-%m-%d")
-    
+
     try:
         with open(LOGPATH, "r") as f:
             lines = f.readlines()
             if lines:
                 morninglogged, eveninglogged = False, False
-                for line in lines: 
+                for line in lines:
                     if line.startswith(f"M|{date_str}"):
                         morninglogged = True
                     if line.startswith(f"E|{date_str}"):
                         eveninglogged = True
-       
+
     except FileNotFoundError:
         print("\n Log text file not found!")
-    
+
     print(f"Olympus Interface - {datetime_str}" + "\n")
     print(color_text("Today's Schedule:", "green") + "\n")
     counter = 1
-    
+
     for workout in SCHEDULE[datetime_now.strftime("%A").lower()]:
         print(color_text(f"{counter}. {workout}", "green"))
         counter += 1
-    
+
     print("\n")
     morningcompletionstr = "COMPLETED" if morninglogged else "NOT COMPLETED"
     eveningcompletionstr = "COMPLETED" if eveninglogged else "NOT COMPLETED"
@@ -176,7 +176,7 @@ def mainscreen():
             f"PR Tracker - I.C.",
             "Exit"
         ]).ask()
-    
+
     match selection:
         case selection if selection.startswith("Morning Log"):
             morning_log()
@@ -185,7 +185,7 @@ def mainscreen():
         case selection if selection.startswith("Weekly OPI Report"):
             weekly_opi_report()
         case selection if selection.startswith("Schedule Overview"):
-            scheduleoverview() 
+            scheduleoverview()
         case selection if selection.startswith("Events"):
             racecalendar()
         case selection if selection.startswith("Sessions"):
@@ -197,7 +197,7 @@ def mainscreen():
         case "Exit":
             print(color_text("Exiting Olympus Interface. Goodbye!", "red"))
             sys.exit()
-    
+
 def morning_log():
     datetime_now = datetime.datetime.now()
     date_str = datetime_now.strftime("%Y-%m-%d %H:%M:%S")
@@ -213,7 +213,7 @@ def evening_log():
         with open(LOGPATH, "r") as f:
             lines = f.readlines()
             if lines:
-                for line in lines: 
+                for line in lines:
                     if line.startswith(f"E|{date_str[:10]}"):  # Check for today's date in the log
                         print(color_text("Today's Log:", "yellow") + "\n")
                         log_details = line.strip().split("|")
@@ -234,13 +234,13 @@ def evening_log():
                 print("No logs found.")
     except FileNotFoundError:
         print("ERROR! Log file not found. No upcoming events to display.")
-    
-    
+
+
     counter = 1
     for workout in SCHEDULE[datetime_now.strftime("%A").lower()]:
         print(color_text(f"{counter}. Planned Workout: {workout}", "green"))
         counter += 1
-    
+
     checklist = questionary.checkbox(
         "Select completed workouts:",
         choices=[workout for workout in SCHEDULE[datetime_now.strftime("%A").lower()]]
@@ -272,19 +272,19 @@ def evening_log():
         "On a scale of 1-10, how strong did you feel today?",
         choices=[str(i) for i in range(1, 11)]
     ).ask()
-    
+
     # 0 - 100 daily rating based on completion, step goal, injury, sleep, nutrition, mental health and strength
-    dayscore: int = (stepgoalbool * 10 
-    + (not injurybool) * 10 
-    + (SLEEP_SCORES[sleepquality]) 
-    + int(nutriscale) 
-    + int(mentalscale) 
-    + int(strenghtscale) 
+    dayscore: int = (stepgoalbool * 10
+    + (not injurybool) * 10
+    + (SLEEP_SCORES[sleepquality])
+    + int(nutriscale)
+    + int(mentalscale)
+    + int(strenghtscale)
     + round((daily_completion_score / 10)))
     print(color_text(f"Overall Day Score: {dayscore}/100", "green" if dayscore >= 85 else "yellow" if dayscore >= 50 else "red"))
-    
+
     understood = questionary.confirm("Complete").ask()
-    
+
     if understood:
         daystr = f"E|{date_str}|{', '.join(completed_workouts)}|{daily_completion_score:.2f}%|{dayscore}|{stepgoalbool}|{injurybool}|{sleepquality}|{nutriscale}|{mentalscale}|{strenghtscale}"
         writefile(LOGPATH, daystr)
@@ -300,24 +300,24 @@ def weekly_opi_report():
 def scheduleoverview():
     clear_terminal()
     print(color_text("Schedule Overview", "cyan") + "\n")
-    
+
     schedule = load_schedule()
     if schedule is None:
         print(color_text("Schedule is empty! \n", "red"))
-        
+
     else:
         for day, workouts in schedule.items():
             print(color_text(f"{day.capitalize()}: {', '.join(workouts) if workouts else 'No workouts scheduled'}", "green"))
-    
+
         print("\n")
 
     selection: str = questionary.select(
         "Select an option:",
         choices = [
-            f"Edit Schedule",           
+            f"Edit Schedule",
             f"Return",
         ]).ask()
-    
+
     match selection:
         case selection if selection.startswith("Edit Schedule"):
             edit_schedule()
@@ -327,32 +327,32 @@ def scheduleoverview():
 def exercisebuilder():
     clear_terminal()
     print(color_text("Exercise Builder", "cyan") + "\n")
-    
+
     steps: list[Step] = []
     exercisename = questionary.text("Exercise Name:").ask()
-    
+
     addsteps = questionary.confirm("Add steps to this exercise?").ask()
     newstep: Step
     firststepadded: bool = False
-    
+
     while addsteps:
         stepadded = False
         clear_terminal()
         print(color_text(f"Exercise Builder - {exercisename}", "cyan") + "\n")
         print(color_text(f"Added steps: {[step.name for step in steps]}", "green") + "\n")
-        
+
         if not firststepadded: # Prevents copy option on first step before any steps exist
             copystep = False
-        else: 
+        else:
             copystep = questionary.confirm("Copy a previous step?").ask()
-        
+
         if copystep:
             copystepname = questionary.select(
                 "Select a step to copy:",
                 choices=[step.name for step in steps]        ).ask()
         else:
             copystepname = None
-            
+
         if copystepname:
             selected_step = next((s for s in steps if s.name == copystepname), None)
             if selected_step:
@@ -360,15 +360,15 @@ def exercisebuilder():
                 stepduration = selected_step.duration
                 stepthrz = selected_step.thrz
                 steptrpe = selected_step.trpe
-                
+
                 copiedstep = Step(
-                    name=selected_step.name, 
+                    name=selected_step.name,
                     workout=stepworkout,
                     duration=stepduration,
                     thrz=stepthrz,
                     trpe=steptrpe
                 )
-                
+
                 steps.append(copiedstep)
                 stepadded = True
             else:
@@ -391,11 +391,11 @@ def exercisebuilder():
                 thrz=stepthrz,
                 trpe=steptrpe
             )
-        
+
             steps.append(newstep)
-        
+
         addsteps = questionary.confirm("Add another step?").ask()
-    
+
     newexercise = Exercise(
         name=exercisename,
         steps=steps
@@ -406,14 +406,14 @@ def sessionbuilder():
     clear_terminal()
     print(color_text("Session Builder", "cyan") + "\n")
     print(color_text("New session:", "green") + "\n")
-    
+
     exercises: list[Exercise] = []
     sessionname = questionary.text("Session Name:").ask()
     seshtype = questionary.select("Session Type:", choices=[GOALS[idx].capitalize() for idx, _ in enumerate(GOALS)]).ask()
-    duration: int = 0  
-    
+    duration: int = 0
+
     addexercises = questionary.confirm("Add exercises to this session?").ask()
-    
+
     while addexercises:
         newexercise = exercisebuilder()
         exercises.append(newexercise)
@@ -424,7 +424,7 @@ def sessionbuilder():
         seshtype=seshtype,
         exercises=exercises,
     )
-    
+
     save_session(newsession)
     print(color_text(f"Session '{newsession.name}' saved!", "green"))
     time.sleep(1)
@@ -433,7 +433,7 @@ def sessionviewer():
     clear_terminal()
     print(color_text("Session Viewer", "cyan") + "\n")
     sessions = load_sessions()
-    
+
     if not sessions:
         action = questionary.confirm(color_text("No sessions found. Build a new one?", "yellow")).ask()
         if action:
@@ -447,10 +447,10 @@ def sessionviewer():
         for exercise in session.exercises:
             print(color_text(f"  Exercise: {exercise.name}", "yellow"))
     print("\n")
-    
+
     returnconfirmed = questionary.confirm("Return?").ask()
     if returnconfirmed:
-        sessionsoverview()    
+        sessionsoverview()
 def sessionsoverview():
     clear_terminal()
     print(color_text("Sessions Overview", "cyan") + "\n")
@@ -458,9 +458,9 @@ def sessionsoverview():
         "Select an option:",
         choices = [
             "View Sessions",
-            "Build Session", 
+            "Build Session",
             "Edit Session",
-            "Build Exercise",           
+            "Build Exercise",
             "Return",
         ]).ask()
     match selection:
@@ -487,22 +487,22 @@ def add_event():
     name: str = questionary.text("Event Name:").ask()
     date: str = questionary.text("Event Date (DD-MM-YYYY):").ask()
     type: str = questionary.select("Event Type: ", choices=["Cycling", "Running", "Swimming", "Triathlon", "XC Ski", ]).ask()
-    
+
     if type == "Triathlon":
         print(color_text("\n Enter distances for each discipline in kilometers.", "yellow") + "\n")
         swimdistance: float = questionary.text("Swim Distance:").ask()
         bikedistance: float = questionary.text("Bike Distance:").ask()
         rundistance: float = questionary.text("Run Distance:").ask()
         distance: list[float] = [swimdistance, bikedistance, rundistance]
-        
+
     else:
         distance: float = questionary.text("Event Distance (Kilometers):").ask()
-        
+
     rawlocation: str = questionary.text("Location (City - Country) :").ask()
     location: list = rawlocation.strip().split(" - ")
     priority: str = questionary.select("Priority", choices=["Primary", "Secondary", "Tertiary", "Supporting"]).ask()
     notes: str = questionary.text("Notes (Optional):").ask()
-    
+
     new_event = Event(
         name=name,
         date=date,
@@ -512,18 +512,18 @@ def add_event():
         priority=priority,
         notes=notes if notes else None
     )
-    
+
     save_event(new_event)
     print(color_text("Event successfully saved!", "green"))
     time.sleep(2)
     mainscreen()
-    
+
 def racecalendar():
     clear_terminal()
-        
+
     print(color_text("Race Calendar", "cyan") + "\n")
     print("Upcoming Events:" + "\n")
-    
+
     events = sort_events_by_date(load_events())
     if not events:
         print(color_text("No upcoming events found. Add an event to get started!", "yellow") + "\n")
@@ -542,7 +542,7 @@ def racecalendar():
     selection: str = questionary.select(
         "Select an option:",
         choices = [
-            f"Add Event",           
+            f"Add Event",
             f"Return",
         ]).ask()
     match selection:
@@ -580,4 +580,4 @@ def pr_tracker():
             mainscreen()
 
 if __name__ == "__main__":
-    mainscreen() 
+    mainscreen()

@@ -14,7 +14,7 @@ from pydub import AudioSegment
 from src.types import Response
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
-from durapy.src.uniCLI.uniCLI import Console
+from durapy.durapy.uniCLI.uniCLI import Console
 from src.utilities.decorators import runtime_log
 from pydub.playback import play
 from dotenv import load_dotenv

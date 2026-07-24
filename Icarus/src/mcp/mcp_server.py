@@ -3,7 +3,7 @@ import json
 import importlib.util
 
 from pathlib import Path
-from durapy.src.uniCLI import Console
+from durapy.durapy.uniCLI import Console
 from types import ModuleType
 from .types import MCPTool, InputSchema, MCPProperty
 from ..shared.exceptions import MissingFileError, SkillLoadError

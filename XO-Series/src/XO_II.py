@@ -1,52 +1,69 @@
 """Second Iteration - XO Neural Net Series | Matrix-Based Neural Net"""
 
-import numpy as np
 import time
+
+import numpy as np
+
 
 def _sigmoid(Z):
     return 1 / (1 + np.exp(-Z))
+
+
 def _dsigmoid(Z):
     s = _sigmoid(Z)
     return s * (1 - s)
 
+
 ACTIVATIONS = {
-    "relu":    (lambda Z: np.maximum(0, Z),  lambda Z: (Z > 0).astype(float)),
-    "sigmoid": (_sigmoid,                    _dsigmoid),
+    "relu": (lambda Z: np.maximum(0, Z), lambda Z: (Z > 0).astype(float)),
+    "sigmoid": (_sigmoid, _dsigmoid),
 }
+
 
 def MAE(Actual: np.ndarray, Prediction: np.ndarray) -> float:
     if Actual.shape != Prediction.shape:
         raise ValueError("Actual and Prediction must have the same shape")
     return np.mean(np.abs(Actual - Prediction))
+
+
 def MSE(Actual: np.ndarray, Prediction: np.ndarray) -> float:
     if Actual.shape != Prediction.shape:
         raise ValueError("Actual and Prediction must have the same shape")
     return np.mean((Actual - Prediction) ** 2)
+
+
 def RMSE(Actual: np.ndarray, Prediction: np.ndarray) -> float:
     return np.sqrt(MSE(Actual, Prediction))
 
+
 class DenseLayer:
     def __init__(self, NInputs: int, NOutputs: int, activation: str):
-        self.Weights: np.ndarray = np.random.randn(NInputs, NOutputs) * np.sqrt(2.0 / NInputs)
-        self.Bias: np.ndarray    = np.zeros(NOutputs)
+        self.Weights: np.ndarray = np.random.randn(NInputs, NOutputs) * np.sqrt(
+            2.0 / NInputs
+        )
+        self.Bias: np.ndarray = np.zeros(NOutputs)
         self.act, self.dact = ACTIVATIONS[activation]
+
     def Forward(self, Input: np.ndarray) -> np.ndarray:
         self.Input = Input
-        self.Z     = Input @ self.Weights + self.Bias
+        self.Z = Input @ self.Weights + self.Bias
         self.Output = self.act(self.Z)
         return self.Output
+
     def Backward(self, dA: np.ndarray, LearningRate: float):
         dZ: np.ndarray = dA * self.dact(self.Z)
-        X:  np.ndarray = self.Input if self.Input.ndim > 1 else self.Input.reshape(1, -1)
-        dZ: np.ndarray = dZ  if dZ.ndim  > 1 else dZ.reshape(1, -1)
+        X: np.ndarray = self.Input if self.Input.ndim > 1 else self.Input.reshape(1, -1)
+        dZ: np.ndarray = dZ if dZ.ndim > 1 else dZ.reshape(1, -1)
         dW: np.ndarray = X.T @ dZ / X.shape[0]
         dB: np.ndarray = dZ.mean(axis=0)
         dI: np.ndarray = dZ @ self.Weights.T
 
         self.Weights -= LearningRate * dW
-        self.Bias    -= LearningRate * dB
+        self.Bias -= LearningRate * dB
 
         return dI.reshape(self.Input.shape)
+
+
 class NeuralNetwork:
     def __init__(
         self,
@@ -55,7 +72,7 @@ class NeuralNetwork:
         DenseLayerNeuronCount: int,
         OutputNeuronCount: int,
         ActivationFunctionsPerLayer: list[str],
-        LearningRate: float
+        LearningRate: float,
     ):
 
         self.InputNeuronCount = InputNeuronCount
@@ -70,13 +87,18 @@ class NeuralNetwork:
             layer = DenseLayer(
                 PreviousNeuronCount,
                 DenseLayerNeuronCount,
-                ActivationFunctionsPerLayer[idx]
+                ActivationFunctionsPerLayer[idx],
             )
             self.Layers.append(layer)
             PreviousNeuronCount = DenseLayerNeuronCount
 
         # Output layer
-        self.Layers.append(DenseLayer(PreviousNeuronCount, OutputNeuronCount, ActivationFunctionsPerLayer[-1]))
+        self.Layers.append(
+            DenseLayer(
+                PreviousNeuronCount, OutputNeuronCount, ActivationFunctionsPerLayer[-1]
+            )
+        )
+
     def Forward(self, Input: np.ndarray) -> np.ndarray:
         """_Forward pass for the entire network._
 
@@ -90,6 +112,7 @@ class NeuralNetwork:
         for layer in self.Layers:
             x = layer.Forward(x)
         return x
+
     def Backward(self, TargetOutput: np.ndarray):
         """Backward pass for the entire network.
 
@@ -102,6 +125,7 @@ class NeuralNetwork:
 
         for layer in reversed(self.Layers):
             dA = layer.Backward(dA, self.LearningRate)
+
     def Train(self, X: np.ndarray, y: np.ndarray, epochs: int):
         """Training loop for the network.
 
@@ -111,16 +135,21 @@ class NeuralNetwork:
             epochs (int): Number of training epochs.
         """
 
-        lastloss = float('inf')
+        lastloss = float("inf")
 
         for epoch in range(epochs):
             self.Forward(X)
             self.Backward(y)
             if (epoch + 1) % 1000 == 0:
                 loss = MSE(y, self.Layers[-1].Output)  # post-update loss
-                Marker = "\033[92m ### \033[0m" if loss < lastloss else "\033[91m ### \033[0m"
+                Marker = (
+                    "\033[92m ### \033[0m"
+                    if loss < lastloss
+                    else "\033[91m ### \033[0m"
+                )
                 print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss:.6f} {Marker}")
                 lastloss = loss
+
     def Predict(self, X: np.ndarray) -> np.ndarray:
         """Make predictions on new data.
 
@@ -131,12 +160,14 @@ class NeuralNetwork:
             np.ndarray: Predictions.
         """
         return self.Forward(X)
+
     @staticmethod
     def NormalizeData(X: np.ndarray) -> np.ndarray:
         mean = np.mean(X, axis=0)
-        std  = np.std(X, axis=0)
-        std  = np.where(std == 0, 1, std)   # avoid div/0
+        std = np.std(X, axis=0)
+        std = np.where(std == 0, 1, std)  # avoid div/0
         return (X - mean) / std
+
 
 NEURALNET = NeuralNetwork(
     InputNeuronCount=3,
@@ -144,29 +175,35 @@ NEURALNET = NeuralNetwork(
     DenseLayerNeuronCount=4,
     OutputNeuronCount=2,
     ActivationFunctionsPerLayer=["relu", "relu", "sigmoid"],
-    LearningRate=0.1
+    LearningRate=0.1,
 )
 
-X: np.ndarray = np.array([
-    [0, 0, 0],
-    [0, 0, 1],
-    [0, 1, 0],
-    [0, 1, 1],
-    [1, 0, 0],
-    [1, 0, 1],
-    [1, 1, 0],
-    [1, 1, 1],
-], dtype=np.float64)
-Y: np.ndarray = np.array([
-    [0, 0],
-    [0, 1],
-    [0, 1],
-    [0, 0],
-    [1, 0],
-    [1, 1],
-    [1, 1],
-    [1, 0],
-], dtype=np.float64)
+X: np.ndarray = np.array(
+    [
+        [0, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        [0, 1, 1],
+        [1, 0, 0],
+        [1, 0, 1],
+        [1, 1, 0],
+        [1, 1, 1],
+    ],
+    dtype=np.float64,
+)
+Y: np.ndarray = np.array(
+    [
+        [0, 0],
+        [0, 1],
+        [0, 1],
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [1, 1],
+        [1, 0],
+    ],
+    dtype=np.float64,
+)
 
 Epochs = int(1 * 1e6)
 StartTime = time.time()
@@ -177,7 +214,7 @@ Endtime = time.time()
 ElapsedTime = Endtime - StartTime
 
 print(f"\nTotal Training Time: {ElapsedTime:.2f} seconds")
-print(f"Time per Epoch: {ElapsedTime/Epochs:.4f} seconds")
+print(f"Time per Epoch: {ElapsedTime / Epochs:.4f} seconds")
 
 # VERIFYING TRAINING DATA PREDICTIONS
 for i in range(len(X)):

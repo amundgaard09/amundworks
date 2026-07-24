@@ -12,7 +12,7 @@ from src.mcp.types import MCPTool
 from difflib import SequenceMatcher
 from src.types import Query, ToolCall
 from src.mcp.mcp_server import MCPServer
-from durapy.src.uniCLI.uniCLI import Console
+from durapy.durapy.uniCLI.uniCLI import Console
 from ..shared.decorators import runtime_log
 from re import findall
 

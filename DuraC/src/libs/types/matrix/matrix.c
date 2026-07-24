@@ -7,7 +7,7 @@
 #define INITIAL_CAPACITY 4
 
 void init_matrix(Matrix *M, int rows, int cols) {
-    int capacity = (rows > 0 && cols > 0) ? rows * cols : INITIAL_CAPACITY; // What the fuck is this line?
+    int capacity = (rows > 0 && cols > 0) ? rows * cols : INITIAL_CAPACITY; // What the fuck is this line??
     M->data = (float*)calloc(capacity, sizeof(float));
     if (M->data == NULL) { printf("Error: calloc failed\n"); return; }
     M->rows = rows;

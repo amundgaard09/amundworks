@@ -23,10 +23,12 @@ def send_message(ssl_sock: ssl.SSLSocket, message: str) -> None:
 
 def close(ssl_socket: ssl.SSLSocket | None) -> None:
 	"""Close the SSL socket if open."""
+
 	if ssl_socket:
 		try:
 			ssl_socket.shutdown(socket.SHUT_RDWR)
-		except Exception as e:
+
+		except ssl.SSLError as e:
 			print(f"An error occured: {e}")
 
 		ssl_socket.close()

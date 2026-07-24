@@ -1,12 +1,13 @@
-
 import socket
 import threading
+
 from durapy import uniCLI
 
-HOST = str('0.0.0.0')
-PORT = int(5000)
+HOST = "0.0.0.0"
+PORT = 5000
 
 clients = []
+
 
 def handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
     """
@@ -18,7 +19,7 @@ def handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
     `address`: A tupe of the host and port of the server. \n
     """
 
-    uniCLI.console_print("SERVER", "green", f'CONNECTED: {address}')
+    uniCLI.console_print("SERVER", "green", f"CONNECTED: {address}")
 
     while True:
         try:
@@ -31,10 +32,11 @@ def handle_client(connection: socket.socket, address: tuple[str, ...]) -> None:
             uniCLI.console_print(str(address), "red", f"ERROR: {e}")
             break
 
-    uniCLI.console_print("SERVER", "red", f'DISCONNECTED: {address}')
+    uniCLI.console_print("SERVER", "red", f"DISCONNECTED: {address}")
 
     connection.close()
     clients.remove(connection)
+
 
 def server_kernel() -> None:
     """The kernel for the server."""
@@ -50,6 +52,7 @@ def server_kernel() -> None:
         clients.append(connection)
         thread = threading.Thread(target=handle_client, args=(connection, address))
         thread.start()
+
 
 if __name__ == "__main__":
     server_kernel()

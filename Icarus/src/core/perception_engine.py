@@ -13,7 +13,7 @@ from pathlib import Path
 from vosk import Model, KaldiRecognizer
 from src.types import Query, EmotionMatrix
 from sounddevice import RawInputStream, PortAudioError
-from durapy.src.uniCLI.uniCLI import Console, console_print
+from durapy.durapy.uniCLI.uniCLI import Console, console_print
 from ..shared.decorators import runtime_log
 from json import loads
 

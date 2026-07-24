@@ -8,18 +8,20 @@ This file contains the entrypoint for ICARUS.
 The ICARUS Complex is a Durendal project. More information can be found at the [Durendal GitHub](https://github.com/amundgaard09/durendal)
 """
 
-from durapy import uniCLI
-
 from src.boot_tools import check_microphone, check_wifi
 from src.core import ExecutionEngine, FeedbackEngine, IntentEngine, PerceptionEngine
 from src.mcp.mcp_server import MCPServer
 from src.shared.decorators import runtime_log
 
+from durapy import uniCLI
+
 Console = uniCLI.Console
 clear_terminal = uniCLI.clear_terminal
 
+
 class IcarusKernel:
     """The IcarusKernel class unifies all resources that ICARUS provides, such as NLP, computer vision, and more."""
+
     @runtime_log
     def __init__(self) -> None:
 
@@ -39,6 +41,7 @@ class IcarusKernel:
 
             console.end_task("Initializing Icarus", success=True)
 
+
 @runtime_log
 def main() -> None:
     """The main dialouge kernel for the Icarus Complex"""
@@ -46,10 +49,11 @@ def main() -> None:
     icarus = IcarusKernel()
 
     while True:
-        query    = icarus.perception.listen()
-        call     = icarus.intent.process(query)
+        query = icarus.perception.listen()
+        call = icarus.intent.process(query)
         response = icarus.execution.respond(call)
         icarus.feedback.speak(response)
+
 
 if __name__ == "__main__":
     main()
