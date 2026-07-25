@@ -4,11 +4,11 @@ from . import (
     uniCLI,
     unicogni,
     unicrypt,
-    uniflight,
     unimath,
     uniops,
     uniphys,
     unipower,
+    unisky,
 )
 from .shared import (
     color_system,
@@ -26,11 +26,11 @@ __all__ = [
     "uniCLI",
     "unicogni",
     "unicrypt",
-    "uniflight",
     "unimath",
     "uniops",
     "uniphys",
     "unipower",
+    "unisky",
     "units",
 ]
 

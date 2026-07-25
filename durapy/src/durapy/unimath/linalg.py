@@ -1,7 +1,5 @@
 """
-Linear Algebra Type Library for the `DuraPy` package.
-
-This module contains data types for linear algebra.
+Linear Algebra Library for the `DuraPy` package.
 
 Data Types
 ----------

@@ -3,9 +3,8 @@
 **/DuraPy.egg-info
 **/__pycache__
 **/database
-**/proglang
 __pycache__/
-target/
+**/target
 venv/
 .venv/
 *.env
@@ -13,3 +12,4 @@ venv/
 *.onnx
 *.onnx.json
 logs/
+project_I/target/
