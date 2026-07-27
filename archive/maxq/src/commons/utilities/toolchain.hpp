@@ -1,8 +1,8 @@
 
 #include <vector>
 
-#ifndef TOOLCHAIN.HPP
-#define TOOLCHAIN.HPP
+#ifndef TOOLCHAIN_HPP
+#define TOOLCHAIN_HPP
 
 std::vector<float*> get_indvdl_ptrs(const std::vector<float> valuevector);
 float ptrvecsum(const std::vector<float*>& vec);

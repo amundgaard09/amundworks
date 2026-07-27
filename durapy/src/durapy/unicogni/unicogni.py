@@ -156,6 +156,14 @@ def mse(actual: np.ndarray, pred: np.ndarray) -> float:
     return np.mean((actual - pred) ** 2) / len(actual)
 
 
+def mse_grad(actual: np.ndarray, pred: np.ndarray) -> np.ndarray:
+    """Gradient of the Mean Squared Error metric function"""
+    if len(pred) != len(actual):
+        raise ValueError("Loss functions must be given two equal-length arrays/lists!")
+
+    return 2 * (pred - actual) / len(actual)
+
+
 def rmse(actual: np.ndarray, pred: np.ndarray) -> float:
     """Root Mean Squared Error metric function"""
     if len(pred) != len(actual):

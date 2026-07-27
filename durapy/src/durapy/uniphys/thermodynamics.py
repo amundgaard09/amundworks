@@ -2,7 +2,7 @@
 
 from ..shared.constants import GAS_CONSTANT
 from ..shared.numval_types import Quantity
-from ..shared.units import JOULE, KELVIN, MOLE
+from ..shared.units import JOULE, KELVIN, MOLE, PASCAL
 
 
 def work(force: float, distance: float) -> float:
@@ -169,14 +169,14 @@ def helmholtz_free_energy(
     return internal_energy - temperature * entropy
 
 
-def van_der_waals_pressure(n: float, V: float, T: float, a: float, b: float) -> float:
+def van_der_waals_pressure(n: float, vol: float, temp: float, a: float, b: float) -> Quantity:
     """
     Calculate the pressure of a real gas using the Van der Waals equation.
 
     Parameters
     ----------
         n (float): The number of moles of the gas.
-        V (float): The volume of the gas (in cubic meters).
+        vol (float): The volume of the gas (in cubic meters).
         T (float): The absolute temperature of the gas (in kelvin).
         a (float): The Van der Waals constant for attraction (in joules per mole squared).
         b (float): The Van der Waals constant for volume (in cubic meters per mole).
@@ -185,5 +185,4 @@ def van_der_waals_pressure(n: float, V: float, T: float, a: float, b: float) -> 
     -------
         float: The pressure of the gas (in pascals).
     """
-    R = 8.314  # Universal gas constant in joules per mole per kelvin
-    return (n * R * T) / (V - n * b) - (a * n**2) / V**2
+    return Quantity((n * GAS_CONSTANT.value * temp) / (vol - n * b) - (a * n**2) / vol**2, PASCAL)

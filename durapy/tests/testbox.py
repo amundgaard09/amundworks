@@ -1,7 +1,6 @@
 """DuraPy Testbox I"""
 
 import numpy as np
-
 from durapy.unimath.linalg import Matrix, Vector
 
 print("START")

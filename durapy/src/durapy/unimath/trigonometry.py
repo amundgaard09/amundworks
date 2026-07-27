@@ -4,7 +4,6 @@ import math
 
 import sympy
 
-from .exceptions import ImpossibleTriangleError
 from .geometry import herons_formula
 
 
@@ -29,8 +28,8 @@ def interpolate_triangle(
         Area, (A, B, C), (a, b, c), (sin(a), sin(b), sin(c))
     """
 
-    if sum((a, b, c)) != 180:
-        raise ImpossibleTriangleError()
+    if sum([a, b, c]) != 180:
+        raise ValueError("The sum of the angles of a triangle must be 180 degrees!")
 
     sin_A = math.sin(math.radians(a))
     sin_B = math.sin(math.radians(b))

@@ -247,7 +247,7 @@ class Quantity:
     def __eq__(self, value: object) -> bool:
         if isinstance(value, Quantity):
             return self.unit == value.unit and self._value == value._value
-        elif isinstance(value, (int, float)):
+        if isinstance(value, (int, float)):
             return self._value == value
         return NotImplemented
 

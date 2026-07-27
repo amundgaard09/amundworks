@@ -23,6 +23,8 @@
 
 ## Packages
 
+The following packages are available in DuraPy. 
+
 ### UniCLI
 
 UniCLI is a package that supercharges CLIs via effective I/O solutions, data visualization and more.
@@ -35,15 +37,26 @@ UniCogni is a machine learning toolkit filled with everything a developer might 
 
 UniCrypt is a function library for data encryption and decryption.
 
-### UniFlight
+### UniSky
+
+UniSky provides resources for aerospace calculations. It includes formulas for aerodynamics, flight dynamics, and more.
 
 ### UniMath
 
+UniMath is a package for mathematical operations. UniMath provides a wide range of mathematical functions and operations, especially linear algebra, geometry, trigonometry, and more.
+
 ### UniOps
+
+UniOps is a package for Mechatronics Engineering, with resources for F/B kinematics, algorithms, and more.
 
 ### UniPhys
 
+UniPhys is a package for physics simulations and calculations.
+
 ### UniPower
+
+UniPower is a package for electronics engineering.
+
 
 ## License and Usage - Durendal Open Source Philosophy
 

@@ -37,6 +37,8 @@ dependencies = [
     "prompt_toolkit",
     "numpy",
     "sympy",
+    "scipy",
+    "rich"
 ]
 
 [project.urls]
@@ -45,8 +47,9 @@ Repository = "https://github.com/amundgaard09/durendal"
 Issues = "https://github.com/amundgaard09/durendal/issues"
 
 [tool.setuptools]
+package-dir = {"" = "src"}
 include-package-data = true
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 include = ["durapy*"]

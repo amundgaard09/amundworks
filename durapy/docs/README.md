@@ -1,9 +1,9 @@
-# DuraPy - The Durendal Python Collection
+# DuraPy - An Open-Source Python Toolbox for STEM Workflows | By Durendal
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-DuraPy is a growing toolbox for science, engineering, and STEMP workflows. It brings together helpful utilities for mathematics, physics, robotics, chemistry-adjacent calculations, and more under one Python package.
+DuraPy is a growing toolbox for science, engineering, and STEM workflows. It brings together helpful utilities for mathematics, physics, robotics, chemistry-adjacent calculations, and more under one Python universal package.
 
 ## What makes it useful
 
@@ -50,4 +50,4 @@ If you want to evolve the package further, the most impactful next steps are:
 - Add documentation pages for each submodule
 - Introduce a richer test suite and versioned release workflow
 
-DuraPy is intentionally open-ended, so it can grow into whatever your STEMP projects need next.
+DuraPy is intentionally open-ended, so it can grow into whatever your STEM projects need next.

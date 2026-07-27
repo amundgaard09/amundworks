@@ -2,13 +2,16 @@
 
 from ..shared.constants import E
 from ..shared.numval_types import Quantity
+from ..shared.units import NUMERICAL
 
 
 def radioactive_decay(
     initial_quantity: float, decay_const: float, time: float
 ) -> Quantity:
     """Returns the remaining quantity of a radioactive substance after a given time, based on its initial quantity and decay constant."""
-    return initial_quantity * (E ** (-decay_const * time))
+    return Quantity(
+        initial_quantity * (E ** (-decay_const * time)), NUMERICAL
+    )  # Not kg?
 
 
 def half_life(decay_const: float) -> float:

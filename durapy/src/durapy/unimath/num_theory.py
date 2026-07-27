@@ -18,20 +18,15 @@ def lovelace(
 def fibonacci_integer(fib_idx: float) -> int:
     """Fibonacci integer generator that returns the Fibonacci integer at the given index."""
 
-    try:
-        fib_idx = int(fib_idx)
-    except ValueError:
-        raise ValueError("fibonacci_integer does not take floats or strings!")
-
-    if fib_idx < 2:
-        raise ValueError("fibonacci_integer does not take integers less than 2!")
+    if fib_idx < 2 or not isinstance(fib_idx, int):
+        raise ValueError("fibonacci_integer does not take integers less than 2 or floats/strings!")
 
     if fib_idx == 2:
         return 1
 
     fib0, fib1, fib2 = 0, 1, 1
 
-    for _ in range(0, (fib_idx - 2)):
+    for _ in range(fib_idx - 2):
         fib2 = fib0 + fib1
         fib0, fib1 = fib1, fib2
 
@@ -41,20 +36,17 @@ def fibonacci_integer(fib_idx: float) -> int:
 def fibonacci_list(n: int) -> list[int]:
     """Fibonacci sequence generator that returns a list of the sequence up to the given length."""
 
-    try:
-        n = int(n)
-    except ValueError:
-        raise ValueError("fibonacci_integer does not take floats or strings!")
-
-    if n < 2:
-        raise ValueError("fibonacci_integer does not take integers less than 2!")
+    if n < 2 or not isinstance(n, int):
+        raise ValueError(
+            "fibonacci_list does not take integers less than 2 or floats/strings!"
+        )
 
     if n == 2:
         return [0, 1]
 
     fib0, fib1, fiblist = 0, 1, [0, 1]
 
-    for _ in range(0, (n - 2)):
+    for _ in range(n - 2):
         fib2 = fib0 + fib1
         fib0, fib1 = fib1, fib2
         fiblist.append(fib2)
@@ -64,8 +56,10 @@ def fibonacci_list(n: int) -> list[int]:
 
 def factorial(n: int) -> int:
     """Returns the factorial of a non-negative integer `n`."""
-    if n < 0:
-        raise ValueError("Factorial is not defined for negative numbers.")
+    if n < 0 or not isinstance(n, int):
+        raise ValueError(
+            "Factorial is not defined for negative numbers or floats/strings!"
+        )
 
     elif n == 0 or n == 1:
         return 1
@@ -79,9 +73,9 @@ def factorial(n: int) -> int:
 
 def subfactorial(n: int) -> int:
     """Returns the subfactorial of a non-negative integer `n`."""
-    if n < 0:
+    if n < 0 or not isinstance(n, int):
         raise ValueError(
-            "Subfactorial and Factorial are not defined for negative numbers."
+            "Subfactorial and Factorial are not defined for negative numbers or floats/strings!"
         )
     return int(factorial(n) * sum((-1) ** k / factorial(k) for k in range(n)))
 

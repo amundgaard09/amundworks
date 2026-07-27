@@ -17,82 +17,41 @@ F_4, F_3, F_2, F_1, F0, F1, F2, F3, F4 = (
 )
 
 # ISO Base Units - Scale: 1 # The scale is a measurement of how many times to multiply the value to get to one base units worth.
-NUMERICAL = Unit(
-    symbol="NUM", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1
-)  # N/A
+NUMDIM = Dimension((F0, F0, F0, F0, F0, F0, F0))
 
-METER = Unit(
-    symbol="M", dimension=Dimension((F1, F0, F0, F0, F0, F0, F0)), scale=1
-)  # L
-KILOGRAM = Unit(
-    symbol="KG", dimension=Dimension((F0, F1, F0, F0, F0, F0, F0)), scale=1
-)  # M
-SECOND = Unit(
-    symbol="S", dimension=Dimension((F0, F0, F1, F0, F0, F0, F0)), scale=1
-)  # T
-AMPERE = Unit(
-    symbol="B", dimension=Dimension((F0, F0, F0, F1, F0, F0, F0)), scale=1
-)  # I
-KELVIN = Unit(
-    symbol="K", dimension=Dimension((F0, F0, F0, F0, F1, F0, F0)), scale=1
-)  # Θ
-MOLE = Unit(
-    symbol="MOL", dimension=Dimension((F0, F0, F0, F0, F0, F1, F0)), scale=1
-)  # N
-CANDELA = Unit(
-    symbol="CD", dimension=Dimension((F0, F0, F0, F0, F0, F0, F1)), scale=1
-)  # J
+NUMERICAL = Unit("NUM", NUMDIM)  # N/A
+METER = Unit("M", Dimension((F1, F0, F0, F0, F0, F0, F0)))  # L
+KILOGRAM = Unit("KG", Dimension((F0, F1, F0, F0, F0, F0, F0)))  # M
+SECOND = Unit("S", Dimension((F0, F0, F1, F0, F0, F0, F0)))  # T
+AMPERE = Unit("B", Dimension((F0, F0, F0, F1, F0, F0, F0)))  # I
+KELVIN = Unit("K", Dimension((F0, F0, F0, F0, F1, F0, F0)))  # Θ
+MOLE = Unit("MOL", Dimension((F0, F0, F0, F0, F0, F1, F0)))  # N
+CANDELA = Unit("CD", Dimension((F0, F0, F0, F0, F0, F0, F1)))  # J
 
-PASCAL = Unit(
-    symbol="Pa", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))
-)  # L * M / T^2
-PSI = Unit(
-    symbol="psi", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))
-)  # L * M / T^2
-BAR = Unit(
-    symbol="bar", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))
-)  # L * M / T^2
+PASCAL = Unit("Pa", Dimension((F1, F1, F_2, F0, F0, F0, F0)))  # L * M / T^2
+PSI = Unit("psi", Dimension((F1, F1, F_2, F0, F0, F0, F0)))  # L * M / T^2
+BAR = Unit("bar", Dimension((F1, F1, F_2, F0, F0, F0, F0)))  # L * M / T^2
 
-UNIGUNIT = Unit(
-    symbol="UNI_G", dimension=Dimension((F3, F_1, F_2, F0, F0, F0, F0))
-)  # L^3 / M * T^2
-G = Unit(symbol="G", dimension=Dimension((F1, F0, F_2, F0, F0, F0, F0)))  # L / T^2
+UNIGUNIT = Unit("UNI_G", Dimension((F3, F_1, F_2, F0, F0, F0, F0)))  # L^3 / M * T^2
+G = Unit("G", Dimension((F1, F0, F_2, F0, F0, F0, F0)))  # L / T^2
 
-NEWTON = Unit(
-    symbol="N", dimension=Dimension((F1, F1, F_2, F0, F0, F0, F0))
-)  # L * M / T^2
-JOULE = Unit(
-    symbol="J", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))
-)  # L^2 * M / T^2
+NEWTON = Unit("N", Dimension((F1, F1, F_2, F0, F0, F0, F0)))  # L * M / T^2
+JOULE = Unit("J", Dimension((F2, F1, F_2, F0, F0, F0, F0)))  # L^2 * M / T^2
 ELECTRONVOLT = Unit(
-    symbol="eV", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0)), scale=6.242e18
+    "eV", Dimension((F2, F1, F_2, F0, F0, F0, F0)), scale=6.242e18
 )  # L^2 * M / T^2
-NEWTONMETER = Unit(
-    symbol="Nm", dimension=Dimension((F2, F1, F_2, F0, F0, F0, F0))
-)  # L^2 * M / T^2
+NEWTONMETER = Unit("Nm", Dimension((F2, F1, F_2, F0, F0, F0, F0)))  # L^2 * M / T^2
 
-COULOMB = Unit(symbol="C", dimension=Dimension((F0, F0, F1, F1, F0, F0, F0)))  # I * T
-FARAD = Unit(
-    symbol="F", dimension=Dimension((F_2, F_1, F4, F2, F0, F0, F0))
-)  # T^4 * I^2 / L^2 * M
-WATT = Unit(
-    symbol="W", dimension=Dimension((F2, F1, F_3, F0, F0, F0, F0))
-)  # L^2 * M / T^3
-VOLT = Unit(
-    symbol="V", dimension=Dimension((F2, F1, F_2, F_1, F0, F0, F0))
-)  # L^2 * M / T^2 * I
-OHM = Unit(
-    symbol="Ω", dimension=Dimension((F2, F1, F_3, F_2, F0, F0, F0))
-)  # L^2 * M / T^3 * I^2
+COULOMB = Unit("C", Dimension((F0, F0, F1, F1, F0, F0, F0)))  # I * T
+FARAD = Unit("F", Dimension((F_2, F_1, F4, F2, F0, F0, F0)))  # T^4 * I^2 / L^2 * M
+WATT = Unit("W", Dimension((F2, F1, F_3, F0, F0, F0, F0)))  # L^2 * M / T^3
+VOLT = Unit("V", Dimension((F2, F1, F_2, F_1, F0, F0, F0)))  # L^2 * M / T^2 * I
+OHM = Unit("Ω", Dimension((F2, F1, F_3, F_2, F0, F0, F0)))  # L^2 * M / T^3 * I^2
 
-HERTZ = Unit(symbol="Hz", dimension=Dimension((F0, F0, F_1, F0, F0, F0, F0)))  # 1 / T
+HERTZ = Unit("Hz", Dimension((F0, F0, F_1, F0, F0, F0, F0)))  # 1 / T
 
-RADIAN = Unit(
-    symbol="rad", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=1
-)
-DEGREE = Unit(
-    symbol="deg", dimension=Dimension((F0, F0, F0, F0, F0, F0, F0)), scale=0.01745329251
-)
+RADIAN = Unit("rad", NUMDIM, scale=1)
+DEGREE = Unit("deg", NUMDIM, scale=0.01745329251)
 
 # Derived units
 MPS = METER / SECOND  # L / T

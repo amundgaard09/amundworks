@@ -22,6 +22,8 @@ Requires-Dist: questionary
 Requires-Dist: prompt_toolkit
 Requires-Dist: numpy
 Requires-Dist: sympy
+Requires-Dist: scipy
+Requires-Dist: rich
 Dynamic: license-file
 
 # **DURENDAL**

@@ -51,17 +51,16 @@ def is_close(a: Numerical, b: Numerical) -> bool:
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
         return math.isclose(a, b)
 
-    elif isinstance(a, list) and isinstance(b, list):
+    if isinstance(a, list) and isinstance(b, list):
         if len(a) != len(b):
             return False
 
         return all(is_close(x, y) for x, y in zip(a, b))
 
-    elif isinstance(a, xp.ndarray) and isinstance(b, xp.ndarray):
+    if isinstance(a, xp.ndarray) and isinstance(b, xp.ndarray):
         return xp.allclose(a, b)
 
-    else:
-        return False
+    return False
 
 
 class Vector:
@@ -79,6 +78,8 @@ class Vector:
         self.imag_components = [
             component.imag for component in components if component.imag != 0
         ]
+        # self.is_row_vec = False
+        # self.is_col_vec = False
 
     @property
     def magnitude(self) -> float:
@@ -122,7 +123,7 @@ class Vector:
     def __eq__(self, value: object) -> bool:
         if isinstance(value, Vector):
             return self.components == value.components
-        elif isinstance(value, list):
+        if isinstance(value, list):
             return self.components == value
         return NotImplemented
 
@@ -244,7 +245,7 @@ class Matrix:
         if array:
             if shape:
                 raise ArgumentError(
-                    "Both array and size parameters are provided! Only one should be specified."
+                    "Both array and size parameters are provided! Only one should be specified."  # Make this config valid, by taking the array and reshaping it into the specified shape
                 )
             if len(array) == 0 or any(len(row) != len(array[0]) for row in array):
                 raise ValueError("Matrix must be rectangular and non-empty")
@@ -311,6 +312,10 @@ class Matrix:
         self._array[key] = value
 
     def set_row(self, idx: int, new_row: list) -> None:
+        if len(new_row) != self._cols:
+            raise ValueError(
+                "New row length doesn't match the dimensions of the matrix!"
+            )
         self[idx] = new_row
 
     def row(self, idx: int) -> list[float]:
@@ -321,6 +326,7 @@ class Matrix:
             raise ValueError(
                 "New column length doesn't match the dimensions of the matrix!"
             )
+
         for j in range(len(self._array)):
             self[j][idx] = new_col[j]
 
@@ -366,7 +372,7 @@ class Matrix:
         )
 
     def __len__(self) -> int:
-        return self._rows
+        return self._rows * self._cols
 
     def __abs__(self) -> float:
         return math.sqrt(sum(cell * cell for row in self._array for cell in row))
