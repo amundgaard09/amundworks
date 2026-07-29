@@ -1,5 +1,7 @@
 # **DURENDAL**
 
+NOTE: THIS REPO IS ABANDONED
+
 ***Written, Created, Iterated, Evolved and Built by Simon Stordal Amundgård***
 
 ![GitHub Repo Stars](https://img.shields.io/github/stars/amundgaard09/durendal?style=social)
