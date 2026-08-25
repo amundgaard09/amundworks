@@ -1,1 +1,0 @@
-# Vanguard - Markdown Knowledge Database System
