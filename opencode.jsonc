@@ -1,0 +1,46 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "opencode-power-pack@git+https://github.com/waybarrios/opencode-power-pack.git"
+  ],
+  "permission": {
+    "external_directory": {
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-best/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-datasets/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-papers/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-gradio/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-llm-trainer/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-local-models/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-vision-trainer/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-spaces/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-tool-builder/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-trackio/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-community-evals/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/hf-cli/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/hf-mem/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/paper-summarizer/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/train-sentence-transformers/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/trl-training/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-lora-space-builder/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/huggingface-zerogpu/*": "allow",
+      "/home/amundgaard/.cache/opencode/packages/opencode-power-pack@git+https:/github.com/waybarrios/opencode-power-pack.git/node_modules/opencode-power-pack/skills/transformers-js/*": "allow"
+    }
+  },
+  "disabled_providers": [
+    "omniroute"
+  ],
+  "provider": {
+    "omniroute": {
+      "name": "OmniRoute",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://localhost:20128/api/v1"
+      },
+      "models": {
+        "nvidia/z-ai/glm-5.2": {
+          "name": "NVIDIA GLM 5.2"
+        }
+      }
+    }
+  }
+}
